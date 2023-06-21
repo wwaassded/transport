@@ -51,7 +51,6 @@ static int cmd_si(char *args) {
     if(arg == NULL)
         cpu_exec(1);
     else {
-	    printf("%s\n",arg);
         int i;
         uint64_t number = 0;
         for(i = 0; arg[i]!='\0'; ++i) {
@@ -68,7 +67,6 @@ static int cmd_si(char *args) {
                 }
             }
         }
-            printf("%lu\n",number);
             cpu_exec(number);
     }
     return 0;
@@ -157,7 +155,6 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-	      printf("your command is %s\n",cmd);
         if (cmd_table[i].handler(args) < 0) { 
 		return;
        
