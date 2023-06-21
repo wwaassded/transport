@@ -126,7 +126,6 @@ void sdb_mainloop() {
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
         if (cmd_table[i].handler(args) < 0) { 
-		printf("it is quit for sure!\n");	
 		return;
        
 	}
