@@ -17,7 +17,9 @@
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <ctype.h>
 #include "sdb.h"
+
 
 static int is_batch_mode = false;
 
@@ -42,6 +44,36 @@ static char* rl_gets() {
   return line_read;
 }
 
+
+static int cmd_si(char *args) {
+    char *arg = strtok(NULL," ");
+    // s命令之后没有跟随数字，为默认执行一条指令
+    if(arg == NULL)
+        cpu_exec(1);
+    else {
+	    printf("%s\n",arg);
+        int i;
+        uint64_t number = 0;
+        for(i = 0; arg[i]!='\0'; ++i) {
+            if(!isdigit(arg[i])) {
+               printf("you should only input number affter the si command!\n");
+	       return 0;
+            }
+            else {
+                uint64_t tmp = number;
+                number = number*10 + (arg[i]-'0');
+                if(tmp >= number) {
+                    printf("your input is too big! overflow error!\n");
+                    return 0;
+                }
+            }
+        }
+            printf("%lu\n",number);
+            cpu_exec(number);
+    }
+    return 0;
+}
+
 static int cmd_c(char *args) {
   cpu_exec(-1);
   return 0;
@@ -62,7 +94,7 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "si", "run code by single step", cmd_si }
   /* TODO: Add more commands */
 
 };
@@ -125,6 +157,7 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
+	      printf("your command is %s\n",cmd);
         if (cmd_table[i].handler(args) < 0) { 
 		return;
        
