@@ -55,7 +55,10 @@ static int cmd_si(char *args) {
         uint64_t number = 0;
         for(i = 0; arg[i]!='\0'; ++i) {
             if(!isdigit(arg[i])) {
-               printf("you should only input number affter the si command!\n");
+		    if(arg[i] == '.' || arg[i] == '-')
+			    printf("you should input positive integer only !\n");
+		    else 
+			    printf("you should only input number after the si command!\n");
 	       return 0;
             }
             else {
