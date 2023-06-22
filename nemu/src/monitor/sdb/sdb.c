@@ -45,11 +45,34 @@ static char* rl_gets() {
 }
 
 
+static int cmd_info(char *args) {
+	char *arg = strtok(NULL, " ");
+	if(arg == NULL) {
+		printf("you was suposed to input r/w after the info command!\n");
+		return 0;
+	}
+	else {
+		if(strcmp(arg,"r") == 0) {
+			isa_reg_display();
+		}
+		else if(strcmp(arg,"w") == 0) {
+			/* TODO implement it latter! */
+		}
+		else {
+			printf("you was suposed to input r/w after the info command!\n");
+			return 0;
+		}
+	}
+	return 0;
+}
+
+
 static int cmd_si(char *args) {
     char *arg = strtok(NULL," ");
-    // s命令之后没有跟随数字，为默认执行一条指令
+    // si命令之后没有跟随数字，为默认执行一条指令
     if(arg == NULL)
         cpu_exec(1);
+    //si命令之后又跟随其他内容，判断输入是否合法并处理合法的输入
     else {
         int i;
         uint64_t number = 0;
@@ -95,7 +118,8 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "run code by single step", cmd_si }
+  { "si", "run code by single step", cmd_si },
+  { "info", "print out the state of register or watchpoint by adding r/w after the info command", cmd_info}
   /* TODO: Add more commands */
 
 };
