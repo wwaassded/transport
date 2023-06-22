@@ -89,6 +89,10 @@ static int cmd_x(char *args) {
 		}
 		unsigned int j;
 		for(j=0 ; j<number; ++j) {
+			if(addre+j-CONFIG_MBASE < 0) {
+				printf("please input legal address!\n");
+				return 0;
+			}
 			uint8_t *ptr = guest_to_host(addre+j);
 			if(ptr == NULL) {
 				printf("there is not as many as you want!\n");
