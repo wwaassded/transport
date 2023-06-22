@@ -72,9 +72,6 @@ static int cmd_x(char *args) {
 				return 0;
 			}
 		}
-		//only test
-		printf("number : %d\n",number);
-		printf("address : %s\n",address);
 		address += 1;
 		address += 1;
 		int addre = 0;
@@ -98,7 +95,7 @@ static int cmd_x(char *args) {
 				return 0;
 			}
 			else
-				printf("%d ",*ptr);
+				printf("%x ",*ptr);
 		} 
 		printf("\n");
 	} 
