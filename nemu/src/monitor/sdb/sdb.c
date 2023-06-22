@@ -73,8 +73,19 @@ static int cmd_x(char *args) {
 		}
 		//only test
 		printf("number : %d\n",number);
+		printf("address : %s\n",address);
+		int addre = 0;
 		for(i=0; address[i]!='\0'; ++i) {
-
+			if(isdigit(address[i])) {
+				addre = addre*16 + (address[i]-'0');
+			}
+			else if((address[i]>='a' && address[i]<='f') || (address[i]>='A' && address[i]<='B')) {
+				addre = addre*16 + (tolower(address[i])-'a'+10);
+			}
+			else {
+				printf("you should not input something like that !\n");
+				return 0;
+			}
 		}
 	}
 	return 0;
