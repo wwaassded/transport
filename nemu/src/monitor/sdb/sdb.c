@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <ctype.h>
+#include <memory/paddr.h>
 #include "sdb.h"
 
 
@@ -89,6 +90,7 @@ static int cmd_x(char *args) {
 				return 0;
 			}
 		}
+		printf("%d\n",*(guest_to_host(0)));
 	}
 	return 0;
 }
