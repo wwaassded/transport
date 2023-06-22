@@ -24,6 +24,7 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
+	printf("pc	%x	%x\n",cpu.pc,cpu.pc);
 	int i;
 	for(i=0; i<32; ++i) {
 		if(regs[i][1] != 'p')
