@@ -45,6 +45,42 @@ static char* rl_gets() {
 }
 
 
+static int cmd_x(char *args) {
+	char *arg = strtok(NULL," ");
+	if(arg == NULL) {
+		printf("please input the memory address you want to print!\n");
+		return 0;
+	}
+	else {
+		char *address = strtok(NULL," ");
+		if(address == NULL){
+			printf("please input memory address you want to print!\n");
+			return 0;
+		}
+		int number = 0;
+		int i;
+		for(int i=0; arg[i]!='\0'; ++i) {
+			if(!isdigit(arg[i])) {
+				printf("please give me a number!\n");
+				return 0;
+			}
+			int tmp = number;
+			number = number*10 + (arg[i] - '0');
+			if(tmp > number) {
+				printf("integer overflow!\n");
+				return 0;
+			}
+		}
+		//only test
+		printf("number : %d\n",number);
+		for(i=0; address[i]!='\0'; ++i) {
+
+		}
+	}
+	return 0;
+}
+
+
 static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
 	if(arg == NULL) {
@@ -119,7 +155,8 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "run code by single step", cmd_si },
-  { "info", "print out the state of register or watchpoint by adding r/w after the info command", cmd_info}
+  { "info", "print out the state of register or watchpoint by adding r/w after the info command", cmd_info},
+  { "x", "print out the memory", cmd_x},
   /* TODO: Add more commands */
 
 };
