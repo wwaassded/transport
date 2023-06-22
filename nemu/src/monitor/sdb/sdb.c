@@ -74,6 +74,8 @@ static int cmd_x(char *args) {
 		//only test
 		printf("number : %d\n",number);
 		printf("address : %s\n",address);
+		address += 1;
+		address += 1;
 		int addre = 0;
 		for(i=0; address[i]!='\0'; ++i) {
 			if(isdigit(address[i])) {
