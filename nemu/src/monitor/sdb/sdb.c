@@ -90,7 +90,9 @@ static int cmd_x(char *args) {
 				return 0;
 			}
 		}
-		printf("%d\n",*(guest_to_host(0)));
+		uint8_t *ptr = guest_to_host(0);
+		assert(ptr!=NULL);
+		printf("%d\n",*ptr);
 	}
 	return 0;
 }
