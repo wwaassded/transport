@@ -90,10 +90,18 @@ static int cmd_x(char *args) {
 				return 0;
 			}
 		}
-		uint8_t *ptr = guest_to_host(2147483648);
-		assert(ptr!=NULL);
-		printf("%d\n",*ptr);
-	}
+		unsigned int j;
+		for(j=0 ; j<number; ++j) {
+			uint8_t *ptr = guest_to_host(CONFIG_MBASE+j);
+			if(ptr == NULL) {
+				printf("there is not as many as you want!\n");
+				return 0;
+			}
+			else
+				printf("%d ",*ptr);
+		} 
+		printf("\n");
+	} 
 	return 0;
 }
 
