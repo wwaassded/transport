@@ -89,8 +89,7 @@ static int cmd_x(char *args) {
 		}
 		unsigned int j;
 		for(j=0 ; j<number; ++j) {
-			printf("%u\n",addre+j-CONFIG_MBASE);
-			if(addre+j-CONFIG_MBASE < 0) {
+			if(addre+j < CONFIG_MBASE) {
 				printf("please input legal address!\n");
 				return 0;
 			}
