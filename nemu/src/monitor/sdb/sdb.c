@@ -58,6 +58,7 @@ static int cmd_x(char *args) {
 			printf("please input memory address you want to print!\n");
 			return 0;
 		}
+		int len = strlen(address);
 		int number = 0;
 		int i;
 		for(int i=0; arg[i]!='\0'; ++i) {
@@ -72,10 +73,12 @@ static int cmd_x(char *args) {
 				return 0;
 			}
 		}
-		address += 1;
-		address += 1;
+		if(len >= 3 && address[0]=='0' && (address[1]=='x' || address[1]=='X')) {
+			address += 1;
+			address += 1;
+		}
 		unsigned int addre = 0;
-		for(i=0; address[i]!='\0'; ++i) {
+		for(i=0;address!=NULL && address[i]!='\0'; ++i) {
 			if(isdigit(address[i])) {
 				addre = addre*16 + (address[i]-'0');
 			}
