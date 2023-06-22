@@ -90,7 +90,7 @@ static int cmd_x(char *args) {
 				return 0;
 			}
 		}
-		uint8_t *ptr = guest_to_host(0);
+		uint8_t *ptr = guest_to_host(2147483648);
 		assert(ptr!=NULL);
 		printf("%d\n",*ptr);
 	}
