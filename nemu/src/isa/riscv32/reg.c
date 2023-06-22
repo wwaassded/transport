@@ -24,13 +24,10 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-	printf("pc		0x%x		0x%x\n",cpu.pc,cpu.pc);
+	printf("pc		0x%x\n",cpu.pc);
 	int i;
 	for(i=0; i<32; ++i) {
-		if(regs[i][1] != 'p')
-			printf("%s		0x%x		%d\n",regs[i],cpu.gpr[i],cpu.gpr[i]);
-		else
-			printf("%s		0x%x		0x%x\n",regs[i],cpu.gpr[i],cpu.gpr[i]);
+		printf("%s		0x%x\n",regs[i],cpu.gpr[i]);
 	}
 }
 
