@@ -74,7 +74,7 @@ static int cmd_x(char *args) {
 		}
 		address += 1;
 		address += 1;
-		int addre = 0;
+		unsigned int addre = 0;
 		for(i=0; address[i]!='\0'; ++i) {
 			if(isdigit(address[i])) {
 				addre = addre*16 + (address[i]-'0');
@@ -89,7 +89,7 @@ static int cmd_x(char *args) {
 		}
 		unsigned int j;
 		for(j=0 ; j<number; ++j) {
-			uint8_t *ptr = guest_to_host(CONFIG_MBASE+j);
+			uint8_t *ptr = guest_to_host(addre+j);
 			if(ptr == NULL) {
 				printf("there is not as many as you want!\n");
 				return 0;
