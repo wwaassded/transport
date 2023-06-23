@@ -97,7 +97,7 @@ static int cmd_x(char *args) {
 			printf("at 0x%8x : ",addre);
 			for(jj=0; jj<4; ++jj) {
 				word_t nu = paddr_read(addre+jj,1);
-				printf("%2x ",nu);
+				printf("%02x ",nu);
 			}
 			printf("\n");
 		}
