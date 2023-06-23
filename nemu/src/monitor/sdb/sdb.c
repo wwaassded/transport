@@ -94,6 +94,7 @@ static int cmd_x(char *args) {
 		unsigned int jj;
 		for(j=0; j<number; ++j) {
 			addre += j*4;
+			printf("%d\n",j*4);
 			printf("0x%x\n",addre);
 			printf("at 0x%x : ",addre);
 			for(jj=0; jj<4; ++jj) {
