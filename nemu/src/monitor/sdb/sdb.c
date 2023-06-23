@@ -93,8 +93,10 @@ static int cmd_x(char *args) {
 		unsigned int j;
 		unsigned int jj;
 		for(j=0; j<number; ++j) {
-			for(jj=1; jj<5; ++jj) {
-				word_t nu = paddr_read(addre+j*4,jj);
+			addre += j*4;
+			printf("at 0x%8x : ",addre);
+			for(jj=0; jj<4; ++jj) {
+				word_t nu = paddr_read(addre+jj,1);
 				printf("%2x ",nu);
 			}
 			printf("\n");
