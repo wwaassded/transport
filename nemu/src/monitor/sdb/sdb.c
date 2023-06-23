@@ -94,29 +94,14 @@ static int cmd_x(char *args) {
 		unsigned int jj;
 		for(j=0; j<number; ++j) {
 			addre += j*4;
-			printf("at 0x%8x : ",addre);
+			printf("0x%x\n",addre);
+			printf("at 0x%x : ",addre);
 			for(jj=0; jj<4; ++jj) {
 				word_t nu = paddr_read(addre+jj,1);
 				printf("%02x ",nu);
 			}
 			printf("\n");
 		}
-		/*
-		for(j=0 ; j<number; ++j) {
-			if(addre+j < CONFIG_MBASE) {
-				printf("please input legal address!\n");
-				return 0;
-			}
-			uint8_t *ptr = guest_to_host(addre+j);
-			if(ptr == NULL) {
-				printf("there is not as many as you want!\n");
-				return 0;
-			}
-			else
-				printf("%x ",*ptr);
-		} 
-		printf("\n");
-		*/
 	} 
 	return 0;
 }
