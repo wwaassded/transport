@@ -91,9 +91,12 @@ static int cmd_x(char *args) {
 			}
 		}
 		unsigned int j;
+		unsigned int jj;
 		for(j=0; j<number; ++j) {
-			word_t nu = paddr_read(addre+j*4,1);
-			printf("%2x ",nu);
+			for(jj=1; jj<5; ++jj) {
+				word_t nu = paddr_read(addre+j*4,jj);
+				printf("%2x ",nu);
+			}
 			printf("\n");
 		}
 		/*
