@@ -129,10 +129,11 @@ static int cmd_info(char *args) {
 
 
 static int cmd_si(char *args) {
-    char *arg = strtok(NULL," ");
-    // si命令之后没有跟随数字，为默认执行一条指令
-    if(arg == NULL)
-        cpu_exec(1);
+	char *arg = strtok(NULL," ");
+	if(arg == NULL) {
+		printf("there is no command behind the si!\n");
+        cpu_exec(1);	
+	}
     //si命令之后又跟随其他内容，判断输入是否合法并处理合法的输入
     else {
         int i;

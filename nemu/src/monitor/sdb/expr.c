@@ -14,14 +14,13 @@
 ***************************************************************************************/
 
 #include <isa.h>
-
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ,TK_TNUMBER,
 
   /* TODO: Add more token types */
 
@@ -38,6 +37,12 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
+  {"/", '/'},
+  {"-", '-'}, 
+  {"\\*", '*'},
+  {"[0-9]+", TK_TNUMBER},
+  {"\\(", '(',},
+  {"\\)", ')'}, // 
   {"==", TK_EQ},        // equal
 };
 
@@ -83,11 +88,18 @@ static bool make_token(char *e) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
-
+if(i != 0) { 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
-
-        position += substr_len;
+        tokens[nr_token].type = rules[i].token_type;
+	position += substr_len;
+	strncpy(tokens[nr_token].str,substr_start,substr_len);
+	if(substr_len < 32)
+		tokens[nr_token].str[substr_len] = '\0';
+	else
+		tokens[nr_token].str[31] = '\0';
+	++nr_token;
+}
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
