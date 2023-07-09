@@ -48,7 +48,7 @@ static struct rule {
   {"==", TK_EQ},        // equal
 };
 
-#define NR_REGEX ARRLEN(rules)
+#define NR_REGEX 9
 
 static regex_t re[NR_REGEX] = {};
 
