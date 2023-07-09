@@ -78,13 +78,14 @@ static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
+	printf("%s\n",e);
     int position = 0;
     int i;
     regmatch_t pmatch;
 
     nr_token = 0;
     bra_len = 0;
-    u_int32_t fake_stack[100];
+    word_t fake_stack[100];
     int pos = 0;
     bool flag;
     fake_stack[pos++] = 114514;
