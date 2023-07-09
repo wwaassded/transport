@@ -19,6 +19,8 @@
  */
 #include <regex.h>
 
+static word_t bra[20];
+static int bra_len=0;
 enum {
   TK_NOTYPE = 256, TK_EQ,TK_TNUMBER,
 
@@ -76,62 +78,129 @@ static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
-  int position = 0;
-  int i;
-  regmatch_t pmatch;
+    int position = 0;
+    int i;
+    regmatch_t pmatch;
 
-  nr_token = 0;
+    nr_token = 0;
+    bra_len = 0;
+    u_int32_t fake_stack[100];
+    int pos = 0;
+    bool flag;
+    fake_stack[pos++] = 114514;
+    while (e[position] != '\0') {
+        /* Try all rules one by one. */
+        for (i = 0; i < NR_REGEX; i ++) {
+            if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+                char *substr_start = e + position;
+                int substr_len = pmatch.rm_eo;
+                if(i != 0) {
+                    Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+                        i, rules[i].regex, position, substr_len, substr_len, substr_start);
+                    tokens[nr_token].type = rules[i].token_type;
+                    position += substr_len;
+                    strncpy(tokens[nr_token].str,substr_start,substr_len);
+                    if(substr_len < 32)
+                        tokens[nr_token].str[substr_len] = '\0';
+                    else
+                        tokens[nr_token].str[31] = '\0';
+                    ++nr_token;
+                }
 
-  while (e[position] != '\0') {
-    /* Try all rules one by one. */
-    for (i = 0; i < NR_REGEX; i ++) {
-      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        char *substr_start = e + position;
-        int substr_len = pmatch.rm_eo;
-if(i != 0) { 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
-        tokens[nr_token].type = rules[i].token_type;
-	position += substr_len;
-	strncpy(tokens[nr_token].str,substr_start,substr_len);
-	if(substr_len < 32)
-		tokens[nr_token].str[substr_len] = '\0';
-	else
-		tokens[nr_token].str[31] = '\0';
-	++nr_token;
-}
-
-        /* TODO: Now a new token is recognized with rules[i]. Add codes
+                /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
 
-        switch (rules[i].token_type) {
-          default: TODO();
+                switch (rules[i].token_type) {
+                    case '(': {
+                        fake_stack[pos++] = nr_token-1;
+                        break ;
+                    }
+                    case ')': {
+                        flag = fake_stack[--pos] != 114514;
+                        if(!flag)
+                            return false;
+                        bra[bra_len++] = fake_stack[pos];
+                        break ;
+                    }
+                                           default: TODO();
+                }
+
+                break;
+            }
         }
 
-        break;
-      }
+        if (i == NR_REGEX) {
+            printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+            return false;
+        }
     }
+    if(pos != 1)
+        return false;
+    return true;
+}
 
-    if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      return false;
+
+word_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
+    if(left > right) {
+        *success = false;
+        return -1;
     }
-  }
-
-  return true;
+    else if(left == right) {
+        return atoi(pToken[left].str);
+    }
+    else {
+        if(pToken[left].type=='(' && pToken[right].type==')' && bra[bra_len-1]==left) {
+            --bra_len;
+            return eval(pToken,left+1,right-1,success);
+        }
+        else {
+            bool is_in_bra = false;
+            int op_pos = left;
+            int op_tmp = left;
+            for(op_tmp = left; op_tmp<=right; ++op_tmp) {
+                if(pToken[op_tmp].type == '(')
+                    is_in_bra = true;
+                else if(pToken[op_tmp].type == ')')
+                    is_in_bra = false;
+                else if(!is_in_bra && pToken[op_tmp].type != TK_TNUMBER) {
+                    if(pToken[op_tmp].type=='+' || pToken[op_tmp].type=='-')
+                        op_pos = op_tmp;
+                    else if(pToken[op_tmp].type=='*' || pToken[op_tmp].type=='/')
+                        if(pToken[op_pos].type!='+' && pToken[op_pos].type!='-')
+                            op_pos = op_tmp;
+                }
+            }
+            int left_number = eval(pToken,left,op_pos-1,success);
+            int right_number = eval(pToken,op_pos+1,right,success);
+            switch (pToken[op_pos].type) {
+                case '+': {
+                    return left_number + right_number;
+                }
+                case '-': {
+                    return left_number - right_number;
+                }
+                case '*': {
+                    return left_number * right_number;
+                }
+                case '/': {
+                    return left_number / right_number;
+                }
+                default:
+                    return -1;
+            }
+        }
+    }
 }
 
 
 word_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
-    *success = false;
-    return 0;
-  }
-
-  /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
-  return 0;
+    if (!make_token(e)) {
+        *success = false;
+        return 0;
+    }
+    else
+        return eval(tokens,0,nr_token-1,success);
 }
+

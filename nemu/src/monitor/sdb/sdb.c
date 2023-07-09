@@ -170,6 +170,23 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+
+static int cmd_p(char *args) {
+	bool islegal = true;
+	char *arg = strtok(NULL," ");
+	word_t number = 23;
+	if(arg != NULL)
+		number = expr(arg,&islegal);
+	else
+		islegal = false;
+	if(islegal) {
+		printf("%u\n",number);
+		return 0;
+	}
+	else 
+		return -23;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -183,9 +200,13 @@ static struct {
   { "si", "run code by single step", cmd_si },
   { "info", "print out the state of register or watchpoint by adding r/w after the info command", cmd_info},
   { "x", "print out the memory", cmd_x},
+  { "p", "calculate the expresion",cmd_p},
   /* TODO: Add more commands */
 
 };
+
+
+
 
 #define NR_CMD ARRLEN(cmd_table)
 
@@ -245,10 +266,12 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if (cmd_table[i].handler(args) < 0) { 
-		return;
-       
-	}
+	int number = cmd_table[i].handler(args);
+	if(number == -1)
+		return ;
+	else if(number == -23)
+		printf("you should input right expresion!\n");
+
         break;
       }
     }
