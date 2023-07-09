@@ -132,7 +132,6 @@ static bool make_token(char *e) {
     return true;
 }
 
-
 u_int32_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
     if(left > right) {
         *success = false;
@@ -147,15 +146,15 @@ u_int32_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
             return eval(pToken,left+1,right-1,success);
         }
         else {
-            bool is_in_bra = false;
+            int is_in_bra = 0;
             int op_pos = -100;
             int op_tmp = left;
             for(op_tmp = left; op_tmp<=right; ++op_tmp) {
                 if(pToken[op_tmp].type == '(')
-                    is_in_bra = true;
+                    ++is_in_bra;
                 else if(pToken[op_tmp].type == ')')
-                    is_in_bra = false;
-                else if(!is_in_bra && pToken[op_tmp].type != TK_TNUMBER) {
+                    --is_in_bra;
+                else if(is_in_bra == 0 && pToken[op_tmp].type != TK_TNUMBER) {
                     if(pToken[op_tmp].type=='+' || pToken[op_tmp].type=='-')
                         op_pos = op_tmp;
                     else if(pToken[op_tmp].type=='*' || pToken[op_tmp].type=='/')
@@ -176,12 +175,7 @@ u_int32_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
                     return left_number * right_number;
                 }
                 case '/': {
-		    if(right_number == 0) {
-			    printf("a number can not divide zero!\n");
-			    *success = false;
-			    return -1;
-		    }
-               	    return left_number / right_number;
+                    return left_number / right_number;
                 }
                 default:
                     return -1;
