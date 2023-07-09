@@ -176,7 +176,12 @@ u_int32_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
                     return left_number * right_number;
                 }
                 case '/': {
-                    return left_number / right_number;
+		    if(right_number == 0) {
+			    printf("a number can not divide zero!\n");
+			    *success = false;
+			    return -1;
+		    }
+               	    return left_number / right_number;
                 }
                 default:
                     return -1;
