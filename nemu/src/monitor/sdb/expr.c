@@ -29,23 +29,23 @@ enum {
 };
 
 static struct rule {
-  const char *regex;
-  int token_type;
+    const char *regex;
+    int token_type;
 } rules[] = {
 
-  /* TODO: Add more rules.
+        /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", TK_PLUS},         // plus
-  {"/", TK_MI},
-  {"-", '-'}, 
-  {"\\*", TK_MUL},
-  {"[0-9]+", TK_TNUMBER},
-  {"\\(", '(',},
-  {"\\)", ')'}, // 
-  {"==", TK_EQ},        // equal
+        {" +", TK_NOTYPE},    // spaces
+        {"\\+", '+'},         // plus
+        {"/", '/'},
+        {"-", '-'},
+        {"\\*", '*'},
+        {"[0-9]+", TK_TNUMBER},
+        {"\\(", '(',},
+        {"\\)", ')'}, //
+        {"==", TK_EQ},        // equal
 };
 
 #define NR_REGEX 9
@@ -133,7 +133,7 @@ static bool make_token(char *e) {
 }
 
 
-word_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
+u_int32_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
     if(left > right) {
         *success = false;
         return -1;
@@ -148,7 +148,7 @@ word_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
         }
         else {
             bool is_in_bra = false;
-            int op_pos = left;
+            int op_pos = -100;
             int op_tmp = left;
             for(op_tmp = left; op_tmp<=right; ++op_tmp) {
                 if(pToken[op_tmp].type == '(')
@@ -159,12 +159,12 @@ word_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
                     if(pToken[op_tmp].type=='+' || pToken[op_tmp].type=='-')
                         op_pos = op_tmp;
                     else if(pToken[op_tmp].type=='*' || pToken[op_tmp].type=='/')
-                        if(pToken[op_pos].type!='+' && pToken[op_pos].type!='-')
+                        if(op_pos == -100)
                             op_pos = op_tmp;
                 }
             }
-            int left_number = eval(pToken,left,op_pos-1,success);
             int right_number = eval(pToken,op_pos+1,right,success);
+            int left_number = eval(pToken,left,op_pos-1,success);
             switch (pToken[op_pos].type) {
                 case '+': {
                     return left_number + right_number;
