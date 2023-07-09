@@ -78,7 +78,6 @@ static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
-	printf("%s\n",e);
     int position = 0;
     int i;
     regmatch_t pmatch;
@@ -91,7 +90,8 @@ static bool make_token(char *e) {
     fake_stack[pos++] = 114514;
     while (e[position] != '\0') {
         /* Try all rules one by one. */
-        for (i = 0; i < NR_REGEX; i ++) {
+        for (i = 0; i < NR_REGEX; ++i) {
+		printf("%s\n",rules[i].regex);
             if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
                 char *substr_start = e + position;
                 int substr_len = pmatch.rm_eo;
