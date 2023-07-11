@@ -94,8 +94,6 @@ static bool make_token(char *e) {
                 char *substr_start = e + position;
                 int substr_len = pmatch.rm_eo;
                 if(i != 0) {
-                    Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-                        i, rules[i].regex, position, substr_len, substr_len, substr_start);
                     tokens[nr_token].type = rules[i].token_type;
                     position += substr_len;
                     strncpy(tokens[nr_token].str,substr_start,substr_len);
@@ -212,7 +210,6 @@ int expr(char *e, bool *success) {
 				    tokens[i].type = 114514;
 		    }
 	    }
-	    printf("here!\n");
 	    return eval(tokens,0,nr_token-1,success);
     }
 }
