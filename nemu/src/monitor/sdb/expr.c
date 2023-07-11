@@ -22,7 +22,7 @@
 static word_t bra[20];
 static int bra_len=0;
 enum {
-  TK_NOTYPE = 256, TK_PLUS,TK_MI,TK_MUL,TK_EQ,TK_TNUMBER,
+  TK_NOTYPE = 256, TK_PLUS,TK_MI,TK_MUL,TK_EQ,TK_TNUMBER,TK_HEX,
 
   /* TODO: Add more token types */
 
@@ -43,6 +43,7 @@ static struct rule {
         {"-", '-'},
         {"\\*", '*'},
         {"[0-9]+", TK_TNUMBER},
+	{"0x[0-9]{8}",TK_HEX},
         {"\\(", '(',},
         {"\\)", ')'}, //
         {"==", TK_EQ},        // equal
