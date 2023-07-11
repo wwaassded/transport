@@ -167,6 +167,8 @@ int eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
 		    }
                 }
             }
+	    if(pToken[op_pos].type == 114514)
+		    return -1 * eval(pToken,op_pos+1,right,success);
             int right_number = eval(pToken,op_pos+1,right,success);
             int left_number = eval(pToken,left,op_pos-1,success);
             switch (pToken[op_pos].type) {
@@ -187,9 +189,6 @@ int eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
 		    }
                     return left_number / right_number;
                 }
-		case 114514: {
-			      return -1 * eval(pToken,op_pos+1,right,success);
-			     }
                 default:
                     return -1;
             }
