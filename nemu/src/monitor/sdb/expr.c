@@ -132,7 +132,7 @@ static bool make_token(char *e) {
     return true;
 }
 
-u_int32_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
+int eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
     if(left > right) {
         *success = false;
         return -1;
@@ -157,9 +157,14 @@ u_int32_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
                 else if(is_in_bra == 0 && pToken[op_tmp].type != TK_TNUMBER) {
                     if(pToken[op_tmp].type=='+' || pToken[op_tmp].type=='-')
                         op_pos = op_tmp;
-                    else if(pToken[op_tmp].type=='*' || pToken[op_tmp].type=='/')
-                        if(op_pos == -100)
-                            op_pos = op_tmp;
+                    else if(pToken[op_tmp].type=='*' || pToken[op_tmp].type=='/') {
+			    if(op_pos == -100 || pToken[op_pos].type=='*' || pToken[op_pos].type=='/' || pToken[op_pos].type==114514)
+				    op_pos = op_tmp;
+		    }
+		    else if(pToken[op_tmp].type==114514) {
+			    if(op_pos == -100)
+				    op_pos = op_tmp;
+		    }
                 }
             }
             int right_number = eval(pToken,op_pos+1,right,success);
@@ -175,8 +180,16 @@ u_int32_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
                     return left_number * right_number;
                 }
                 case '/': {
+		    if(right_number == 0) {
+			    *success = false;
+			    printf("a number can not devide zero!\n");
+			    return -1;
+		    }
                     return left_number / right_number;
                 }
+		case 114514: {
+			      return -1 * eval(pToken,op_pos+1,right,success);
+			     }
                 default:
                     return -1;
             }
@@ -185,12 +198,22 @@ u_int32_t eval(Token pToken[],u_int32_t left,u_int32_t right, bool *success) {
 }
 
 
-word_t expr(char *e, bool *success) {
+int expr(char *e, bool *success) {
     if (!make_token(e)) {
         *success = false;
         return 0;
     }
-    else
-        return eval(tokens,0,nr_token-1,success);
+    else {
+	    int i=0;
+	    for(i=0; i<nr_token; ++i) {
+		    if(tokens[i].type == '-'){
+			    if(i == 0)
+				    tokens[i].type = 114514;
+			    else if(tokens[i-1].type!=')' && tokens[i-1].type!=TK_TNUMBER)
+				    tokens[i].type = 114514;
+		    }
+	    }
+	    return eval(tokens,0,nr_token-1,success);
+    }
 }
 

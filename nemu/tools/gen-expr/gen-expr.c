@@ -21,6 +21,7 @@
 #include <string.h>
 
 // this should be enough
+static int pos = 0;
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
@@ -31,9 +32,56 @@ static char *code_format =
 "  return 0; "
 "}";
 
-static void gen_rand_expr() {
-  buf[0] = '\0';
+int choose(int number) {
+	int num = rand() % (number+1);
+	return num;
 }
+
+
+void gen(char ch) {
+	buf[pos++] = ch;
+}
+
+static void gen_rand_op() {
+	switch(choose(3)) {
+		case 0: {gen('+');break;}
+	        case 1: {gen('-');break;}
+		case 2: {gen('/');break;}
+		case 3: {gen('*');break;}
+	}
+}
+
+#define MAX_NUMBER 100
+
+
+void gen_num() {
+	int number = choose(MAX_NUMBER);
+	int i=0;
+	char fake_num[4];
+	fake_num[3] = '\0';
+	int tmp;
+	for(i=0; i<3; ++i) {
+		tmp = rand();
+		if(tmp%2 == 0)
+			fake_num[i] = '0';
+		else
+			fake_num[i] = '0' + (rand()%10);
+	}
+	i = 0;
+	while(i<3 && fake_num[i]=='0')
+		++i;
+	for(;i<3;++i)
+		buf[pos++] = fake_num[i];
+}
+
+static void gen_rand_expr() {
+	switch(choose(3)) {
+		case 0: {gen_num();break;}
+		case 1: {gen('(');gen_rand_expr();gen_rand_op();gen_rand_expr();gen(')');break;}
+	        default: {gen_rand_expr();gen_rand_op();gen_rand_expr();break;}
+	}
+}
+
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
@@ -45,7 +93,8 @@ int main(int argc, char *argv[]) {
   int i;
   for (i = 0; i < loop; i ++) {
     gen_rand_expr();
-
+    printf("it worked !\n");
+    buf[pos++] = '\0';
     sprintf(code_buf, code_format, buf);
 
     FILE *fp = fopen("/tmp/.code.c", "w");
