@@ -213,6 +213,7 @@ int expr(char *e, bool *success) {
 				    tokens[i].type = 114514;
 		    }
 	    }
+	    printf("here!\n");
 	    return eval(tokens,0,nr_token-1,success);
     }
 }
