@@ -159,7 +159,7 @@ static bool make_token(char *e)
   return true;
 }
 
-int eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
+u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
 {
   if (left > right)
   {
