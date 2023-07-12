@@ -174,13 +174,13 @@ static int cmd_q(char *args) {
 static int cmd_p(char *args) {
 	bool islegal = true;
 	char *arg = strtok(NULL," ");
-	int number = 23;
+	uint32_t number = 23;
 	if(arg != NULL)
 		number = expr(arg,&islegal);
 	else
 		islegal = false;
 	if(islegal) {
-		printf("%d\n",number);
+		printf("%u\n",number);
 		return 0;
 	}
 	else 

@@ -273,7 +273,7 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
   }
 }
 
-int expr(char *e, bool *success)
+u_int32_t expr(char *e, bool *success)
 {
   if (!make_token(e))
   {
