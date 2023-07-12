@@ -31,6 +31,16 @@ void isa_reg_display() {
 	}
 }
 
-word_t isa_reg_str2val(const char *s, bool *success) {
-  return 0;
+uint32_t isa_reg_str2val(const char *s, bool *success) {
+  if(strcmp(s,"pc") == 0) {
+    return cpu.pc;
+  }
+  int i = 0;
+  for (i = 0; i < 32; ++i) {
+    if(strcmp(s,regs[i]) == 0) {
+      return cpu.gpr[i];
+    }
+  }
+  printf("there is no such a register please try again!\n");
+  return -1;
 }

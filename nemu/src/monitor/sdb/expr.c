@@ -18,6 +18,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <string.h>
 
 static word_t bra[20];
 static int bra_len = 0;
@@ -30,7 +31,8 @@ enum
   TK_EQ,
   TK_TNUMBER,
   TK_HEX,
-
+  TK_DECODE,
+  TK_REG,
   /* TODO: Add more token types */
 
 };
@@ -57,7 +59,7 @@ static struct rule
         '(',
     },
     {"\\)", ')'},
-    {"\\$[a-z]{0,2}[1-9]{0,1}[0-9]{0,1}"},
+    {"\\$[a-z]{0,2}[1-9]{0,1}[0-9]{0,1}",TK_REG},
     {"==", TK_EQ},
 };
 
@@ -166,7 +168,41 @@ int eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
   }
   else if (left == right)
   {
-    return atoi(pToken[left].str);
+    switch (pToken[left].type)
+    {
+
+      case TK_TNUMBER: {
+      return atoi(pToken[left].str);
+      }
+
+      case TK_HEX: {
+      int i = 0;
+      u_int32_t ans = 0;
+      for (i = 2; pToken[left].str[i] != '\0';++i) {
+        char tmp = pToken[left].str[i];
+        if(tmp>='0' && tmp<='9')
+          ans = ans * 16 + pToken[left].str[i] - '0';
+        else if(tmp>='a' && tmp<='f')
+          ans = ans * 16 + tmp - 'a' + 10;
+          else if(tmp>='A' && tmp<='F')
+          ans = ans * 16 + tmp - 'A' + 10;
+          else {
+          printf("format error !\n");
+          *success = false;
+          return -1;
+          }
+        }
+        return ans;
+      }
+
+      case TK_REG: {
+        return isa_reg_str2val(pToken[left].str+1,success);
+      }
+      default :{
+        *success = false;
+        return -1;
+      }
+    }
   }
   else
   {
@@ -255,6 +291,20 @@ int expr(char *e, bool *success)
           tokens[i].type = 114514;
         else if (tokens[i - 1].type != ')' && tokens[i - 1].type != TK_TNUMBER)
           tokens[i].type = 114514;
+      }
+      else if (tokens[i].type == '*')
+      {
+        if (i == 0 || (tokens[i - 1].type != ')' && tokens[i].type != TK_TNUMBER))
+        {
+          if (i + 1 < nr_token && tokens[i + 1].type == TK_HEX)
+            tokens[i].type = TK_DECODE;
+          else
+          {
+            printf("format error!\n");
+            *success = false;
+            return -1;
+          }
+        }
       }
     }
     return eval(tokens, 0, nr_token - 1, success);
