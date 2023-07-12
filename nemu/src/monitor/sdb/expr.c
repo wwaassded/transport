@@ -14,6 +14,7 @@
  ***************************************************************************************/
 
 #include <isa.h>
+#include <memory/paddr.h>
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
@@ -59,7 +60,7 @@ static struct rule
         '(',
     },
     {"\\)", ')'},
-    {"\\$[a-z]{0,2}[1-9]{0,1}[0-9]{0,1}",TK_REG},
+    {"\\$[a-z]{0,2}[1-9]{0,1}[0-9]{0,1}", TK_REG},
     {"==", TK_EQ},
 };
 
@@ -171,37 +172,43 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
     switch (pToken[left].type)
     {
 
-      case TK_TNUMBER: {
+    case TK_TNUMBER:
+    {
       return atoi(pToken[left].str);
-      }
+    }
 
-      case TK_HEX: {
+    case TK_HEX:
+    {
       int i = 0;
       u_int32_t ans = 0;
-      for (i = 2; pToken[left].str[i] != '\0';++i) {
+      for (i = 2; pToken[left].str[i] != '\0'; ++i)
+      {
         char tmp = pToken[left].str[i];
-        if(tmp>='0' && tmp<='9')
+        if (tmp >= '0' && tmp <= '9')
           ans = ans * 16 + pToken[left].str[i] - '0';
-        else if(tmp>='a' && tmp<='f')
+        else if (tmp >= 'a' && tmp <= 'f')
           ans = ans * 16 + tmp - 'a' + 10;
-          else if(tmp>='A' && tmp<='F')
+        else if (tmp >= 'A' && tmp <= 'F')
           ans = ans * 16 + tmp - 'A' + 10;
-          else {
+        else
+        {
           printf("format error !\n");
           *success = false;
           return -1;
-          }
         }
-        return ans;
       }
+      return ans;
+    }
 
-      case TK_REG: {
-        return isa_reg_str2val(pToken[left].str+1,success);
-      }
-      default :{
-        *success = false;
-        return -1;
-      }
+    case TK_REG:
+    {
+      return isa_reg_str2val(pToken[left].str + 1, success);
+    }
+    default:
+    {
+      *success = false;
+      return -1;
+    }
     }
   }
   else
@@ -233,17 +240,20 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
           }
           else if (pToken[op_tmp].type == 114514)
           {
-            if (op_pos == -100 || pToken[op_pos].type == 263)
+            if (op_pos == -100 || pToken[op_pos].type == TK_DECODE)
               op_pos = op_tmp;
           }
-          else if(pToken[op_tmp].type == TK_DECODE) {
-            if(op_pos == -100)
+          else if (pToken[op_tmp].type == TK_DECODE)
+          {
+            if (op_pos == -100)
               op_pos = op_tmp;
           }
         }
       }
       if (pToken[op_pos].type == 114514)
         return -1 * eval(pToken, op_pos + 1, right, success);
+      else if (pToken[op_pos].type == TK_DECODE)
+        return paddr_read(eval(pToken, op_pos + 1, right, success), 1);
       int right_number = eval(pToken, op_pos + 1, right, success);
       int left_number = eval(pToken, left, op_pos - 1, success);
       switch (pToken[op_pos].type)
