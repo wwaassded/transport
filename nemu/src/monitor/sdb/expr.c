@@ -63,7 +63,7 @@ static struct rule
     {"==", TK_EQ},
 };
 
-#define NR_REGEX 9
+#define NR_REGEX 11
 
 static regex_t re[NR_REGEX] = {};
 
@@ -176,7 +176,6 @@ int eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
       }
 
       case TK_HEX: {
-      printf("caonima!\n");
       int i = 0;
       u_int32_t ans = 0;
       for (i = 2; pToken[left].str[i] != '\0';++i) {
