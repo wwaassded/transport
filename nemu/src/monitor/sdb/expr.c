@@ -233,7 +233,11 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
           }
           else if (pToken[op_tmp].type == 114514)
           {
-            if (op_pos == -100)
+            if (op_pos == -100 || pToken[op_pos].type == 263)
+              op_pos = op_tmp;
+          }
+          else if(pToken[op_tmp].type == TK_DECODE) {
+            if(op_pos == -100)
               op_pos = op_tmp;
           }
         }
