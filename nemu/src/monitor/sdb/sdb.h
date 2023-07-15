@@ -23,6 +23,6 @@ word_t expr(char *e, bool *success);
 void info_watchpoint();
 void free_wp(int number);
 void add_watchpoint(char *wp_expr);
-void check_watchpoint();
+void check_watchpoint(bool *is_stop);
 uint32_t expr(char *e, bool *success);
 #endif

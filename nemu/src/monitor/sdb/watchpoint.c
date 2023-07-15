@@ -79,7 +79,7 @@ WP *new_wp()
   }
 }
 
-void check_watchpoint()
+void check_watchpoint(bool *is_stop)
 {
   if (head == nullptr)
     return;
@@ -91,6 +91,16 @@ void check_watchpoint()
       bool success = true;
       ptr->old_value = ptr->new_value;
       ptr->new_value = expr(ptr->content, &success);
+      if(!success) {
+        printf("you should input correct expr!\n");
+        return;
+      }
+      else if(ptr->new_value != ptr->old_value) {
+        printf("wp no:%d  old_value:%u  new_value:%u  expr:%s",ptr->NO,ptr->old_value,ptr->new_value,ptr->content);
+        printf("\n");
+        *is_stop = true;
+      }
+      ptr = ptr->next;
     }
   }
 }
