@@ -78,7 +78,7 @@ static void execute(uint64_t n) {
     trace_and_difftest(&s, cpu.pc);
     bool flag = false;
     check_watchpoint(&flag);
-    if(!flag) {
+    if(flag) {
       printf("flag is false!\n");
       nemu_state.state = NEMU_STOP;
     }
