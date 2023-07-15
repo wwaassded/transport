@@ -19,7 +19,6 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
-#include <string.h>
 
 static word_t bra[20];
 static int bra_len = 0;

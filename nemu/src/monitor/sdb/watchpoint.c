@@ -22,6 +22,8 @@ typedef struct watchpoint
 {
   int NO;
   char content[expr_len];
+  uint32_t old_value;
+  uint32_t new_value;
   struct watchpoint *next;
 } WP;
 
@@ -125,6 +127,16 @@ void add_watchpoint(char *wp_expr) {
   WP *ptr = new_wp();
   strcpy(ptr->content,wp_expr);
   ptr->content[expr_len-1] = '\0';
+  bool success;
+  uint32_t value = expr(ptr->content,&success);
+  if(!success) {
+    printf("you should set a right watchpoint!\n");
+    free_wp(ptr->NO);
+  }
+  else {
+    ptr->old_value = value;
+    ptr->new_value = value;
+  }
 }
 
 void info_watchpoint()
