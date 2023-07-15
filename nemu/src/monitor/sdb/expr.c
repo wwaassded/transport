@@ -254,8 +254,6 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
         return -1 * eval(pToken, op_pos + 1, right, success);
       else if (pToken[op_pos].type == TK_DECODE)
       {
-        uint32_t res = eval(pToken, op_pos + 1, right, success);
-        printf("0x%x\n", res);
         return paddr_read(eval(pToken, op_pos + 1, right, success), 4);
       }
       int right_number = eval(pToken, op_pos + 1, right, success);
