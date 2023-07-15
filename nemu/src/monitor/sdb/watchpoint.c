@@ -148,7 +148,7 @@ void info_watchpoint()
     WP *ptr = head;
     while (ptr != nullptr)
     {
-      printf("wp no:%d expr:%s", ptr->NO, ptr->content);
+      printf("wp no:%d  old_value:%d  new_value:%d  expr:%s", ptr->NO, ptr->old_value,ptr->new_value,ptr->content);
       printf("\n");
       ptr = ptr->next;
     }
