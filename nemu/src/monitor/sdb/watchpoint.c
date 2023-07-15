@@ -79,11 +79,28 @@ WP *new_wp()
   }
 }
 
+void check_watchpoint()
+{
+  if (head == nullptr)
+    return;
+  else
+  {
+    WP *ptr = head;
+    while (ptr != nullptr)
+    {
+      bool success = true;
+      ptr->old_value = ptr->new_value;
+      ptr->new_value = expr(ptr->content, &success);
+    }
+  }
+}
+
 void free_wp(int number)
 {
-  if(number > NR_WP) {
+  if (number > NR_WP)
+  {
     int tmp = NR_WP;
-    printf("the number should not be bigger than %d!\n",tmp);
+    printf("the number should not be bigger than %d!\n", tmp);
     assert(0);
   }
   if (head == NULL)
@@ -123,17 +140,20 @@ void free_wp(int number)
   }
 }
 
-void add_watchpoint(char *wp_expr) {
+void add_watchpoint(char *wp_expr)
+{
   WP *ptr = new_wp();
-  strcpy(ptr->content,wp_expr);
-  ptr->content[expr_len-1] = '\0';
+  strcpy(ptr->content, wp_expr);
+  ptr->content[expr_len - 1] = '\0';
   bool success = true;
-  uint32_t value = expr(ptr->content,&success);
-  if(!success) {
+  uint32_t value = expr(ptr->content, &success);
+  if (!success)
+  {
     printf("you should set a right watchpoint!\n");
     free_wp(ptr->NO);
   }
-  else {
+  else
+  {
     ptr->old_value = value;
     ptr->new_value = value;
   }
@@ -148,7 +168,7 @@ void info_watchpoint()
     WP *ptr = head;
     while (ptr != nullptr)
     {
-      printf("wp no:%d  old_value:%u  new_value:%u  expr:%s", ptr->NO, ptr->old_value,ptr->new_value,ptr->content);
+      printf("wp no:%d  old_value:%u  new_value:%u  expr:%s", ptr->NO, ptr->old_value, ptr->new_value, ptr->content);
       printf("\n");
       ptr = ptr->next;
     }
