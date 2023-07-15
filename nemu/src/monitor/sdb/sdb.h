@@ -19,5 +19,5 @@
 #include <common.h>
 #include <stdbool.h>
 word_t expr(char *e, bool *success);
-
+void info_watchpoint();
 #endif

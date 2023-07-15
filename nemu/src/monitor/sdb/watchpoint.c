@@ -14,13 +14,14 @@
  ***************************************************************************************/
 #include <unistd.h>
 #include "sdb.h"
-
+#define nullptr NULL
 #define NR_WP 32
 
 typedef struct watchpoint
 {
   int NO;
-  struct watchpoint  *next;
+  char content[32];
+  struct watchpoint *next;
 } WP;
 
 static WP wp_pool[NR_WP] = {};
@@ -86,17 +87,20 @@ void free_wp(WP *wp)
   {
     WP *pre = NULL;
     WP *tmp = head;
-    while(tmp!=NULL && tmp!=wp) {
+    while (tmp != NULL && tmp != wp)
+    {
       pre = tmp;
       tmp = tmp->next;
     }
-    if(tmp != NULL) {
-      if(tmp == head) 
+    if (tmp != NULL)
+    {
+      if (tmp == head)
         head = head->next;
       else
         pre->next = tmp->next;
     }
-    else {
+    else
+    {
       printf("there is no this WP!\n");
       assert(0);
     }
@@ -107,6 +111,21 @@ void free_wp(WP *wp)
     {
       wp->next = free_;
       free_ = wp;
+    }
+  }
+}
+
+void info_watchpoint()
+{
+  if (head == NULL)
+    printf("there is no watchpoint yet ! \n");
+  else
+  {
+    WP *ptr = head;
+    while(ptr != nullptr) {
+      printf("wp no:%d expr:%s",ptr->NO,ptr->content);
+      printf("\n");
+      ptr = ptr->next;
     }
   }
 }

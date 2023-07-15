@@ -117,9 +117,9 @@ static int cmd_info(char *args) {
 			isa_reg_display();
 		}
 		else if(strcmp(arg,"w") == 0) {
-			/* TODO implement it latter! */
-		}
-		else {
+      info_watchpoint();
+    }
+    else {
 			printf("you was suposed to input r/w after the info command!\n");
 			return 0;
 		}
