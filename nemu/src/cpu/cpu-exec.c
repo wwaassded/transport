@@ -78,10 +78,8 @@ static void execute(uint64_t n) {
     trace_and_difftest(&s, cpu.pc);
     bool flag = false;
     check_watchpoint(&flag);
-    if(flag) {
-      printf("flag is false!\n");
+    if(flag) 
       nemu_state.state = NEMU_STOP;
-    }
     if (nemu_state.state != NEMU_RUNNING)
       break;
     IFDEF(CONFIG_DEVICE, device_update());
@@ -121,10 +119,6 @@ void cpu_exec(uint64_t n) {
 
   switch (nemu_state.state) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
-    case NEMU_STOP: {
-      printf("the program has been stopped!\n");
-      break;
-    }
     case NEMU_END: case NEMU_ABORT:
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
@@ -133,5 +127,8 @@ void cpu_exec(uint64_t n) {
           nemu_state.halt_pc);
       // fall through
     case NEMU_QUIT: statistic();
+    default: {
+      break;
+    }
   }
 }
