@@ -152,10 +152,7 @@ static int cmd_si(char *args)
 {
   char *arg = strtok(NULL, " ");
   if (arg == NULL)
-  {
-    printf("there is no command behind the si!\n");
     cpu_exec(1);
-  }
   // si命令之后又跟随其他内容，判断输入是否合法并处理合法的输入
   else
   {
