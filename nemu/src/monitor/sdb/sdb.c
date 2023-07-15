@@ -218,6 +218,7 @@ static int cmd_p(char *args)
 
 static int cmd_help(char *args);
 static int cmd_d(char *args);
+
 static int cmd_w(char *args) {
   char *arg = strtok(NULL, " ");
   if(arg == NULL) {
@@ -225,9 +226,11 @@ static int cmd_w(char *args) {
     return 0;
   }
   else {
+    add_watchpoint(arg);
     return 0;
   }
 }
+
 static struct
 {
   const char *name;

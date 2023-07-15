@@ -21,4 +21,5 @@
 word_t expr(char *e, bool *success);
 void info_watchpoint();
 void free_wp(int number);
+void add_watchpoint(char *wp_expr);
 #endif

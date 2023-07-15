@@ -16,11 +16,12 @@
 #include "sdb.h"
 #define nullptr NULL
 #define NR_WP 32
+#define expr_len 32
 
 typedef struct watchpoint
 {
   int NO;
-  char content[32];
+  char content[expr_len];
   struct watchpoint *next;
 } WP;
 
@@ -118,6 +119,12 @@ void free_wp(int number)
       free_ = tmp;
     }
   }
+}
+
+void add_watchpoint(char *wp_expr) {
+  WP *ptr = new_wp();
+  strcpy(ptr->content,wp_expr);
+  ptr->content[expr_len-1] = '\0';
 }
 
 void info_watchpoint()
