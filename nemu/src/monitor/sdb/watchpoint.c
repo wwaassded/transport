@@ -127,7 +127,7 @@ void add_watchpoint(char *wp_expr) {
   WP *ptr = new_wp();
   strcpy(ptr->content,wp_expr);
   ptr->content[expr_len-1] = '\0';
-  bool success;
+  bool success = true;
   uint32_t value = expr(ptr->content,&success);
   if(!success) {
     printf("you should set a right watchpoint!\n");
