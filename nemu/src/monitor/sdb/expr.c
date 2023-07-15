@@ -170,7 +170,6 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
   {
     switch (pToken[left].type)
     {
-
     case TK_TNUMBER:
     {
       return atoi(pToken[left].str);
@@ -230,7 +229,9 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
           --is_in_bra;
         else if (is_in_bra == 0 && pToken[op_tmp].type != TK_TNUMBER)
         {
-          if (pToken[op_tmp].type == '+' || pToken[op_tmp].type == '-')
+          if(pToken[op_tmp].type == TK_EQ)
+            op_pos = op_tmp;
+          else if ((pToken[op_tmp].type == '+' || pToken[op_tmp].type == '-') && pToken[op_tmp].type!=TK_EQ)
             op_pos = op_tmp;
           else if (pToken[op_tmp].type == '*' || pToken[op_tmp].type == '/')
           {
@@ -251,9 +252,10 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
       }
       if (pToken[op_pos].type == 114514)
         return -1 * eval(pToken, op_pos + 1, right, success);
-      else if (pToken[op_pos].type == TK_DECODE) {
-        uint32_t res = eval(pToken,op_pos+1,right,success);
-        printf("0x%x\n",res);
+      else if (pToken[op_pos].type == TK_DECODE)
+      {
+        uint32_t res = eval(pToken, op_pos + 1, right, success);
+        printf("0x%x\n", res);
         return paddr_read(eval(pToken, op_pos + 1, right, success), 4);
       }
       int right_number = eval(pToken, op_pos + 1, right, success);
@@ -281,6 +283,13 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
           return -1;
         }
         return left_number / right_number;
+      }
+      case TK_EQ:
+      {
+        if (left_number == right_number)
+          return 1;
+        else
+          return 0;
       }
       default:
         return -1;
@@ -320,6 +329,27 @@ u_int32_t expr(char *e, bool *success)
             *success = false;
             return -1;
           }
+        }
+      }
+      else if (tokens[i].type == TK_EQ)
+      {
+        if (i == 0 || i == nr_token - 1)
+        {
+          printf("wrong format!\n");
+          *success = false;
+          return -1;
+        }
+        if (tokens[i - 1].type != TK_HEX && tokens[i - 1].type != TK_TNUMBER && tokens[i - 1].type != ')' && tokens[i - 1].type != TK_REG)
+        {
+          printf("wrong format!\n");
+          *success = false;
+          return -1;
+        }
+        else if (tokens[i + 1].type != TK_HEX && tokens[i + 1].type != TK_TNUMBER && tokens[i + 1].type != '(' && tokens[i + 1].type != TK_REG)
+        {
+          printf("wrong format!\n");
+          *success = false;
+          return -1;
         }
       }
     }
