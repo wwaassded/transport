@@ -20,4 +20,5 @@
 #include <stdbool.h>
 word_t expr(char *e, bool *success);
 void info_watchpoint();
+void free_wp(int number);
 #endif

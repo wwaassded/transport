@@ -76,8 +76,13 @@ WP *new_wp()
   }
 }
 
-void free_wp(WP *wp)
+void free_wp(int number)
 {
+  if(number > NR_WP) {
+    int tmp = NR_WP;
+    printf("the number should not be bigger than %d!\n",tmp);
+    assert(0);
+  }
   if (head == NULL)
   {
     printf("you can not free before use !\n");
@@ -87,7 +92,7 @@ void free_wp(WP *wp)
   {
     WP *pre = NULL;
     WP *tmp = head;
-    while (tmp != NULL && tmp != wp)
+    while (tmp != NULL && tmp->NO != number)
     {
       pre = tmp;
       tmp = tmp->next;
@@ -104,13 +109,13 @@ void free_wp(WP *wp)
       printf("there is no this WP!\n");
       assert(0);
     }
-    wp->next = NULL;
+    tmp->next = NULL;
     if (free_ == NULL)
-      free_ = wp;
+      free_ = tmp;
     else
     {
-      wp->next = free_;
-      free_ = wp;
+      tmp->next = free_;
+      free_ = tmp;
     }
   }
 }
@@ -122,8 +127,9 @@ void info_watchpoint()
   else
   {
     WP *ptr = head;
-    while(ptr != nullptr) {
-      printf("wp no:%d expr:%s",ptr->NO,ptr->content);
+    while (ptr != nullptr)
+    {
+      printf("wp no:%d expr:%s", ptr->NO, ptr->content);
       printf("\n");
       ptr = ptr->next;
     }
