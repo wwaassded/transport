@@ -95,7 +95,7 @@ void check_watchpoint(bool *is_stop)
         printf("you should input correct expr!\n");
         return;
       }
-      else if(ptr->new_value != ptr->old_value) {
+      else if((ptr->new_value != ptr->old_value) && !(ptr->new_value==-1 && ptr->old_value==-2)) {
         printf("wp no:%d  old_value:0x%x  new_value:0x%x  expr:%s",ptr->NO,ptr->old_value,ptr->new_value,ptr->content);
         printf("\n");
         *is_stop = true;

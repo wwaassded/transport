@@ -285,9 +285,9 @@ u_int32_t eval(Token pToken[], u_int32_t left, u_int32_t right, bool *success)
       case TK_EQ:
       {
         if (left_number == right_number)
-          return 1;
+          return -2;
         else
-          return 0;
+          return -1;
       }
       default:
         return -1;
