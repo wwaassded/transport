@@ -27,6 +27,7 @@ enum
   TYPE_I,
   TYPE_U,
   TYPE_S,
+  TYPE_B,
   TYPE_J,
   TYPE_N, // none
 };
@@ -67,6 +68,15 @@ enum
     }                                                                                                                       \
   } while (0)
 
+#define immB()                                                            \
+  do                                                                      \
+  {                                                                       \
+    uint64_t tmp = SEXT(BITS(i, 31, 0), 32);                              \
+    *imm |= (SEXT(BITS(tmp, 63, 44), 20) << 12) | (BITS(i, 30, 25) << 5) | (BITS(i, 11, 8) << 1);                                     \
+    if (((i & 0x00000080) >> 7) == 1)                                     \
+      *imm |= 0x00000800;                                                 \
+  } while (0)
+
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type)
 {
   uint32_t i = s->isa.inst.val;
@@ -79,6 +89,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   case TYPE_U:immU();break;
   case TYPE_S:src1R();src2R();immS();break;
   case TYPE_J:immJ();    break;
+  case TYPE_B:src1R();src2R();immB();break;
   }
 }
 
@@ -103,6 +114,7 @@ static int decode_exec(Decode *s)
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc, U, R(rd) = imm + s->pc);
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal, J, R(rd) = s->snpc; s->dnpc = imm + s->pc);
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr, I, R(rd) = s->snpc; s->dnpc = src1 + imm);
+  INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq, B, if(src1 == src2) s->dnpc = imm + s->pc);
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
