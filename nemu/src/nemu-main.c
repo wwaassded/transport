@@ -27,9 +27,6 @@ int main(int argc, char *argv[]) {
 #else
   init_monitor(argc, argv);
 #endif
-  #ifdef BIN_PATH
-  printf("\n\n\n");
-  #endif
 
   /* Start engine. */
   engine_start();
