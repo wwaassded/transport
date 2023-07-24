@@ -16,7 +16,7 @@
 #include <cpu/cpu.h>
 
 void sdb_mainloop();
-
+#define CONFIG_TARGET_AM
 void engine_start() {
 #ifdef CONFIG_TARGET_AM
   cpu_exec(-1);

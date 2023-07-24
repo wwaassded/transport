@@ -15,7 +15,7 @@
 
 #ifndef __ISA_H__
 #define __ISA_H__
-#define CONFIG_TARGET_AM
+
 #if defined(CONFIG_ISA_mips32)
 #define ISA_QEMU_BIN "qemu-system-mipsel"
 #define ISA_QEMU_ARGS "-machine", "mipssim",\
