@@ -14,7 +14,7 @@
 ***************************************************************************************/
 
 #include <common.h>
-
+#define CONFIG_TARGET_AM
 void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
