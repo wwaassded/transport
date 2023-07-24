@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include <cpu/cpu.h>
+#include "macro.h"
 
 void sdb_mainloop();
 // #define CONFIG_TARGET_AM
