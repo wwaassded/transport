@@ -14,7 +14,7 @@ LDFLAGS   += --gc-sections -e _start
 NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
-CFLAGS += -DCONFIG_TARGET_AM=1
+
 CFLAGS += -I$(AM_HOME)/am/src/platform/nemu/include
 .PHONY: $(AM_HOME)/am/src/platform/nemu/trm.c
 
