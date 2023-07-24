@@ -14,7 +14,7 @@
 ***************************************************************************************/
 
 #include <cpu/cpu.h>
-
+#include "eas.h"
 void sdb_mainloop();
 
 void engine_start() {
