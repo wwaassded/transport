@@ -25,6 +25,7 @@ ifdef CONFIG_TARGET_AM
 endif
 ifdef mainargs
 ASFLAGS += -DBIN_PATH=\"$(mainargs)\"
+CFLAGS := haha
 endif
 SRCS-$(CONFIG_TARGET_AM) += src/am-bin.S
 .PHONY: src/am-bin.S
