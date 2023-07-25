@@ -24,11 +24,16 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
+#define IR_LEN 10
+#define MARCH(num) ((num) = (((num) + 1) % IR_LEN))
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
+static char iringbuf[128][IR_LEN];
+//static uint8_t out = 0;
+static uint8_t in = 0;
 
 void device_update();
 
@@ -75,12 +80,12 @@ static void exec_once(Decode *s, vaddr_t pc)
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
               MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-  printf("HAHA::%s\n",s->logbuf);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
+  strcpy(iringbuf[in], s->logbuf);
+  MARCH(in);
 #endif
-
 }
 
 static void execute(uint64_t n)
@@ -155,7 +160,7 @@ void cpu_exec(uint64_t n)
         nemu_state.halt_pc);
     // fall through
   case NEMU_QUIT:
-    statistic();
+    // statistic();
   default:
   {
     break;
