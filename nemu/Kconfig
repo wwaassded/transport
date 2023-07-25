@@ -99,6 +99,15 @@ config CC_O3
   bool "O3"
 endchoice
 
+choice
+  prompt "enable memory trace"
+  default YES
+  config YES
+    bool "yes"
+  config NO
+    bool "no"
+endchoice
+
 config CC_OPT
   string
   default "-O0" if CC_O0
@@ -128,6 +137,8 @@ menu "Testing and Debugging"
 config TRACE
   bool "Enable tracer"
   default y
+
+
 
 config TRACE_START
   depends on TRACE
