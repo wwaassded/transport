@@ -26,41 +26,47 @@ int sprintf(char *out, const char *fmt, ...)
   while (*fmt)
   {
 
-    if(*fmt == '%') {
+    if (*fmt == '%')
+    {
       ++fmt;
 
-      switch(*fmt) {
+      switch (*fmt)
+      {
 
-        case 's': {
-          const char *tmp = va_arg(ap,const char *);
-          while(*tmp)
-            *ptr++ = *tmp++;
-          break;
-        }
-        
-        case 'd': {
-          int tmp = va_arg(ap,int);
-          uint8_t i;
-          if(tmp < 0) {
-            *ptr++ = '-';
-            tmp = -tmp;
-          }
-          for (i = 0; tmp != 0; ++i) {
-            buf[i] = (tmp % 10) + '0';
-            tmp /= 10;
-          }
-          while(i != 0) {
-            *ptr++ = buf[i];
-            --i;
-          }
-          *ptr++ = buf[i];
-          break;
-        }
-
+      case 's':
+      {
+        const char *tmp = va_arg(ap, const char *);
+        while (*tmp)
+          *ptr++ = *tmp++;
+        break;
       }
 
+      case 'd':
+      {
+        int tmp = va_arg(ap, int);
+        uint8_t i;
+        if (tmp < 0)
+        {
+          *ptr++ = '-';
+          tmp = -tmp;
+        }
+        for (i = 0; tmp != 0; ++i)
+        {
+          buf[i] = (tmp % 10) + '0';
+          tmp /= 10;
+        }
+        --i;
+        while (i != 0)
+        {
+          *ptr++ = buf[i];
+          --i;
+        }
+        *ptr++ = buf[i];
+        break;
+      }
+      }
     }
-    else 
+    else
       *ptr++ = *fmt;
     ++fmt;
   }
