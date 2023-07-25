@@ -33,10 +33,11 @@ NEMU_EXEC := $(BINARY) $(ARGS) $(IMG)
 
 run-env: $(BINARY) $(DIFF_REF_SO)
 
-run: run-env
+run: what run-env
 	$(call git_commit, "run NEMU")
 	$(NEMU_EXEC)
-
+what:
+	@touch /root/operater_system/nemu/src/engine/interpreter/eas.h
 gdb: run-env
 	$(call git_commit, "gdb NEMU")
 	gdb -s $(BINARY) --args $(NEMU_EXEC)
@@ -47,4 +48,4 @@ $(clean-tools):
 clean-tools: $(clean-tools)
 clean-all: clean distclean clean-tools
 
-.PHONY: run gdb run-env clean-tools clean-all $(clean-tools)
+.PHONY: what run gdb run-env clean-tools clean-all $(clean-tools)
