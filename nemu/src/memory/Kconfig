@@ -31,4 +31,13 @@ config MEM_RANDOM
   help
     This may help to find undefined behaviors.
 
+choice
+  prompt "enable memory trace"
+  default MT_ENA
+  config MT_ENA
+    bool "yes"
+  config MT_UNE
+    bool "no"
+endchoice
+
 endmenu #MEMORY
