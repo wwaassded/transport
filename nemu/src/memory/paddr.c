@@ -70,7 +70,6 @@ void init_mem()
 #endif
 #ifdef CONFIG_MT_ENA
   MT_fp = fopen("/root/operater_system/nemu/src/memory/mtrace.txt", "w");
-  printf("what the fuck!\n");
   Assert(MT_fp, "can not trace the memory access please close mtrace in menuconfig!\n");
 #endif
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
