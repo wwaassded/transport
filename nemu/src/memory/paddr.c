@@ -90,7 +90,7 @@ word_t paddr_read(paddr_t addr, int len)
 void paddr_write(paddr_t addr, int len, word_t data)
 {
 #ifdef CONFIG_MT_ENA
-  fprintf(MT_fp, "[[memory write] paddr_t:%u size:%d content:%x]\n", addr, len, data);
+  fprintf(MT_fp, "[[memory write] paddr_t:0x%08x size:%d content:%x]\n", addr, len, data);
 #endif
 #ifdef CONFIG_MT_ENA
 #endif
