@@ -24,6 +24,10 @@ static uint8_t *pmem = NULL;
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
+#ifdef CONFIG_MT_ENA
+static FILE *MT_fp;
+static char MT_buf[128];
+#endif
 
 
 uint8_t *guest_to_host(paddr_t paddr)
