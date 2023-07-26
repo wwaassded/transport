@@ -26,7 +26,6 @@ static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 
 #ifdef CONFIG_MT_ENA
 static FILE *MT_fp;
-static char MT_buf[128];
 #endif
 
 
@@ -78,9 +77,7 @@ void init_mem()
 word_t paddr_read(paddr_t addr, int len)
 {
 #ifdef CONFIG_MT_ENA
-  sprintf(MT_buf, "[[memory read] paddr_t:%u size:%d\n]", addr, len);
-  // printf("haha:%s\n",MT_buf);
-  fprintf(MT_fp,"%s",MT_buf);
+  fprintf(MT_fp, "[[memory read] paddr_t:%u size:%d]\n", addr, len);
 #endif
   if (likely(in_pmem(addr)))
     return pmem_read(addr, len);
@@ -93,8 +90,7 @@ word_t paddr_read(paddr_t addr, int len)
 void paddr_write(paddr_t addr, int len, word_t data)
 {
 #ifdef CONFIG_MT_ENA
-  sprintf(MT_buf, "[[memory write] paddr_t:%u size:%d content:%x\n]", addr, len, data);
-  fputs(MT_buf, MT_fp);
+  fprintf(MT_fp, "[[memory write] paddr_t:%u size:%d content:%x]\n", addr, len, data);
 #endif
 #ifdef CONFIG_MT_ENA
 #endif
