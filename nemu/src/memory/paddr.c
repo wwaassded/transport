@@ -28,7 +28,6 @@ static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 static FILE *MT_fp;
 #endif
 
-
 uint8_t *guest_to_host(paddr_t paddr)
 {
   assert(pmem != NULL);
@@ -77,12 +76,14 @@ void init_mem()
 word_t paddr_read(paddr_t addr, int len)
 {
 #ifdef CONFIG_MT_ENA
-  fprintf(MT_fp, "[[memory read] paddr_t:0x%08x size:%d]\n", addr, len);
+  if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START)
+    fprintf(MT_fp, "[[memory read] paddr_t:0x%08x size:%d]\n", addr, len);
 #endif
   if (likely(in_pmem(addr)))
     return pmem_read(addr, len);
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
-  IFDEF(CONFIG_MT_ENA,fputs("sever error",MT_fp));
+  IFDEF(CONFIG_MT_ENA, if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START)
+                           fprintf(MT_fp, "sever error"));
   out_of_bound(addr);
   return 0;
 }
@@ -90,7 +91,8 @@ word_t paddr_read(paddr_t addr, int len)
 void paddr_write(paddr_t addr, int len, word_t data)
 {
 #ifdef CONFIG_MT_ENA
-  fprintf(MT_fp, "[[memory write] paddr_t:0x%08x size:%d content:%x]\n", addr, len, data);
+  if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START)
+    fprintf(MT_fp, "[[memory write] paddr_t:0x%08x size:%d content:%x]\n", addr, len, data);
 #endif
 #ifdef CONFIG_MT_ENA
 #endif
@@ -100,6 +102,6 @@ void paddr_write(paddr_t addr, int len, word_t data)
     return;
   }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
-  IFDEF(CONFIG_MT_ENA,fputs("sever error",MT_fp));
+  IFDEF(CONFIG_MT_ENA, if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START) fprintf(MT_fp, "sever error"));
   out_of_bound(addr);
 }

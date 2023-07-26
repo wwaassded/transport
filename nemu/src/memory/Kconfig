@@ -40,4 +40,14 @@ choice
     bool "no"
 endchoice
 
+config MTRACE_START
+prompt "the beginning of mtrace"
+hex "When mtracing is abled"
+default 0x80000000
+
+config MTRACE_END
+prompt "the end of mtrace"
+hex "When mtracing is abled"
+default 0xffffffff
+
 endmenu #MEMORY
