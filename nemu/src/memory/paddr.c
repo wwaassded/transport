@@ -77,7 +77,7 @@ void init_mem()
 word_t paddr_read(paddr_t addr, int len)
 {
 #ifdef CONFIG_MT_ENA
-  fprintf(MT_fp, "[[memory read] paddr_t:%u size:%d]\n", addr, len);
+  fprintf(MT_fp, "[[memory read] paddr_t:0x%08x size:%d]\n", addr, len);
 #endif
   if (likely(in_pmem(addr)))
     return pmem_read(addr, len);
