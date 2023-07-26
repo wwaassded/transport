@@ -80,7 +80,7 @@ word_t paddr_read(paddr_t addr, int len)
 #ifdef CONFIG_MT_ENA
   sprintf(MT_buf, "[[memory read] paddr_t:%u size:%d\n]", addr, len);
   // printf("haha:%s\n",MT_buf);
-  fputs(MT_buf, MT_fp);
+  fprintf(MT_fp,"%s",MT_buf);
 #endif
   if (likely(in_pmem(addr)))
     return pmem_read(addr, len);
