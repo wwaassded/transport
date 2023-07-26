@@ -69,7 +69,7 @@ void init_mem()
   }
 #endif
 #ifdef CONFIG_MT_ENA
-  MT_fp = fopen("./mtrace.txt", "w");
+  MT_fp = fopen("/root/operater_system/nemu/src/memory/mtrace.txt", "w");
   Assert(MT_fp, "can not trace the memory access please close mtrace in menuconfig!\n");
 #endif
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
@@ -79,7 +79,7 @@ word_t paddr_read(paddr_t addr, int len)
 {
 #ifdef CONFIG_MT_ENA
   sprintf(MT_buf, "[[memory read] paddr_t:%u size:%d\n]", addr, len);
-  printf("haha:%s\n",MT_buf);
+  // printf("haha:%s\n",MT_buf);
   fputs(MT_buf, MT_fp);
 #endif
   if (likely(in_pmem(addr)))
