@@ -26,20 +26,38 @@ void init_elf(const char *elf_file)
   }
 }
 
-
 void parse_elf(const char *elf_file)
 {
   assert(elf);
   Elf32_Ehdr elf_hdr;
-  memmove(&elf_hdr,elf,sizeof(Elf32_Ehdr));
-  unsigned char expected_magicnumber[] = {ELFMAG0,ELFMAG1,ELFMAG2,ELFMAG3};
-  if(memcmp(elf_hdr.e_ident,expected_magicnumber,sizeof(expected_magicnumber)) != 0) {
-    printf("%s is not a elf file please check your makefile!\n",elf_file);
+  memmove(&elf_hdr, elf, sizeof(Elf32_Ehdr));
+  unsigned char expected_magicnumber[] = {ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3};
+  if (memcmp(elf_hdr.e_ident, expected_magicnumber, sizeof(expected_magicnumber)) != 0)
+  {
+    printf("%s is not a elf file please check your makefile!\n", elf_file);
     return;
   }
-  if(elf_hdr.e_ident[EI_CLASS] != ELFCLASS32) {
+  if (elf_hdr.e_ident[EI_CLASS] != ELFCLASS32)
+  {
     printf("only 32bit elf file is supported!\n");
     return;
   }
-  printf("\n\nSTROFF::%u\n\n",elf_hdr.e_shstrndx);
+  uint16_t i;
+  for (i = 0; i < elf_hdr.e_shnum; ++i)
+  {
+    size_t offset = elf_hdr.e_shoff + i * elf_hdr.e_shentsize;
+    Elf32_Shdr shdr;
+    memmove(&shdr, elf + offset, sizeof(Elf32_Shdr));
+    switch (shdr.sh_type)
+    {
+    case SHT_SYMTAB:
+    {
+      printf("%d::%d\n", i, shdr.sh_name);
+    }
+    case SHT_STRTAB:
+    {
+      printf("%d::%d\n", i, shdr.sh_name);
+    }
+    }
+  }
 }
