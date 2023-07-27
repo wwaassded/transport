@@ -7,13 +7,6 @@ static FILE *fp;
 static void *elf = NULL;
 
 
-typedef struct {
-    void *elf_file;
-    size_t str_offset;
-    size_t sym_offset;
-    size_t sym_size;
-} Elf_Info;
-
 
 void parse_elf(const char *elf_file);
 
@@ -72,9 +65,10 @@ void parse_elf(const char *elf_file) {
         }
     }
     assert(offset_sym != 0 && offset_str != 0 && size_sym);
-    // Elf_Info info;
-    // info.elf_file = elf;
-    // info.str_offset = offset_str;
-    // info.sym_offset = offset_sym;
-    // info.sym_size = size_sym;
+    Elf_Info *info = (Elf_Info *) malloc(sizeof(Elf_Info));
+    info->elf_file = elf;
+    info->str_offset = offset_str;
+    info->sym_offset = offset_sym;
+    info->sym_size = size_sym;
+    init_elf_info(info);
 }

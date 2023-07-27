@@ -36,12 +36,7 @@ static bool g_print_step = false;
 static char iringbuf[IR_LEN][128];
 static uint8_t out = 0;
 static uint8_t in = 0;
-typedef struct {
-    void *elf_file;
-    size_t str_offset;
-    size_t sym_offset;
-    size_t sym_size;
-} Elf_Info;
+
 void device_update();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc)
