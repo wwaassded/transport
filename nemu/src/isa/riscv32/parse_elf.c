@@ -65,5 +65,4 @@ void parse_elf(const char *elf_file) {
         }
     }
     assert(offset_sym != 0 && offset_str != 0 && size_sym);
-    
 }
