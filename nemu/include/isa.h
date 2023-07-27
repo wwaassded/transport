@@ -61,8 +61,6 @@ typedef struct {
     size_t sym_offset;
     size_t sym_size;
 } Elf_Info;
-void init_elf_info(Elf_Info *e) {
-    printf("Hello World!\n");
-}
+void init_elf_info(Elf_Info *e);
 
 #endif
