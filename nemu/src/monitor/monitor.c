@@ -98,7 +98,6 @@ static int parse_args(int argc, char *argv[])
       break;
     case 'e':
       elf_file = optarg;
-      printf("Hello World!\n");
       break;
     case 'd':
       diff_so_file = optarg;
@@ -132,7 +131,9 @@ void init_monitor(int argc, char *argv[])
   /* Open the log file. */
   init_log(log_file);
 
+  #ifdef CONFIG_FTRACE
   init_elf(elf_file);
+  #endif
 
   /* Initialize memory. */
   init_mem();

@@ -37,5 +37,9 @@ void parse_elf(const char *elf_file)
     printf("%s is not a elf file please check your makefile!\n",elf_file);
     return;
   }
-  printf("Congratulation!\n");
+  if(elf_hdr.e_ident[EI_CLASS] != ELFCLASS32) {
+    printf("only 32bit elf file is supported!\n");
+    return;
+  }
+  printf("\n\nSTROFF::0x%08x\n\n",elf_hdr.e_shstrndx);
 }
