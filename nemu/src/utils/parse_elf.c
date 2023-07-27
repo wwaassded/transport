@@ -52,11 +52,12 @@ void parse_elf(const char *elf_file)
     {
     case SHT_SYMTAB:
     {
-      printf("%d::%d\n", i, shdr.sh_offset);
+      printf("SYMTAB:%d\n",  shdr.sh_offset);
+      break;
     }
     case SHT_STRTAB:
     {
-      printf("%d::%d\n", i, shdr.sh_offset);
+      printf("STRTAB:%d\n", shdr.sh_offset);
     }
     }
   }
