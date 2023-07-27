@@ -33,6 +33,7 @@ void parse_elf(const char *elf_file)
   Elf32_Ehdr elf_hdr;
   memmove(&elf_hdr,elf,sizeof(Elf32_Ehdr));
   unsigned char expected_magicnumber[] = {ELFMAG0,ELFMAG1,ELFMAG2,ELFMAG3};
+  printf("\n\nSTROFF::0x%08x\n\n",elf_hdr.e_shstrndx);
   if(memcmp(elf_hdr.e_ident,expected_magicnumber,sizeof(expected_magicnumber)) != 0) {
     printf("%s is not a elf file please check your makefile!\n",elf_file);
     return;
