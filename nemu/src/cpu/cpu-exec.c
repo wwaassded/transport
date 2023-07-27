@@ -18,6 +18,7 @@
 #include <cpu/difftest.h>
 #include <locale.h>
 #include "../monitor/sdb/sdb.h"
+
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
@@ -34,7 +35,7 @@ static bool g_print_step = false;
 static char iringbuf[IR_LEN][128];
 static uint8_t out = 0;
 static uint8_t in = 0;
-void func();
+
 void device_update();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc)
@@ -138,7 +139,6 @@ void print_out_ir_trace() {
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n)
 {
-  func();
   g_print_step = (n < MAX_INST_TO_PRINT);
   switch (nemu_state.state)
   {
