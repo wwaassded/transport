@@ -17,6 +17,7 @@
 #define __ISA_RISCV32_H__
 
 #include <common.h>
+#define FUNC_NAME_LEN 20
 
 typedef struct {
   word_t gpr[32];
@@ -29,6 +30,13 @@ typedef struct {
     size_t sym_offset;
     size_t sym_size;
 } Elf_Info;
+
+typedef struct{
+    char F_name[FUNC_NAME_LEN];
+    size_t sta_address;
+    size_t end_address;
+} Func_Info;
+
 
 // decode
 typedef struct {

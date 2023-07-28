@@ -17,6 +17,7 @@
 #include <cpu/cpu.h>
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
+#include <elf.h>
 #include <isa.h>
 #include <locale.h>
 
@@ -28,7 +29,8 @@
 #define MAX_INST_TO_PRINT 10
 #define IR_LEN 10
 #define MARCH(num) ((num) = (((num) + 1) % IR_LEN))
-
+#define FUNC_NUMBER 128
+#define nullptr NULL
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0;// unit: us
@@ -36,8 +38,18 @@ static bool g_print_step = false;
 static char iringbuf[IR_LEN][128];
 static uint8_t out = 0;
 static uint8_t in = 0;
+static Elf_Info *elf_info = nullptr;
+// static Func_Info func_info[FUNC_NUMBER];
+// static uint32_t F_len = 0;
 
 void device_update();
+void init_Func_Info();
+
+void init_elf_info(Elf_Info *e) {
+    assert(e);
+    elf_info = e;
+}
+
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
@@ -152,12 +164,16 @@ void cpu_exec(uint64_t n) {
             nemu_state.state = NEMU_STOP;
             break;
         case NEMU_END:
-        case NEMU_ABORT:
+        case NEMU_ABORT: {
+            if (elf_info != nullptr) {
+                free(elf_info);
+            }
             Log("nemu: %s at pc = " FMT_WORD,
                 (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
                 nemu_state.halt_pc);
             if (nemu_state.halt_ret != 0)
                 print_out_ir_trace();
+        }
         // fall through
         case NEMU_QUIT:
             statistic();
@@ -168,6 +184,16 @@ void cpu_exec(uint64_t n) {
 }
 
 
-void init_elf_info(Elf_Info *e) {
-    printf("Hello World!\n");
+void init_Func_Info() {
+    assert(elf_info);
+    uint32_t j = 0;
+    printf("watch out !\n\n\n\n");
+    for (j = 0; j * sizeof(Elf32_Sym) < elf_info->sym_size; ++j) {
+        Elf32_Sym tmp;
+        uint32_t absoffset = elf_info->sym_offset + j * sizeof(Elf32_Sym);
+        memmove(&tmp, elf_info->elf_file + absoffset, sizeof(Elf32_Sym));
+        if (tmp.st_name != 0)
+            printf("%s\n", (char *) (elf_info->elf_file + tmp.st_name + elf_info->str_offset));
+    }
+    printf("\n\n\n\n");
 }
