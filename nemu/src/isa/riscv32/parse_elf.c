@@ -107,7 +107,7 @@ void parse_decode(Decode *s) {
             end = sta + func_info[i].size;
             if (s->dnpc >= sta && s->dnpc < end)
                 tar = i;
-            if (s->snpc >= sta && s->snpc < end)
+            if (s->snpc-4 >= sta && s->snpc-4 < end)
                 ori = i;
         }
         fprintf(ftrace_fp, "call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
