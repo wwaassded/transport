@@ -39,8 +39,8 @@ static char iringbuf[IR_LEN][128];
 static uint8_t out = 0;
 static uint8_t in = 0;
 static Elf_Info *elf_info = nullptr;
-// static Func_Info func_info[FUNC_NUMBER];
-// static uint32_t F_len = 0;
+static Func_Info func_info[FUNC_NUMBER];
+static uint32_t F_len = 0;
 
 void device_update();
 void init_Func_Info();
@@ -189,13 +189,16 @@ void init_Func_Info() {
     assert(elf_info);
     char *cbytes = (char *) elf_info->elf_file;
     uint32_t j = 0;
-    printf("watch out !\n\n\n\n");
     for (j = 0; j * sizeof(Elf32_Sym) < elf_info->sym_size; ++j) {
         Elf32_Sym tmp;
         uint32_t absoffset = elf_info->sym_offset + j * sizeof(Elf32_Sym);
         memmove(&tmp, cbytes + absoffset, sizeof(Elf32_Sym));
-        if (tmp.st_name != 0 && ELF32_ST_TYPE(tmp.st_info) == STT_FUNC)
-            printf("%u %u\n",tmp.st_info,ELF32_ST_TYPE(tmp.st_info));
+        if (tmp.st_name != 0 && ELF32_ST_TYPE(tmp.st_info) == STT_FUNC) {
+            strncpy(func_info[F_len].F_name,elf_info->str_offset+cbytes+tmp.st_name,FUNC_NAME_LEN);
+            ++F_len;
+        }
     }
-    printf("\n\n\n\n");
+    int i = 0;
+    for (i = 0; i < FUNC_NUMBER; ++i)
+        printf("F:%s\n",func_info[i].F_name);
 }
