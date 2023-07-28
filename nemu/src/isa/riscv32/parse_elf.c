@@ -2,27 +2,33 @@
 #include <elf.h>
 #include <isa.h>
 #include <sys/mman.h>
+#include <cpu/decode.h>
+
+#define FUNC_NUMBER 128
 
 static FILE *fp;
 static void *elf = NULL;
+static Func_Info func_info[FUNC_NUMBER];
+static uint32_t F_len = 0;
+static struct {
+    uint32_t sym_size;
+    uint32_t sym_offset;
+    uint32_t str_offset;
+} elf_info;
 
-
-void parse_elf(const char *elf_file);
-
-void init_elf(const char *elf_file) {
-    assert(elf_file);
-    fp = fopen(elf_file, "r");
-    if (fp == NULL)
-        printf("can not open your elf_file!\n");
-    else {
-        fseek(fp, 0, SEEK_END);
-        size_t number = ftell(fp);
-        elf = mmap(NULL, number, PROT_READ, MAP_PRIVATE, fileno(fp), 0);
-        fclose(fp);
-        if (elf == MAP_FAILED)
-            perror("in_init_elf");
-        else
-            parse_elf(elf_file);
+void init_Func_Info() {
+    char *cbytes = (char *) elf;
+    uint32_t j = 0;
+    for (j = 0; j * sizeof(Elf32_Sym) < elf_info.sym_size; ++j) {
+        Elf32_Sym tmp;
+        uint32_t absoffset = elf_info.sym_offset + j * sizeof(Elf32_Sym);
+        memmove(&tmp, cbytes + absoffset, sizeof(Elf32_Sym));
+        if (tmp.st_name != 0 && ELF32_ST_TYPE(tmp.st_info) == STT_FUNC) {
+            strncpy(func_info[F_len].F_name, elf_info.str_offset + cbytes + tmp.st_name, FUNC_NAME_LEN);
+            func_info[F_len].sta_address = tmp.st_value;
+            func_info[F_len].size = tmp.st_size;
+            ++F_len;
+        }
     }
 }
 
@@ -61,10 +67,29 @@ void parse_elf(const char *elf_file) {
         }
     }
     assert(offset_sym != 0 && offset_str != 0 && size_sym);
-    Elf_Info *info = (Elf_Info *) malloc(sizeof(Elf_Info));
-    info->elf_file = elf;
-    info->str_offset = offset_str;
-    info->sym_offset = offset_sym;
-    info->sym_size = size_sym;
-    init_elf_info(info);
+    elf_info.str_offset = offset_str;
+    elf_info.sym_offset = offset_sym;
+    elf_info.sym_size = size_sym;
+    init_Func_Info();
+}
+
+void init_elf(const char *elf_file) {
+    assert(elf_file);
+    fp = fopen(elf_file, "r");
+    if (fp == NULL)
+        printf("can not open your elf_file!\n");
+    else {
+        fseek(fp, 0, SEEK_END);
+        size_t number = ftell(fp);
+        elf = mmap(NULL, number, PROT_READ, MAP_PRIVATE, fileno(fp), 0);
+        fclose(fp);
+        if (elf == MAP_FAILED)
+            perror("in_init_elf");
+        else
+            parse_elf(elf_file);
+    }
+}
+
+void parse_decode(Decode *s) {
+    printf("%s\n",s->name);
 }

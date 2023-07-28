@@ -24,17 +24,10 @@ typedef struct {
   vaddr_t pc;
 } riscv32_CPU_state;
 
-typedef struct {
-    void *elf_file;
-    size_t str_offset;
-    size_t sym_offset;
-    size_t sym_size;
-} Elf_Info;
-
 typedef struct{
     char F_name[FUNC_NAME_LEN];
-    size_t sta_address;
-    size_t end_address;
+    uint32_t sta_address;
+    uint32_t size;
 } Func_Info;
 
 
