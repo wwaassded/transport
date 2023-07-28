@@ -1,8 +1,8 @@
 #include <common.h>
+#include <cpu/decode.h>
 #include <elf.h>
 #include <isa.h>
 #include <sys/mman.h>
-#include <cpu/decode.h>
 
 #define FUNC_NUMBER 128
 
@@ -10,6 +10,7 @@ static FILE *fp;
 static void *elf = NULL;
 static Func_Info func_info[FUNC_NUMBER];
 static uint32_t F_len = 0;
+static FILE *ftrace_fp = NULL;
 static struct {
     uint32_t sym_size;
     uint32_t sym_offset;
@@ -88,8 +89,27 @@ void init_elf(const char *elf_file) {
         else
             parse_elf(elf_file);
     }
+    assert(!ftrace_fp);
+    ftrace_fp = fopen("/root/operater_system/nemu/src/cpu/ftrace.txt", "w");
+    if (ftrace_fp == NULL)
+        perror("fail to open file");
 }
 
 void parse_decode(Decode *s) {
-    printf("%s\n",s->name);
+    if (strncmp(s->name, "jal", CMD_LEN) == 0 || strncmp(s->name, "jalr", CMD_LEN) == 0) {
+        uint16_t i = 0;
+        uint16_t ori = 0;
+        uint16_t tar = 0;
+        uint32_t sta;
+        uint32_t end;
+        for (i = 0; i < F_len; ++i) {
+            sta = func_info[i].sta_address;
+            end = sta + func_info[i].size;
+            if (s->dnpc >= sta && s->dnpc < end)
+                tar = i;
+            if (s->snpc >= sta && s->snpc < end)
+                ori = i;
+        }
+        fprintf(ftrace_fp, "call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
+    }
 }
