@@ -13,14 +13,14 @@
  * See the Mulan PSL v2 for more details.
  ***************************************************************************************/
 
-#include <memory/host.h>
-#include <memory/paddr.h>
 #include <device/mmio.h>
 #include <isa.h>
+#include <memory/host.h>
+#include <memory/paddr.h>
 
 #if defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
-#else // CONFIG_PMEM_GARRAY
+#else// CONFIG_PMEM_GARRAY
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
@@ -28,80 +28,76 @@ static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 static FILE *MT_fp;
 #endif
 
-uint8_t *guest_to_host(paddr_t paddr)
-{
-  assert(pmem != NULL);
-  return pmem + paddr - CONFIG_MBASE;
+uint8_t *guest_to_host(paddr_t paddr) {
+    assert(pmem != NULL);
+    return pmem + paddr - CONFIG_MBASE;
 }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 
-static word_t pmem_read(paddr_t addr, int len)
-{
-  word_t ret = host_read(guest_to_host(addr), len);
-  return ret;
+static word_t pmem_read(paddr_t addr, int len) {
+    word_t ret = host_read(guest_to_host(addr), len);
+    return ret;
 }
 
-static void pmem_write(paddr_t addr, int len, word_t data)
-{
-  host_write(guest_to_host(addr), len, data);
+static void pmem_write(paddr_t addr, int len, word_t data) {
+    host_write(guest_to_host(addr), len, data);
 }
 
-static void out_of_bound(paddr_t addr)
-{
-  panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
-        addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
+static void out_of_bound(paddr_t addr) {
+    panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
+          addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
 }
 
-void init_mem()
-{
+void init_mem() {
 #if defined(CONFIG_PMEM_MALLOC)
-  pmem = malloc(CONFIG_MSIZE);
-  assert(pmem);
+    pmem = malloc(CONFIG_MSIZE);
+    assert(pmem);
 #endif
 #ifdef CONFIG_MEM_RANDOM
-  uint32_t *p = (uint32_t *)pmem;
-  int i;
-  for (i = 0; i < (int)(CONFIG_MSIZE / sizeof(p[0])); i++)
-  {
-    p[i] = rand();
-  }
+    uint32_t *p = (uint32_t *) pmem;
+    int i;
+    for (i = 0; i < (int) (CONFIG_MSIZE / sizeof(p[0])); i++) {
+        p[i] = rand();
+    }
 #endif
 #ifdef CONFIG_MT_ENA
-  MT_fp = fopen("/root/operater_system/nemu/src/memory/mtrace.txt", "w");
-  Assert(MT_fp, "can not trace the memory access please close mtrace in menuconfig!\n");
+    MT_fp = fopen("/root/operater_system/nemu/src/memory/mtrace.txt", "w");
+    Assert(MT_fp, "can not trace the memory access please close mtrace in menuconfig!\n");
 #endif
-  Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
+    Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
-word_t paddr_read(paddr_t addr, int len)
-{
+word_t paddr_read(paddr_t addr, int len) {
 #ifdef CONFIG_MT_ENA
-  if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START)
-    fprintf(MT_fp, "[[memory read] paddr_t:0x%08x size:%d]\n", addr, len);
+    if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START) {
+        fprintf(MT_fp, "[[memory read] paddr_t:0x%08x size:%d]\n", addr, len);
+        fflush(MT_fp);
+    }
 #endif
-  if (likely(in_pmem(addr)))
-    return pmem_read(addr, len);
-  IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
-  IFDEF(CONFIG_MT_ENA, if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START)
-                           fprintf(MT_fp, "sever error"));
-  out_of_bound(addr);
-  return 0;
+    if (likely(in_pmem(addr)))
+        return pmem_read(addr, len);
+    IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
+    IFDEF(
+            CONFIG_MT_ENA, if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START) { fprintf(MT_fp, "sever error"); fflush(MT_fp); });
+    out_of_bound(addr);
+    return 0;
 }
 
-void paddr_write(paddr_t addr, int len, word_t data)
-{
+void paddr_write(paddr_t addr, int len, word_t data) {
 #ifdef CONFIG_MT_ENA
-  if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START)
-    fprintf(MT_fp, "[[memory write] paddr_t:0x%08x size:%d content:%x]\n", addr, len, data);
+    if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START) {
+        fprintf(MT_fp, "[[memory write] paddr_t:0x%08x size:%d content:%x]\n", addr, len, data);
+        fflush(MT_fp);
+    }
 #endif
 #ifdef CONFIG_MT_ENA
 #endif
-  if (likely(in_pmem(addr)))
-  {
-    pmem_write(addr, len, data);
-    return;
-  }
-  IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
-  IFDEF(CONFIG_MT_ENA, if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START) fprintf(MT_fp, "sever error"));
-  out_of_bound(addr);
+    if (likely(in_pmem(addr))) {
+        pmem_write(addr, len, data);
+        return;
+    }
+    IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
+    IFDEF(
+            CONFIG_MT_ENA, if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START) { fprintf(MT_fp, "sever error"); fflush(MT_fp); });
+    out_of_bound(addr);
 }
