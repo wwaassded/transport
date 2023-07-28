@@ -1,11 +1,10 @@
 #include <common.h>
 #include <elf.h>
-#include <sys/mman.h>
 #include <isa.h>
+#include <sys/mman.h>
 
 static FILE *fp;
 static void *elf = NULL;
-
 
 
 void parse_elf(const char *elf_file);
@@ -65,4 +64,6 @@ void parse_elf(const char *elf_file) {
         }
     }
     assert(offset_sym != 0 && offset_str != 0 && size_sym);
+    Elf_Info *info = (Elf_Info *) malloc(sizeof(Elf_Info));
+    init_elf_info(info);
 }

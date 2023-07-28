@@ -166,3 +166,8 @@ void cpu_exec(uint64_t n) {
         }
     }
 }
+
+
+void init_elf_info(Elf_Info *e) {
+    printf("Hello World!\n");
+}

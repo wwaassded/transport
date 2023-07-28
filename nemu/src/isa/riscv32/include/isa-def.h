@@ -23,6 +23,13 @@ typedef struct {
   vaddr_t pc;
 } riscv32_CPU_state;
 
+typedef struct {
+    void *elf_file;
+    size_t str_offset;
+    size_t sym_offset;
+    size_t sym_size;
+} Elf_Info;
+
 // decode
 typedef struct {
   union {
