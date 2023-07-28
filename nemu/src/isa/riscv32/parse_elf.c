@@ -105,13 +105,14 @@ void parse_decode(Decode *s,vaddr_t pc) {
         for (i = 0; i < F_len; ++i) {
             sta = func_info[i].sta_address;
             end = sta + func_info[i].size;
-            if (s->dnpc >= sta && s->dnpc <= end)
+            if (s->dnpc >= sta && s->dnpc < end)
                 tar = i;
-            if (pc >= sta && pc <= end)
+            if (pc >= sta && pc < end)
                 ori = i;
         }
         fprintf(ftrace_fp, "call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
+        printf("0x%08x 0x%08x\n",s->dnpc,pc);
         printf("call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
-        printf("old:0x%08x new:0x%08x\n",func_info[ori].sta_address,func_info[tar].sta_address);
+        // printf("old:0x%08x new:0x%08x\n",func_info[ori].sta_address,func_info[tar].sta_address);
     }
 }
