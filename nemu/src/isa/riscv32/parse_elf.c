@@ -111,10 +111,8 @@ void parse_decode(Decode *s, vaddr_t pc) {
                 ori = i;
         }
         assert(ori != -1);
-        if (tar != -1) {
-            printf("0x%08x~0x%08x\n",s->dnpc,pc);
-            printf("call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
-            fprintf(ftrace_fp, "call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
+        if (tar!=-1 && strcmp(func_info[tar].F_name,func_info[ori].F_name)!=0) {
+            fprintf(ftrace_fp, "%08x:call %s in %s\n", pc,func_info[tar].F_name, func_info[ori].F_name);
         }
     }
 }
