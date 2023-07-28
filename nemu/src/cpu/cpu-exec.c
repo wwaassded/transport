@@ -48,6 +48,7 @@ void init_Func_Info();
 void init_elf_info(Elf_Info *e) {
     assert(e);
     elf_info = e;
+    init_Func_Info();
 }
 
 
