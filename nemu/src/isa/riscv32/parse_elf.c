@@ -95,7 +95,7 @@ void init_elf(const char *elf_file) {
         perror("fail to open file");
 }
 
-void parse_decode(Decode *s) {
+void parse_decode(Decode *s,vaddr_t pc) {
     if (strncmp(s->name, "jal", CMD_LEN) == 0 || strncmp(s->name, "jalr", CMD_LEN) == 0) {
         uint16_t i = 0;
         uint16_t ori = 0;
@@ -105,9 +105,9 @@ void parse_decode(Decode *s) {
         for (i = 0; i < F_len; ++i) {
             sta = func_info[i].sta_address;
             end = sta + func_info[i].size;
-            if (s->dnpc >= sta && s->dnpc < end)
+            if (s->dnpc >= sta && s->dnpc <= end)
                 tar = i;
-            if (s->snpc-4 >= sta && s->snpc-4 < end)
+            if (pc >= sta && pc <= end)
                 ori = i;
         }
         fprintf(ftrace_fp, "call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
