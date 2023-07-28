@@ -187,14 +187,15 @@ void cpu_exec(uint64_t n) {
 
 void init_Func_Info() {
     assert(elf_info);
+    char *cbytes = (char*)elf_info->elf_file;
     uint32_t j = 0;
     printf("watch out !\n\n\n\n");
     for (j = 0; j * sizeof(Elf32_Sym) < elf_info->sym_size; ++j) {
         Elf32_Sym tmp;
         uint32_t absoffset = elf_info->sym_offset + j * sizeof(Elf32_Sym);
-        memmove(&tmp, elf_info->elf_file + absoffset, sizeof(Elf32_Sym));
+        memmove(&tmp, cbytes + absoffset, sizeof(Elf32_Sym));
         if (tmp.st_name != 0)
-            printf("%s\n", (char *) (elf_info->elf_file + tmp.st_name + elf_info->str_offset));
+            printf("%s\n", cbytes + tmp.st_name + elf_info->str_offset);
     }
     printf("\n\n\n\n");
 }
