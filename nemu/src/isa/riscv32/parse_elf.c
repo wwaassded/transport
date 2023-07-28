@@ -24,7 +24,7 @@ void init_Func_Info() {
         Elf32_Sym tmp;
         uint32_t absoffset = elf_info.sym_offset + j * sizeof(Elf32_Sym);
         memmove(&tmp, cbytes + absoffset, sizeof(Elf32_Sym));
-        if (tmp.st_name != 0 && ELF32_ST_TYPE(tmp.st_info) == STT_FUNC) {
+        if (tmp.st_name != 0 && ELF32_ST_TYPE(tmp.st_info) == STT_FUNC && tmp.st_size != 0) {
             strncpy(func_info[F_len].F_name, elf_info.str_offset + cbytes + tmp.st_name, FUNC_NAME_LEN);
             func_info[F_len].sta_address = tmp.st_value;
             func_info[F_len].size = tmp.st_size;
@@ -95,25 +95,24 @@ void init_elf(const char *elf_file) {
         perror("fail to open file");
 }
 
-void parse_decode(Decode *s,vaddr_t pc) {
+void parse_decode(Decode *s, vaddr_t pc) {
     if (strncmp(s->name, "jal", CMD_LEN) == 0 || strncmp(s->name, "jalr", CMD_LEN) == 0) {
         uint16_t i = 0;
         uint16_t ori = 0;
         uint16_t tar = 0;
-        uint32_t sta;
-        uint32_t end;
+        uint32_t sta = -1;
+        uint32_t end = -1;
         for (i = 0; i < F_len; ++i) {
             sta = func_info[i].sta_address;
             end = sta + func_info[i].size;
-            printf("name:%s 0x%08x~0x%08x\n",func_info[i].F_name,sta,end);
-            if (s->dnpc >= sta && s->dnpc < end)
+            printf("name:%s 0x%08x~0x%08x\n", func_info[i].F_name, sta, end);
+            if (s->dnpc == sta)
                 tar = i;
             if (pc >= sta && pc < end)
                 ori = i;
         }
-        fprintf(ftrace_fp, "call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
-        printf("0x%08x 0x%08x\n",s->dnpc,pc);
-        printf("call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
-        // printf("old:0x%08x new:0x%08x\n",func_info[ori].sta_address,func_info[tar].sta_address);
+        assert(ori != -1);
+        if (tar != -1)
+            fprintf(ftrace_fp, "call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
     }
 }
