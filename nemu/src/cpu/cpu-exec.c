@@ -199,6 +199,6 @@ void init_Func_Info() {
         }
     }
     int i = 0;
-    for (i = 0; i < FUNC_NUMBER; ++i)
+    for (i = 0; i < F_len; ++i)
         printf("F:%s\n",func_info[i].F_name);
 }
