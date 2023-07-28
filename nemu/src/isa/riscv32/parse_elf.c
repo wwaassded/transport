@@ -105,7 +105,6 @@ void parse_decode(Decode *s, vaddr_t pc) {
         for (i = 0; i < F_len; ++i) {
             sta = func_info[i].sta_address;
             end = sta + func_info[i].size;
-            printf("name:%s 0x%08x~0x%08x\n", func_info[i].F_name, sta, end);
             if (s->dnpc == sta)
                 tar = i;
             if (pc >= sta && pc < end)
