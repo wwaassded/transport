@@ -190,11 +190,6 @@ void init_Func_Info() {
     char *cbytes = (char*)elf_info->elf_file;
     uint32_t j = 0;
     printf("watch out !\n\n\n\n");
-    printf("%lu   ",elf_info->str_offset);
-    printf("%lu   ",elf_info->sym_offset);
-    printf("%lu   ",elf_info->sym_size);
-    free(elf_info);
-    return;
     for (j = 0; j * sizeof(Elf32_Sym) < elf_info->sym_size; ++j) {
         Elf32_Sym tmp;
         uint32_t absoffset = elf_info->sym_offset + j * sizeof(Elf32_Sym);
