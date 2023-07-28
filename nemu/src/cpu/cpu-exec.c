@@ -195,10 +195,8 @@ void init_Func_Info() {
         memmove(&tmp, cbytes + absoffset, sizeof(Elf32_Sym));
         if (tmp.st_name != 0 && ELF32_ST_TYPE(tmp.st_info) == STT_FUNC) {
             strncpy(func_info[F_len].F_name,elf_info->str_offset+cbytes+tmp.st_name,FUNC_NAME_LEN);
+            printf("%u\n",tmp.st_value);
             ++F_len;
         }
     }
-    int i = 0;
-    for (i = 0; i < F_len; ++i)
-        printf("F:%s\n",func_info[i].F_name);
 }
