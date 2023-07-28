@@ -111,5 +111,6 @@ void parse_decode(Decode *s) {
                 ori = i;
         }
         fprintf(ftrace_fp, "call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
+        printf("call %s in %s\n", func_info[tar].F_name, func_info[ori].F_name);
     }
 }
