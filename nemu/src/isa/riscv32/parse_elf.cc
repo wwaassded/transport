@@ -96,7 +96,7 @@ void init_elf(const char *elf_file) {
 }
 
 void parse_decode(Decode *s, vaddr_t pc) {
-    if (strncmp(s->name, "jal", CMD_LEN) == 0 || strncmp(s->name, "jalr", CMD_LEN) == 0) {
+    if (strncmp(s->name, "jal", CMD_LEN) == 0) {
         uint16_t i = 0;
         uint16_t ori = 0;
         uint16_t tar = 0;
@@ -112,7 +112,9 @@ void parse_decode(Decode *s, vaddr_t pc) {
         }
         assert(ori != -1);
         if (tar!=-1 && strcmp(func_info[tar].F_name,func_info[ori].F_name)!=0) {
-            fprintf(ftrace_fp, "%08x:call %s in %s\n", pc,func_info[tar].F_name, func_info[ori].F_name);
+          
         }
+    } else if(strncmp(s->name, "jalr", CMD_LEN) == 0) {
+
     }
 }
