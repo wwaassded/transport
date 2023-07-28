@@ -194,7 +194,7 @@ void init_Func_Info() {
         Elf32_Sym tmp;
         uint32_t absoffset = elf_info->sym_offset + j * sizeof(Elf32_Sym);
         memmove(&tmp, cbytes + absoffset, sizeof(Elf32_Sym));
-        if (tmp.st_name != 0)
+        if (tmp.st_name != 0 && tmp.st_info==STT_FUNC)
             printf("%s\n", cbytes + tmp.st_name + elf_info->str_offset);
     }
     printf("\n\n\n\n");
