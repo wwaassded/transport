@@ -40,7 +40,7 @@ static uint8_t out = 0;
 static uint8_t in = 0;
 
 void device_update();
-void parse_decode(Decode *s,vaddr_t pc);
+void parse_decode(Decode *s, vaddr_t pc);
 
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
@@ -60,7 +60,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
     s->snpc = pc;
     isa_exec_once(s);
     cpu.pc = s->dnpc;
-    parse_decode(s,pc);
+#ifdef CONFIG_FTRACE
+    parse_decode(s, pc);
+#endif
 
 #ifdef CONFIG_ITRACE
     char *p = s->logbuf;
