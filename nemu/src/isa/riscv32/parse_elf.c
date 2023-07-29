@@ -109,6 +109,7 @@ void parse_decode(Decode *s, vaddr_t pc) {
         for (ii = 0; ii < F_len; ++ii) {
             sta = func_info[ii].sta_address;
             end = sta + func_info[ii].size;
+            printf("%08x~%08x\n",sta,end);
             if (s->dnpc == sta)
                 tar = ii;
             if (pc >= sta && pc < end)
