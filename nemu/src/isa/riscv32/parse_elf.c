@@ -102,24 +102,25 @@ void parse_decode(Decode *s, vaddr_t pc) {
     uint8_t f_jalr = strncmp(s->name, "jalr", CMD_LEN);
     if (f_jal == 0 || f_jalr == 0) {
         uint32_t ii = 0;
-        uint16_t ori = 0;
-        uint16_t tar = 0;
-        uint16_t sta = F_len + 1;
-        uint16_t end = sta;
+        uint32_t tar = 0;
+        uint32_t ori = 0;
+        uint32_t sta;
+        uint32_t end;
         for (ii = 0; ii < F_len; ++ii) {
             sta = func_info[ii].sta_address;
             end = sta + func_info[ii].size;
-            printf("%08x~%08x\n",sta,end);
-            if (s->dnpc == sta)
-                tar = ii;
+            if (f_jal == 0) {
+                if (s->dnpc == sta)
+                    tar = ii;
+            } else {
+                if (s->dnpc >= sta && s->dnpc < end)
+                    tar = ii;
+            }
             if (pc >= sta && pc < end)
-                ori = ii;
-            if (s->dnpc > sta && s->dnpc < end && f_jalr == 0)
-                tar = ii;
+                pc = ii;
         }
         printf("%08x %08x\n", pc, s->dnpc);
         printf("%u %u\n", tar, ori);
-        assert(ori != F_len + 1);
         if (tar != F_len + 1 && strcmp(func_info[abs(tar)].F_name, func_info[ori].F_name) != 0) {
             if (f_jal == 0) {
                 printf("FUCK!\n");
