@@ -98,6 +98,7 @@ void init_elf(const char *elf_file) {
 
 void parse_decode(Decode *s, vaddr_t pc) {
     printf("FUCK!\n");
+    assert(ftrace_fp);
     if (strncmp(s->name, "jal", CMD_LEN) == 0 || strncmp(s->name, "jalr", CMD_LEN) == 0) {
         uint32_t ii = 0;
         uint16_t ori = 0;
