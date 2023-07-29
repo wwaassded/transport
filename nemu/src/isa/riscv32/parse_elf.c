@@ -11,6 +11,7 @@ static void *elf = NULL;
 static Func_Info func_info[FUNC_NUMBER];
 static uint32_t F_len = 0;
 static FILE *ftrace_fp = NULL;
+static uint32_t number = 0;
 static struct {
     uint32_t sym_size;
     uint32_t sym_offset;
@@ -97,27 +98,41 @@ void init_elf(const char *elf_file) {
 
 void parse_decode(Decode *s, vaddr_t pc) {
     if (strncmp(s->name, "jal", CMD_LEN) == 0 || strncmp(s->name, "jalr", CMD_LEN) == 0) {
-        uint16_t i = 0;
+        uint32_t ii = 0;
         uint16_t ori = 0;
         uint16_t tar = 0;
-        uint32_t sta = -1;
-        uint32_t end = -1;
-        for (i = 0; i < F_len; ++i) {
-            sta = func_info[i].sta_address;
-            end = sta + func_info[i].size;
-            if (s->dnpc == sta)
-                tar = i;
-            if (pc >= sta && pc < end)
-                ori = i;
+        uint16_t sta = F_len + 1;
+        uint16_t end = sta;
+        for (ii = 0; ii < F_len; ++ii) {
+            sta = func_info[ii].sta_address;
+            end = sta + func_info[ii].size;
+            if (s->dnpc == sta) {
+                tar = -ii;
+                break;
+            }
+            if (pc >= sta && pc < end) {
+                ori = ii;
+                break;
+            }
+            if (s->dnpc >= sta && s->dnpc < end) {
+                tar = ii;
+                break;
+            }
         }
-        assert(ori != -1);
-        if (tar!=-1 && strcmp(func_info[tar].F_name,func_info[ori].F_name)!=0) {
-          if(strncmp(s->name,"jal",CMD_LEN)==0) {
-
-          }
-          else {
-            
-          }
+        assert(ori != F_len + 1);
+        if (tar != F_len + 1 && strcmp(func_info[abs(tar)].F_name, func_info[ori].F_name) != 0) {
+            if (tar < 0) {
+                tar = -tar;
+                for (ii = 0; ii < number; ++ii)
+                    fprintf(ftrace_fp," ");
+                fprintf(ftrace_fp,"[0x%08x:call %s in %s]\n",pc,func_info[tar].F_name,func_info[ori].F_name);
+                ++number;
+            } else if(strcmp(s->name,"jalr")) {
+                --number;
+                for (ii = 0; ii < number; ++ii)
+                    fprintf(ftrace_fp," ");
+                fprintf(ftrace_fp,"[0x%08x:ret %s in %s]\n",pc,func_info[tar].F_name,func_info[ori].F_name);
+            }
         }
     }
 }
