@@ -102,7 +102,7 @@ void parse_decode(Decode *s, vaddr_t pc) {
     uint8_t f_jalr = strncmp(s->name, "jalr", CMD_LEN);
     if (f_jal == 0 || f_jalr == 0) {
         uint32_t ii = 0;
-        uint32_t tar = 0;
+        uint32_t tar = F_len;
         uint32_t ori = 0;
         uint32_t sta;
         uint32_t end;
@@ -119,7 +119,7 @@ void parse_decode(Decode *s, vaddr_t pc) {
             if (pc >= sta && pc < end)
                 ori = ii;
         }
-        if (tar != 0 && strcmp(func_info[tar].F_name, func_info[ori].F_name) != 0) {
+        if (tar != F_len && strcmp(func_info[tar].F_name, func_info[ori].F_name) != 0) {
             if (f_jal == 0) {
                 for (ii = 0; ii < number; ++ii)
                     fprintf(ftrace_fp, "    ");
