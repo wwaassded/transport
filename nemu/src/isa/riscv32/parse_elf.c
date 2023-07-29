@@ -101,7 +101,7 @@ void parse_decode(Decode *s, vaddr_t pc) {
     if (strncmp(s->name, "jal", CMD_LEN) == 0 || strncmp(s->name, "jalr", CMD_LEN) == 0) {
         uint32_t ii = 0;
         uint16_t ori = 0;
-        uint16_t tar = 0;
+        int16_t tar = 0;
         uint16_t sta = F_len + 1;
         uint16_t end = sta;
         for (ii = 0; ii < F_len; ++ii) {
@@ -115,7 +115,7 @@ void parse_decode(Decode *s, vaddr_t pc) {
                 ori = ii;
                 break;
             }
-            if (s->dnpc >= sta && s->dnpc < end) {
+            if (s->dnpc > sta && s->dnpc < end) {
                 tar = ii;
                 break;
             }
