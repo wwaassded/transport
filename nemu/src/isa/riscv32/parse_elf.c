@@ -97,7 +97,6 @@ void init_elf(const char *elf_file) {
 }
 
 void parse_decode(Decode *s, vaddr_t pc) {
-    printf("FUCK!\n");
     assert(ftrace_fp);
     if (strncmp(s->name, "jal", CMD_LEN) == 0 || strncmp(s->name, "jalr", CMD_LEN) == 0) {
         uint32_t ii = 0;
@@ -124,16 +123,17 @@ void parse_decode(Decode *s, vaddr_t pc) {
         assert(ori != F_len + 1);
         if (tar != F_len + 1 && strcmp(func_info[abs(tar)].F_name, func_info[ori].F_name) != 0) {
             if (tar < 0) {
+                printf("FUCK!\n");
                 tar = -tar;
                 for (ii = 0; ii < number; ++ii)
-                    fprintf(ftrace_fp," ");
-                fprintf(ftrace_fp,"[0x%08x:call %s in %s]\n",pc,func_info[tar].F_name,func_info[ori].F_name);
+                    fprintf(ftrace_fp, " ");
+                fprintf(ftrace_fp, "[0x%08x:call %s in %s]\n", pc, func_info[tar].F_name, func_info[ori].F_name);
                 ++number;
-            } else if(strcmp(s->name,"jalr")) {
+            } else if (strcmp(s->name, "jalr")) {
                 --number;
                 for (ii = 0; ii < number; ++ii)
-                    fprintf(ftrace_fp," ");
-                fprintf(ftrace_fp,"[0x%08x:ret %s in %s]\n",pc,func_info[tar].F_name,func_info[ori].F_name);
+                    fprintf(ftrace_fp, " ");
+                fprintf(ftrace_fp, "[0x%08x:ret %s in %s]\n", pc, func_info[tar].F_name, func_info[ori].F_name);
             }
         }
     }
