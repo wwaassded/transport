@@ -120,6 +120,7 @@ void parse_decode(Decode *s, vaddr_t pc) {
                 break;
             }
         }
+        printf("%u %u\n",tar,ori);
         assert(ori != F_len + 1);
         if (tar != F_len + 1 && strcmp(func_info[abs(tar)].F_name, func_info[ori].F_name) != 0) {
             if (tar < 0) {
