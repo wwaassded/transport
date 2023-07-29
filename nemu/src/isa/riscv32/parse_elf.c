@@ -119,19 +119,15 @@ void parse_decode(Decode *s, vaddr_t pc) {
             if (pc >= sta && pc < end)
                 ori = ii;
         }
-        printf("%08x %08x\n", pc, s->dnpc);
-        printf("%u %u\n", tar, ori);
         if (tar != 0 && strcmp(func_info[tar].F_name, func_info[ori].F_name) != 0) {
             if (f_jal == 0) {
-                printf("%08x\n", pc);
                 for (ii = 0; ii < number; ++ii)
-                    fprintf(ftrace_fp, " ");
+                    fprintf(ftrace_fp, "    ");
                 fprintf(ftrace_fp, "[0x%08x:call %s in %s]\n", pc, func_info[tar].F_name, func_info[ori].F_name);
                 ++number;
             } else {
-                printf("%08x\n", pc);
                 for (ii = 0; ii < number; ++ii)
-                    fprintf(ftrace_fp, " ");
+                    fprintf(ftrace_fp, "    ");
                 fprintf(ftrace_fp, "[0x%08x:ret %s in %s]\n", pc, func_info[tar].F_name, func_info[ori].F_name);
                 --number;
             }
