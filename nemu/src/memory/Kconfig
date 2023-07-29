@@ -40,6 +40,15 @@ choice
     bool "no"
 endchoice
 
+choice 
+  prompt "enable function trace"
+  default FTRACE
+  config FTRACE
+    bool "yes"
+  config NFTRACE
+    bool "no"
+endchoice
+
 config MTRACE_START
 prompt "the beginning of mtrace"
 hex "When mtracing is abled"

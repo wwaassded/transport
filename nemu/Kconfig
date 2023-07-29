@@ -199,6 +199,8 @@ source "src/device/Kconfig"
 endif
 
 
+
+
 menu "Miscellaneous"
 choice
   depends on !TARGET_AM
@@ -214,4 +216,10 @@ config RT_CHECK
   bool "Enable runtime checking"
   default y
 
+
+
+
+
+
 endmenu
+
