@@ -98,34 +98,36 @@ void init_elf(const char *elf_file) {
 
 void parse_decode(Decode *s, vaddr_t pc) {
     assert(ftrace_fp);
-    if (strncmp(s->name, "jal", CMD_LEN) == 0 || strncmp(s->name, "jalr", CMD_LEN) == 0) {
-        int32_t ii = 0;
+    uint8_t f_jal = strncmp(s->name, "jal", CMD_LEN);
+    uint8_t f_jalr = strncmp(s->name, "jalr", CMD_LEN);
+    if (f_jal == 0 || f_jalr == 0) {
+        uint32_t ii = 0;
         uint16_t ori = 0;
-        int16_t tar = 0;
+        uint16_t tar = 0;
         uint16_t sta = F_len + 1;
         uint16_t end = sta;
         for (ii = 0; ii < F_len; ++ii) {
             sta = func_info[ii].sta_address;
             end = sta + func_info[ii].size;
             if (s->dnpc == sta)
-                tar = -ii;
-            if (pc >= sta && pc < end) 
+                tar = ii;
+            if (pc >= sta && pc < end)
                 ori = ii;
-            if (s->dnpc > sta && s->dnpc < end) 
+            if (s->dnpc > sta && s->dnpc < end && f_jalr == 0)
                 tar = ii;
         }
-        printf("%08x %08x\n",pc,s->dnpc);
-        printf("%u %u\n",tar,ori);
+        printf("%08x %08x\n", pc, s->dnpc);
+        printf("%u %u\n", tar, ori);
         assert(ori != F_len + 1);
         if (tar != F_len + 1 && strcmp(func_info[abs(tar)].F_name, func_info[ori].F_name) != 0) {
-            if (tar < 0) {
+            if (f_jal == 0) {
                 printf("FUCK!\n");
                 tar = -tar;
                 for (ii = 0; ii < number; ++ii)
                     fprintf(ftrace_fp, " ");
                 fprintf(ftrace_fp, "[0x%08x:call %s in %s]\n", pc, func_info[tar].F_name, func_info[ori].F_name);
                 ++number;
-            } else if (strcmp(s->name, "jalr")) {
+            } else {
                 --number;
                 for (ii = 0; ii < number; ++ii)
                     fprintf(ftrace_fp, " ");
