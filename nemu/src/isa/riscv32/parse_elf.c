@@ -117,7 +117,7 @@ void parse_decode(Decode *s, vaddr_t pc) {
                     tar = ii;
             }
             if (pc >= sta && pc < end)
-                pc = ii;
+                ori = ii;
         }
         printf("%08x %08x\n", pc, s->dnpc);
         printf("%u %u\n", tar, ori);
