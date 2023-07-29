@@ -107,18 +107,12 @@ void parse_decode(Decode *s, vaddr_t pc) {
         for (ii = 0; ii < F_len; ++ii) {
             sta = func_info[ii].sta_address;
             end = sta + func_info[ii].size;
-            if (s->dnpc == sta) {
+            if (s->dnpc == sta)
                 tar = -ii;
-                break;
-            }
-            if (pc >= sta && pc < end) {
+            if (pc >= sta && pc < end) 
                 ori = ii;
-                break;
-            }
-            if (s->dnpc > sta && s->dnpc < end) {
+            if (s->dnpc > sta && s->dnpc < end) 
                 tar = ii;
-                break;
-            }
         }
         printf("%08x %08x\n",pc,s->dnpc);
         printf("%u %u\n",tar,ori);
