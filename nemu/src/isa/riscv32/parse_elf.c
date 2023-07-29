@@ -123,13 +123,11 @@ void parse_decode(Decode *s, vaddr_t pc) {
             if (f_jal == 0) {
                 for (ii = 0; ii < number; ++ii)
                     fprintf(ftrace_fp, "    ");
-                printf("[0x%08x:call %s in %s]\n", pc, func_info[tar].F_name, func_info[ori].F_name);
                 fprintf(ftrace_fp, "[0x%08x:call %s in %s]\n", pc, func_info[tar].F_name, func_info[ori].F_name);
                 ++number;
             } else {
                 for (ii = 0; ii < number; ++ii)
                     fprintf(ftrace_fp, "    ");
-                printf("[0x%08x:ret %s in %s]\n", pc, func_info[tar].F_name, func_info[ori].F_name);
                 fprintf(ftrace_fp, "[0x%08x:ret %s in %s]\n", pc, func_info[tar].F_name, func_info[ori].F_name);
                 --number;
             }
