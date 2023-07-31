@@ -152,13 +152,23 @@ config ITRACE_COND
   default "true"
 
 
-config DIFFTEST
+choice
+  prompt "Enable differential testing"
+  default DIFFTEST
+  config DIFFTEST
   depends on TARGET_NATIVE_ELF
-  bool "Enable differential testing"
-  default n
-  help
-    Enable differential testing with a reference design.
-    Note that this will significantly reduce the performance of NEMU.
+    bool "yes"
+  config NDIFFTEST
+    bool "no"
+endchoice
+
+# config DIFFTEST
+#   depends on TARGET_NATIVE_ELF
+#   bool "Enable differential testing"
+#   default y
+#   help
+#     Enable differential testing with a reference design.
+#     Note that this will significantly reduce the performance of NEMU.
 
 choice
   prompt "Reference design"
