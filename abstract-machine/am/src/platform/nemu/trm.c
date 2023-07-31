@@ -12,8 +12,7 @@ Area heap = RANGE(&_heap_start, PMEM_END);
 static const char mainargs[] = MAINARGS;
 
 void putch(char ch) {
-    printf("FUCK_Q!\n");
-    outb(SERIAL_PORT, ch);
+    // outb(SERIAL_PORT, ch);
 }
 
 void halt(int code) {
