@@ -1,10 +1,8 @@
 #include <am.h>
 #include <nemu.h>
-//测试使用库
-#include <stdio.h>
+
 void __am_timer_init() {
-    printf("%d  ",sizeof(AM_TIMER_UPTIME_T));
-    printf("%d\n",sizeof(AM_TIMER_RTC_T));
+
 }
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
