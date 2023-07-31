@@ -8,7 +8,7 @@ void __am_timer_init() {
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
   if(start_time == 0) {
       uptime->us = 0;
-
+      start_time = inl(RTC_ADDR);
   } else {
   }
 }
