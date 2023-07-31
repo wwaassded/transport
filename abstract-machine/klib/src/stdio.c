@@ -15,6 +15,11 @@ int printf(const char *fmt, ...) {
         if (*fmt == '%') {
             fmt = fmt + 1;
             switch (*fmt) {
+                case 'c': {
+                    char ch = va_arg(ap,int);
+                    putch(ch);
+                    ++res;
+                }
                 case 's': {
                     const char *str = va_arg(ap, const char *);
                     putstr(str);
