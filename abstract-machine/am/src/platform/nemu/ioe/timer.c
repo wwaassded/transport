@@ -14,7 +14,6 @@ void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
         inl(RTC_ADDR + 4);
         uptime->us = inl(RTC_ADDR) - start_time;
         start_time = inl(RTC_ADDR);
-        printf("FUCK:%u\n",uptime->us);
     }
 }
 
