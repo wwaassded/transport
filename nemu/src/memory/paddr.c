@@ -75,6 +75,7 @@ word_t paddr_read(paddr_t addr, int len) {
     }
 #endif
     if (likely(in_pmem(addr))) {
+        printf("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
         return pmem_read(addr, len);
     }
     IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
