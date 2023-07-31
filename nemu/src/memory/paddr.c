@@ -74,8 +74,9 @@ word_t paddr_read(paddr_t addr, int len) {
         fflush(MT_fp);
     }
 #endif
-    if (likely(in_pmem(addr)))
+    if (likely(in_pmem(addr))) {
         return pmem_read(addr, len);
+    }
     IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
     IFDEF(
             CONFIG_MT_ENA, if (addr <= CONFIG_MTRACE_END && addr >= CONFIG_TRACE_START) { fprintf(MT_fp, "sever error"); fflush(MT_fp); });
