@@ -71,8 +71,10 @@ static int cmd_x(char *args) {
                 return 0;
             }
         }
-        if (len >= 3 && address[0] == '0' && (address[1] == 'x' || address[1] == 'X'))
-            address += 2;
+        if (len >= 3 && address[0] == '0' && (address[1] == 'x' || address[1] == 'X')) {
+            address += 1;
+            address += 1;
+        }
         unsigned int addre = 0;
         for (i = 0; address != NULL && address[i] != '\0'; ++i) {
             if (isdigit(address[i])) {
@@ -85,10 +87,13 @@ static int cmd_x(char *args) {
             }
         }
         unsigned int j;
+        unsigned int jj;
         for (j = 0; j < number; ++j) {
             printf("at 0x%x : ", addre);
-            uint32_t nu = paddr_read(addre, 4);
-            printf("%08x ", nu);
+            for (jj = 0; jj < 4; ++jj) {
+                word_t nu = paddr_read(addre + jj, 1);
+                printf("%02x ", nu);
+            }
             printf("\n");
             addre += 4;
         }
