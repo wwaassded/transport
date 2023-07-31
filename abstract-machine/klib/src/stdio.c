@@ -8,6 +8,8 @@
 #define nullptr NULL
 static char buf[32];
 int printf(const char *fmt, ...) {
+    const char *stt = "CRUEL\n";
+    putstr(stt);
     uint32_t res = 0;
     va_list ap;
     va_start(ap, fmt);
