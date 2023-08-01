@@ -1,5 +1,6 @@
 #include <am.h>
 #include <nemu.h>
+#include <stdio.h>
 
 uint64_t boot_time = 0;
 
@@ -13,11 +14,8 @@ static uint64_t read_time() {
 
 
 void __am_timer_init() {
-    putch('F');
-    putch('F');
-    putch('F');
-    putch('F');
     boot_time = read_time();
+    printf("%d\n",boot_time);
 }
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
     uptime->us = read_time() - boot_time;
