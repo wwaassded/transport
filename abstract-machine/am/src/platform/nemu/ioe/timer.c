@@ -15,7 +15,7 @@ static uint64_t read_time() {
 
 void __am_timer_init() {
     boot_time = read_time();
-    printf("%d\n",boot_time);
+    printf("FF::%lu\n\n\n",boot_time);
 }
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
     uptime->us = read_time() - boot_time;
