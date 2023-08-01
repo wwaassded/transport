@@ -38,13 +38,18 @@ int printf(const char *fmt, ...) {
                         buf[i] = (num % 10) + '0';
                         num /= 10;
                     }
-                    res += i + 1;
-                    --i;
-                    while (i != 0) {
-                        putch(buf[i]);
+                    if (i != 0) {
+                        res += i + 1;
                         --i;
+                        while (i != 0) {
+                            putch(buf[i]);
+                            --i;
+                        }
+                        putch(buf[i]);
+                    } else {
+                        putch('0');
+                        res += 1;
                     }
-                    putch(buf[i]);
                     break;
                 }
                 case 'u': {
