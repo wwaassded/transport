@@ -19,6 +19,7 @@ int printf(const char *fmt, ...) {
                     char ch = va_arg(ap, int);
                     putch(ch);
                     ++res;
+                    break;
                 }
                 case 's': {
                     const char *str = va_arg(ap, const char *);
