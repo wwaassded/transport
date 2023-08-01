@@ -8,13 +8,17 @@
 #define nullptr NULL
 static char buf[64];
 int printf(const char *fmt, ...) {
-    putstr(fmt);
     uint32_t res = 0;
     va_list ap;
     va_start(ap, fmt);
     while (*fmt != '\0') {
         if (*fmt == '%') {
             fmt = fmt + 1;
+            uint32_t width = 0;
+            while (*fmt >= '0' && *fmt <= '9') {
+                width = width * 10 + (*fmt - '0');
+                ++fmt;
+            }
             switch (*fmt) {
                 case 'c': {
                     char ch = va_arg(ap, int);
@@ -40,6 +44,10 @@ int printf(const char *fmt, ...) {
                         num /= 10;
                     }
                     if (i != 0) {
+                        while (width > i + 1) {
+                            putch(' ');
+                            --width;
+                        }
                         res += i + 1;
                         --i;
                         while (i != 0) {
