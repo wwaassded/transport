@@ -11,7 +11,7 @@ int printf(const char *fmt, ...) {
     uint32_t res = 0;
     va_list ap;
     va_start(ap, fmt);
-    while (*fmt != '\n') {
+    while (*fmt != '\0') {
         if (*fmt == '%') {
             fmt = fmt + 1;
             switch (*fmt) {
