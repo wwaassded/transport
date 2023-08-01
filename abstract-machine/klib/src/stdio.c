@@ -70,6 +70,7 @@ int printf(const char *fmt, ...) {
                     break;
                 }
                 default: {
+                    putstr(fmt);
                     panic("Not implemented");
                 }
             }
