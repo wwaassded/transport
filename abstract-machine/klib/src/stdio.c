@@ -6,7 +6,7 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 #define nullptr NULL
-static char buf[32];
+static char buf[64];
 int printf(const char *fmt, ...) {
     uint32_t res = 0;
     va_list ap;
@@ -16,7 +16,7 @@ int printf(const char *fmt, ...) {
             fmt = fmt + 1;
             switch (*fmt) {
                 case 'c': {
-                    char ch = va_arg(ap,int);
+                    char ch = va_arg(ap, int);
                     putch(ch);
                     ++res;
                 }
@@ -45,6 +45,21 @@ int printf(const char *fmt, ...) {
                     }
                     putch(buf[i]);
                     break;
+                }
+                case 'u': {
+                    uint64_t num = va_arg(ap, uint64_t);
+                    uint16_t i;
+                    for (i = 0; num != 0; ++i) {
+                        buf[i] = (num % 10) + '0';
+                        num /= 10;
+                    }
+                    res += i + 1;
+                    --i;
+                    while (i != 0) {
+                        putch(buf[i]);
+                        --i;
+                    }
+                    putch(buf[i]);
                     break;
                 }
                 default: {
