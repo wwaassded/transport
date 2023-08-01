@@ -69,8 +69,13 @@ int printf(const char *fmt, ...) {
                     putch(buf[i]);
                     break;
                 }
-                case 'l':{
-                  
+                case 'l': {
+                    panic("FUCK!\n");
+                    break;
+                }
+                case 'x': {
+                    panic("FUCK!\n");
+                    break;
                 }
                 default: {
                     putstr(fmt);
