@@ -117,11 +117,11 @@ static int decode_exec(Decode *s) {
     s->dnpc = s->snpc;
 #define STR(n) (#n)
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
-#define INSTPAT_NAME(s) (((Decode*)(s))->name)
+#define INSTPAT_NAME(s) (((Decode *) (s))->name)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */)             \
     {                                                                    \
         decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
-        strcpy(INSTPAT_NAME(s),STR(name));                                  \
+        strcpy(INSTPAT_NAME(s), STR(name));                              \
         __VA_ARGS__;                                                     \
     }
 
@@ -159,7 +159,8 @@ static int decode_exec(Decode *s) {
     INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div, R, _R(rd) = src1 / src2);
     INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu, R, _R(rd) = src1 / src2);
     INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul, R, _R(rd) = src1 * src2);
-    // INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu, R, );
+    INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu, R, uint64_t a1 = 0, a2 = 0;
+            a1 |= src1; a2 |= src2; _R(rd) = BITS((uint64_t) (a1 * a2), 63, 32));
     INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh, R, uint64_t s1 = SEXT(src1, 32); uint64_t s2 = SEXT(src2, 32); _R(rd) = BITS((uint64_t) (s1 * s2), 63, 32));
     INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub, R, _R(rd) = src1 - src2);
     INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra, R, _R(rd) = (signed) src1 >> src2);
