@@ -10,6 +10,7 @@ void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
         uptime->us = 0;
         inl(RTC_ADDR + 4);
         start_time = inl(RTC_ADDR);
+        printf("%d\n",start_time);
     } else {
         inl(RTC_ADDR + 4);
         uptime->us = inl(RTC_ADDR) - start_time;
