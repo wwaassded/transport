@@ -62,20 +62,7 @@ int printf(const char *fmt, ...) {
                     break;
                 }
                 case 'u': {
-                    uint64_t num = va_arg(ap, uint64_t);
-                    uint16_t i;
-                    for (i = 0; num != 0; ++i) {
-                        buf[i] = (num % 10) + '0';
-                        num /= 10;
-                        putch(buf[i]);
-                    }
-                    res += i + 1;
-                    --i;
-                    while (i != 0) {
-                        putch(buf[i]);
-                        --i;
-                    }
-                    putch(buf[i]);
+                    panic("FUCK!\n");
                     break;
                 }
                 case 'l': {
@@ -83,7 +70,20 @@ int printf(const char *fmt, ...) {
                     break;
                 }
                 case 'x': {
-                    panic("FUCK!\n");
+                    char trans[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+                    uint32_t tmp = va_arg(ap, uint32_t);
+                    uint8_t i = 0;
+                    for (i = 0; tmp != 0; ++i) {
+                        buf[i] = trans[(tmp % 16)];
+                        tmp /= 16;
+                    }
+                    if (i == 0)
+                        putch('0');
+                    else {
+                        for (; i != 0; --i)
+                            putch(buf[i]);
+                        putch(buf[i]);
+                    }
                     break;
                 }
                 default: {
