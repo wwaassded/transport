@@ -13,6 +13,10 @@ static uint64_t read_time() {
 
 
 void __am_timer_init() {
+    putch('F');
+    putch('F');
+    putch('F');
+    putch('F');
     boot_time = read_time();
 }
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
