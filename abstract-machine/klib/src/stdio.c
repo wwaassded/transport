@@ -52,6 +52,7 @@ int printf(const char *fmt, ...) {
                     for (i = 0; num != 0; ++i) {
                         buf[i] = (num % 10) + '0';
                         num /= 10;
+                        putch(buf[i]);
                     }
                     res += i + 1;
                     --i;
