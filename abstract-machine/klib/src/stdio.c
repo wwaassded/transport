@@ -69,6 +69,9 @@ int printf(const char *fmt, ...) {
                     putch(buf[i]);
                     break;
                 }
+                case 'l':{
+                  
+                }
                 default: {
                     putstr(fmt);
                     panic("Not implemented");
