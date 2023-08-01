@@ -8,6 +8,7 @@
 #define nullptr NULL
 static char buf[64];
 int printf(const char *fmt, ...) {
+    putstr(fmt);
     uint32_t res = 0;
     va_list ap;
     va_start(ap, fmt);
