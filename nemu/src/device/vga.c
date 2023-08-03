@@ -57,11 +57,11 @@ static void init_screen() {
 }
 
 static inline void update_screen() {
-    printf("CK ");
-    for (int i = 0; i < 10; ++i) {
-        printf("0x%08x ", ((uint32_t *) vmem)[i]);
-    }
-    printf("\n");
+    // printf("CK ");
+    // for (int i = 0; i < 10; ++i) {
+    //     printf("0x%08x ", ((uint32_t *) vmem)[i]);
+    // }
+    // printf("\n");
 }
 #else
 static void init_screen() {}
