@@ -53,12 +53,12 @@ static void init_screen() {
             0, &window, &renderer);
     SDL_SetWindowTitle(window, title);
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
-                                SDL_TEXTUREACCESS_STATIC, 800, 600);
+                                SDL_TEXTUREACCESS_STATIC, SCREEN_W, SCREEN_H);
 }
 
 static inline void update_screen() {
     printf("FUCK\n");
-    SDL_UpdateTexture(texture, NULL, vmem, SCREEN_W * sizeof(uint32_t));
+    SDL_UpdateTexture(texture, NULL, vmem, screen_width() * sizeof(uint32_t));
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
@@ -73,6 +73,7 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
+    SDL_UpdateTexture(texture, NULL, vmem, screen_width() * sizeof(uint32_t));
     // printf("CK ");
     // for (int i = 0; i < 10; ++i) {
     //     printf("0x%08x ", ((uint32_t *) vmem)[i]);
