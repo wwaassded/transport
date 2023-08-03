@@ -75,7 +75,7 @@ static inline void update_screen() {
 void vga_update_screen() {
     SDL_UpdateTexture(texture, NULL, vmem, screen_width() * sizeof(uint32_t));
     SDL_RenderClear(renderer);
-    // SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
     // SDL_RenderPresent(renderer);
     // printf("CK ");
     // for (int i = 0; i < 10; ++i) {
