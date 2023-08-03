@@ -40,8 +40,8 @@ static uint32_t *vgactl_port_base = NULL;
 #include <SDL2/SDL.h>
 
 static SDL_Renderer *renderer = NULL;
-static SDL_Window *window = NULL;
 static SDL_Texture *texture = NULL;
+static SDL_Window *window = NULL;
 void func() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
