@@ -72,7 +72,7 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-  printf("FUCK!\n");
+
 }
 
 void init_vga() {
