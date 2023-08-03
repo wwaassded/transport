@@ -15,6 +15,7 @@
 
 #include <common.h>
 #include <device/map.h>
+#include <fenv.h>
 #include <stdio.h>
 #ifdef MODE_800x600
 #define W 800
@@ -94,7 +95,7 @@ static inline void update_screen() {
 void vga_update_screen() {
     int x = 0, y = 0, w = W, h = H;
     if (w == 0 || h == 0) return;
-    // feclearexcept(-1);
+    feclearexcept(-1);
     SDL_Surface *s = SDL_CreateRGBSurfaceFrom((void *) (uintptr_t) CONFIG_FB_ADDR, w, h, 32, w * sizeof(uint32_t),
                                               RMASK, GMASK, BMASK, AMASK);
     SDL_Rect rect = {.x = x, .y = y};
