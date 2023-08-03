@@ -29,7 +29,7 @@ void init_audio();
 void init_disk();
 void init_sdcard();
 void init_alarm();
-
+void func();
 void send_key(uint8_t, bool);
 void vga_update_screen();
 
@@ -47,9 +47,11 @@ void device_update() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
-            case SDL_QUIT:
+            case SDL_QUIT: {
+
                 nemu_state.state = NEMU_QUIT;
                 break;
+            }
 #ifdef CONFIG_HAS_KEYBOARD
             // If a key was pressed
             case SDL_KEYDOWN:

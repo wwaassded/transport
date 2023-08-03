@@ -40,10 +40,15 @@ static uint32_t *vgactl_port_base = NULL;
 #include <SDL2/SDL.h>
 
 static SDL_Renderer *renderer = NULL;
+static SDL_Window *window = NULL;
 static SDL_Texture *texture = NULL;
-
+void func() {
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
+    SDL_Quit();
+}
 static void init_screen() {
-    SDL_Window *window = NULL;
+
     char title[128];
     sprintf(title, "%s-NEMU", str(__GUEST_ISA__));
     SDL_Init(SDL_INIT_VIDEO);
@@ -73,15 +78,6 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-    SDL_UpdateTexture(texture, NULL, vmem, screen_width() * sizeof(uint32_t));
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
-    SDL_RenderPresent(renderer);
-    // printf("CK ");
-    // for (int i = 0; i < 10; ++i) {
-    //     printf("0x%08x ", ((uint32_t *) vmem)[i]);
-    // }
-    // printf("\n");
 }
 
 void init_vga() {
