@@ -57,11 +57,10 @@ static void init_screen() {
 }
 
 static inline void update_screen() {
-    // printf("CK ");
-    // for (int i = 0; i < 10; ++i) {
-    //     printf("0x%08x ", ((uint32_t *) vmem)[i]);
-    // }
-    // printf("\n");
+    SDL_UpdateTexture(texture, NULL, vmem, SCREEN_W * sizeof(uint32_t));
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderPresent(renderer);
 }
 #else
 static void init_screen() {}
@@ -73,10 +72,11 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-    SDL_UpdateTexture(texture, NULL, vmem, SCREEN_W * sizeof(uint32_t));
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
-    SDL_RenderPresent(renderer);
+    printf("CK ");
+    for (int i = 0; i < 10; ++i) {
+        printf("0x%08x ", ((uint32_t *) vmem)[i]);
+    }
+    printf("\n");
 }
 
 void init_vga() {
