@@ -28,13 +28,14 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 // CONFIG_FB_ADDR
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     uint32_t *ptr = (uint32_t *) (uintptr_t) FB_ADDR;
+    printf("FU: ");
+    for (int i = 0; i < 10; ++i)
+        printf("0x%08x ", ptr[i]);
+    printf("\n");
     int x = ctl->x;
     int y = ctl->y;
     uint32_t *color_buf = (uint32_t *) ctl->pixels;
-    // printf("FU: ");
-    // for (int i = 0; i < 10; ++i)
-    //     printf("0x%08x ", color_buf[i]);
-    // printf("\n");
+
     int w = ctl->w;
     int h = ctl->h;
     for (int i = 0; i < w; ++i)

@@ -78,7 +78,6 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-    update_screen();
 }
 
 void init_vga() {
