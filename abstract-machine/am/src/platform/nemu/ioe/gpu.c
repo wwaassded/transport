@@ -32,16 +32,17 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     for (int i = 0; i < 10; ++i)
         printf("0x%08x ", ptr[i]);
     printf("\n");
-    // int x = ctl->x;
-    // int y = ctl->y;
+    int x = ctl->x;
+    int y = ctl->y;
     // uint32_t *color_buf = (uint32_t *) ctl->pixels;
 
-    // int w = ctl->w;
-    // int h = ctl->h;
-    // for (int i = 0; i < w; ++i)
-    //     for (int j = 0; j < h; ++j) {
-    //         ptr[(x + i) * hh + (y + j)] = color_buf[i * h + j];
-    //     }
+    int w = ctl->w;
+    int h = ctl->h;
+    for (int i = 0; i < w; ++i)
+        for (int j = 0; j < h; ++j) {
+            ptr[(x + i) * hh + (y + j)] = 0x00ffffff;
+            // ptr[(x + i) * hh + (y + j)] = color_buf[i * h + j];
+        }
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
