@@ -22,8 +22,15 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
             .height = screen_config & (0x0000ffff),
             .vmemsz = 0};
 }
-
+// CONFIG_FB_ADDR
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
+    int ii = 0;
+    void *ptr = (void *) 0xa1000000;
+    for (int i = 0; i < ctl->w; ++i)
+        for (int j = 0; j < ctl->h; ++j) {
+            outl(((uint32_t *) ptr)[ctl->y + j + (ctl->x + i) * ctl->h], *(uint32_t *) (ctl->pixels + ii));
+            ++ii;
+        }
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
