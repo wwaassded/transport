@@ -15,22 +15,8 @@
 
 #include <common.h>
 #include <device/map.h>
-#include <fenv.h>
 #include <stdio.h>
-#ifdef MODE_800x600
-#define W 800
-#define H 600
-#else
-#define W 400
-#define H 300
-#endif
 
-#define FPS 60
-
-#define RMASK 0x00ff0000
-#define GMASK 0x0000ff00
-#define BMASK 0x000000ff
-#define AMASK 0x00000000
 #define SCREEN_W (MUXDEF(CONFIG_VGA_SIZE_800x600, 800, 400))
 #define SCREEN_H (MUXDEF(CONFIG_VGA_SIZE_800x600, 600, 300))
 
@@ -56,7 +42,6 @@ static uint32_t *vgactl_port_base = NULL;
 static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 static SDL_Window *window = NULL;
-static SDL_Surface *surface = NULL;
 void func() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
@@ -93,19 +78,10 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-    int x = 0, y = 0, w = W, h = H;
-    if (w == 0 || h == 0) return;
-    feclearexcept(-1);
-    SDL_Surface *s = SDL_CreateRGBSurfaceFrom((void *) (uintptr_t) CONFIG_FB_ADDR, w, h, 32, w * sizeof(uint32_t),
-                                              RMASK, GMASK, BMASK, AMASK);
-    SDL_Rect rect = {.x = x, .y = y};
-    SDL_BlitSurface(s, NULL, surface, &rect);
-    SDL_FreeSurface(s);
+  
 }
 
 void init_vga() {
-    surface = SDL_CreateRGBSurface(SDL_SWSURFACE, W, H, 32,
-                                   RMASK, GMASK, BMASK, AMASK);
     vgactl_port_base = (uint32_t *) new_space(8);
     vgactl_port_base[0] = (screen_width() << 16) | screen_height();
 #ifdef CONFIG_HAS_PORT_IO
