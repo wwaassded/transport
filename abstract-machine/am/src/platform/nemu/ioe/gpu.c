@@ -13,16 +13,16 @@ void __am_gpu_init() {
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
+    uint32_t screen_config = inl(VGACTL_ADDR + 0);
     *cfg = (AM_GPU_CONFIG_T){
             .present = true,
             .has_accel = false,
-            .width = 0,
-            .height = 0,
+            .width = screen_config >> 16,
+            .height = screen_config & (0x0000ffff),
             .vmemsz = 0};
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
-  
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
