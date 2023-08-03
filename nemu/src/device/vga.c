@@ -78,8 +78,7 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
+    update_screen();
 }
 
 void init_vga() {
