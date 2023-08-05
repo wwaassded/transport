@@ -5,12 +5,6 @@
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 static int W = 0;
 static int H = 0;
-uint32_t min(uint32_t a, uint32_t b) {
-    if (a < b)
-        return a;
-    else
-        return b;
-}
 void __am_gpu_init() {
     int i;
     uint32_t screen_config = inl(VGACTL_ADDR + 0);
@@ -39,7 +33,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     int h = ctl->h;
     int w = ctl->w;
     uint32_t *pixels = (uint32_t *) ctl->pixels;
-    int cp_bytes = sizeof(uint32_t) * min(w, W - x);
+    int cp_bytes = sizeof(uint32_t) * (w > W - x ? W - x : w);
     for (int j = 0; j < h && y + j < H; ++j) {
         memcpy(&fb[(y + j) * W + x], pixels, cp_bytes);
         pixels += w;
