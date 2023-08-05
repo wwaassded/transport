@@ -62,7 +62,6 @@ static void init_screen() {
 }
 
 static inline void update_screen() {
-    printf("FUCK\n");
     SDL_UpdateTexture(texture, NULL, vmem, screen_width() * sizeof(uint32_t));
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -80,10 +79,10 @@ static inline void update_screen() {
 void vga_update_screen() {
     // TODO: call `update_screen()` when the sync register is non-zero,
     // then zero out the sync register
-    // if (vgactl_port_base[1] == 1)
-    //     update_screen();
-    // else
-    //     vgactl_port_base[1] = 0;
+    if (vgactl_port_base[1] == 1)
+        update_screen();
+    else
+        vgactl_port_base[1] = 0;
 }
 
 void init_vga() {
