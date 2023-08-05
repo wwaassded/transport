@@ -5,14 +5,14 @@
 static int ww = 0;
 static int hh = 0;
 void __am_gpu_init() {
-    // int i;
+    int i;
     uint32_t screen_config = inl(VGACTL_ADDR + 0);
     int w = screen_config >> 16;
     int h = screen_config & (0x0000ffff);
     ww = w;
     hh = h;
-    // uint32_t *fb = (uint32_t *) (uintptr_t) FB_ADDR;
-    // for (i = 0; i < w * h; i++) fb[i] = i;
+    uint32_t *fb = (uint32_t *) (uintptr_t) FB_ADDR;
+    for (i = 0; i < w * h; i++) fb[i] = i;
     outl(SYNC_ADDR, 1);
 }
 
@@ -30,6 +30,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     if (ctl->sync) {
         outl(SYNC_ADDR, 1);
     } else {
+        outl(SYNC_ADDR, 0);
         int x = ctl->x;
         int y = ctl->y;
         uint32_t *fb = (uint32_t *) (uintptr_t) FB_ADDR;
