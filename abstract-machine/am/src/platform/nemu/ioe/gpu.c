@@ -1,18 +1,23 @@
 #include <am.h>
 #include <nemu.h>
-#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #define SYNC_ADDR (VGACTL_ADDR + 4)
-static int ww = 0;
-static int hh = 0;
+static int W = 0;
+static int H = 0;
+uint32_t min(uint32_t a, uint32_t b) {
+    if (a < b)
+        return a;
+    else
+        return b;
+}
 void __am_gpu_init() {
     int i;
     uint32_t screen_config = inl(VGACTL_ADDR + 0);
-    int w = screen_config >> 16;
-    int h = screen_config & (0x0000ffff);
-    ww = w;
-    hh = h;
+    W = screen_config >> 16;
+    H = screen_config & (0x0000ffff);
     uint32_t *fb = (uint32_t *) (uintptr_t) FB_ADDR;
-    for (i = 0; i < w * h; i++) fb[i] = i;
+    for (i = 0; i < W * H; i++) fb[i] = i;
     outl(SYNC_ADDR, 1);
 }
 
@@ -34,14 +39,12 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
         uint32_t *fb = (uint32_t *) (uintptr_t) FB_ADDR;
         int h = ctl->h;
         int w = ctl->w;
-        uint32_t *canava = (uint32_t *) ctl->pixels;
-        int i = 0, j = 0;
-        for (i = 0; i < h; ++i)
-            for (j = 0; j < w; ++j) {
-                if (y + i < hh && x + j < ww)
-                    fb[(y + i) * ww + (x + j)] = canava[i * w + j];
-            }
-        outl(SYNC_ADDR, 0);
+        uint32_t *pixels = (uint32_t *) ctl->pixels;
+        int cp_bytes = sizeof(uint32_t) * min(w, W - x);
+        for (int j = 0; j < h && y + j < H; ++j) {
+            memcpy(&fb[(y + j) * W + x], pixels, cp_bytes);
+            pixels += w;
+        }
     }
 }
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
