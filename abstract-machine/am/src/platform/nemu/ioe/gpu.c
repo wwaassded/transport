@@ -39,7 +39,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
         int i = 0, j = 0;
         for (i = 0; i < h; ++i)
             for (j = 0; j < w; ++j) {
-                fb[(x + i) * w + (y + j)] = canava[i * w + j];
+                fb[(x + i) * ww + (y + j)] = canava[i * w + j];
             }
     }
 }
