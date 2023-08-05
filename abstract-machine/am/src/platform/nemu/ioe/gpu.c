@@ -41,8 +41,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
                 if (x + i < hh && y + j < ww)
                     fb[(x + i) * ww + (y + j)] = canava[i * w + j];
             }
-        outl(SYNC_ADDR, 1);
-
+        outl(SYNC_ADDR, 0);
     }
 }
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
