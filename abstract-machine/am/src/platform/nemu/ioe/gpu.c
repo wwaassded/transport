@@ -38,8 +38,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
         int i = 0, j = 0;
         for (i = 0; i < h; ++i)
             for (j = 0; j < w; ++j) {
-                // if (x + i < hh && y + j < ww)
-                    fb[(y + i) * ww + (x + j)] = canava[i * w + j];
+                if (y + i < hh && x + j < ww)
+                    fb[(y + i) * hh + (x + j)] = canava[i * w + j];
             }
         outl(SYNC_ADDR, 0);
     }
