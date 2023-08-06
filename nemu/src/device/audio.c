@@ -64,7 +64,6 @@ void init_sdl_audio() {
     if (ret == 0) {
         SDL_OpenAudio(&desired, NULL);
         SDL_PauseAudio(0);
-        printf("FUCK57\n");
     } else
         printf("%s\n", SDL_GetError());
 }

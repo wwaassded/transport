@@ -1,6 +1,6 @@
 #include <am.h>
 #include <nemu.h>
-
+#include <stdio.h>
 #define AUDIO_FREQ_ADDR (AUDIO_ADDR + 0x00)
 #define AUDIO_CHANNELS_ADDR (AUDIO_ADDR + 0x04)
 #define AUDIO_SAMPLES_ADDR (AUDIO_ADDR + 0x08)
@@ -28,6 +28,10 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 }
 
 void audio_write(uint8_t *sta, int len) {
+    printf("----------------\n");
+    for (int i = 0; i < len; ++i)
+        printf("%d ", sta[i]);
+    printf("----------------\n");
     int buf_size = inl(AUDIO_SBUF_SIZE_ADDR);
     int full_len = buf_size / sizeof(uint8_t);
     while (buf_size - inl(AUDIO_COUNT_ADDR) < len)
