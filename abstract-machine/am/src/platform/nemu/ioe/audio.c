@@ -8,6 +8,7 @@
 #define AUDIO_INIT_ADDR (AUDIO_ADDR + 0x10)
 #define AUDIO_COUNT_ADDR (AUDIO_ADDR + 0x14)
 
+
 void __am_audio_init() {
 }
 
@@ -26,10 +27,26 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
     stat->count = inl(AUDIO_COUNT_ADDR);
 }
 
+void audio_write(uint8_t *sta, int len) {
+    int buf_size = inl(AUDIO_SBUF_SIZE_ADDR);
+    int full_len = buf_size / sizeof(uint8_t);
+    while (buf_size - inl(AUDIO_COUNT_ADDR) < len)
+        ;
+    int count = inl(AUDIO_COUNT_ADDR);
+    outl(AUDIO_COUNT_ADDR, count + len);
+    uint8_t *ptr = (uint8_t *) (uintptr_t) AUDIO_SBUF_ADDR;
+    int right = inl(AUDIO_INIT_ADDR);
+    for (int i = 0; i < len; ++i) {
+        ptr[right] = sta[i];
+        right = (right + 1) % full_len;
+    }
+    outl(AUDIO_INIT_ADDR, right);
+}
+
+
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
     uint8_t *sta = (uint8_t *) ctl->buf.start;
     uint8_t *end = (uint8_t *) ctl->buf.end;
-    int size = sizeof(uint8_t) * (end - sta);
-    while (io_read(AM_AUDIO_CONFIG).bufsize - io_read(AM_AUDIO_STATUS).count < size)
-        ;
+    int len = end - sta;
+    audio_write(sta, len);
 }

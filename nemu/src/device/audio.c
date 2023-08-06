@@ -21,6 +21,7 @@ enum {
     reg_freq,
     reg_channels,
     reg_samples,
+
     reg_sbuf_size,
     reg_init,
     reg_count,
@@ -30,14 +31,39 @@ enum {
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 static SDL_AudioSpec desired;
+static int count = 0;
+static int left = 0;
+static int right = 0;
+static uint32_t full_len = 0;
+
+static void audio_play(void *userdata, uint8_t *stream, int len) {
+    uint8_t *sbuf = (uint8_t *) (uintptr_t) CONFIG_SB_ADDR;
+    int nwrite = len;
+    if (count < nwrite)
+        nwrite = count;
+    for (int i = 0; i < nwrite; ++i) {
+        stream[i] = sbuf[left];
+        left = (left + 1) % full_len;
+    }
+    count -= nwrite;
+    if (len > nwrite)
+        for (int i = nwrite; i < len; ++i) {
+            stream[i] = 0;
+        }
+}
 
 
 void init_sdl_audio() {
+    count = 0;
     desired.format = AUDIO_S16SYS;
     desired.userdata = NULL;
-    SDL_InitSubSystem(SDL_INIT_AUDIO);
-    SDL_OpenAudio(&desired, NULL);
-    SDL_PauseAudio(0);
+    desired.callback = audio_play;
+    int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
+    if (ret == 0) {
+        SDL_OpenAudio(&desired, NULL);
+        SDL_PauseAudio(0);
+    } else
+        printf("%s\n", SDL_GetError());
 }
 
 
@@ -45,16 +71,20 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     if (is_write) {
         switch (offset) {
             case reg_freq * 4: {
-                desired.freq = audio_base[0];
-                init_sdl_audio();
+                desired.freq = audio_base[reg_freq];
                 break;
             }
             case reg_channels * 4: {
-                desired.channels = audio_base[1];
+                desired.channels = audio_base[reg_channels];
                 break;
             }
             case reg_samples * 4: {
-                desired.samples = audio_base[2];
+                desired.samples = audio_base[reg_samples];
+                init_sdl_audio();
+                break;
+            }
+            case reg_init * 4: {
+                right = audio_base[reg_init];
                 break;
             }
             default: {
@@ -63,8 +93,16 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
         }
     } else {
         switch (offset) {
+            case reg_init * 4: {
+                audio_base[reg_init] = right;
+                break;
+            }
+            case reg_count * 4: {
+                audio_base[reg_count] = count;
+                break;
+            }
             case reg_sbuf_size * 4: {
-                audio_base[reg_sbuf_size] = desired.size;
+                audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
             }
             default: {
                 panic("not implemented!\n");
@@ -83,5 +121,8 @@ void init_audio() {
 #endif
 
     sbuf = (uint8_t *) new_space(CONFIG_SB_SIZE);
+    left = 0;
+    right = 0;
+    full_len = CONFIG_SB_SIZE / sizeof(uint8_t);
     add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, sbuf, CONFIG_SB_SIZE, NULL);
 }
