@@ -35,8 +35,11 @@ static int count = 0;
 static int left = 0;
 static int right = 0;
 static uint32_t full_len = 0;
+static bool flag = false;
 
 static void audio_play(void *userdata, uint8_t *stream, int len) {
+    if (!flag)
+        return;
     uint8_t *sbuf = (uint8_t *) (uintptr_t) CONFIG_SB_ADDR;
     int nwrite = len;
     if (count < nwrite)
@@ -126,4 +129,5 @@ void init_audio() {
     right = 0;
     full_len = CONFIG_SB_SIZE / sizeof(uint8_t);
     add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, sbuf, CONFIG_SB_SIZE, NULL);
+    flag = true;
 }
