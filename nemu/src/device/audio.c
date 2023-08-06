@@ -112,7 +112,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 }
 
 void init_audio() {
-    printf("TTT%d\n", full_len);
+    printf("FUCK!\n");
     uint32_t space_size = sizeof(uint32_t) * nr_reg;
     audio_base = (uint32_t *) new_space(space_size);
 #ifdef CONFIG_HAS_PORT_IO
@@ -125,6 +125,5 @@ void init_audio() {
     left = 0;
     right = 0;
     full_len = CONFIG_SB_SIZE / sizeof(uint8_t);
-    printf("TTT%d\n", full_len);
     add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, sbuf, CONFIG_SB_SIZE, NULL);
 }
