@@ -87,9 +87,6 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
                 right = audio_base[reg_init];
                 break;
             }
-            default: {
-                panic("FUCK91!\n");
-            }
         }
     } else {
         switch (offset) {
@@ -103,9 +100,6 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
             }
             case reg_sbuf_size * 4: {
                 audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
-            }
-            default: {
-                panic("FUCK108!\n");
             }
         }
     }
