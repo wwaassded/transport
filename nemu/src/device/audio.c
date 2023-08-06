@@ -37,15 +37,14 @@ static int right = 0;
 static uint32_t full_len = 0;
 
 static void audio_play(void *userdata, uint8_t *stream, int len) {
-    printf("1SSSS\n");
     uint8_t *sbuf = (uint8_t *) (uintptr_t) CONFIG_SB_ADDR;
     int nwrite = len;
     if (count < nwrite)
         nwrite = count;
-    printf("2SSSS\n");
     for (int i = 0; i < nwrite; ++i) {
         stream[i] = sbuf[left];
         left = (left + 1) % full_len;
+        printf("%d\n", i);
     }
 
     count -= nwrite;
