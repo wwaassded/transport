@@ -40,14 +40,14 @@ static bool flag = false;
 static void audio_play(void *userdata, uint8_t *stream, int len) {
     if (!flag)
         return;
-    uint8_t *sbuf = (uint8_t *) (uintptr_t) CONFIG_SB_ADDR;
+    // uint8_t *sbuf = (uint8_t *) (uintptr_t) CONFIG_SB_ADDR;
     int nwrite = len;
     if (count < nwrite)
         nwrite = count;
 
     for (int i = 0; i < nwrite; ++i) {
         printf("TTT::%d %d\n", full_len, left);
-        stream[i] = sbuf[left];
+        stream[i] = 128;
         printf("TTT::%d %d\n", full_len, left);
         left = (left + 1) % full_len;
     }
@@ -118,7 +118,6 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
 }
 
 void init_audio() {
-    printf("FUCK!\n");
     uint32_t space_size = sizeof(uint32_t) * nr_reg;
     audio_base = (uint32_t *) new_space(space_size);
 #ifdef CONFIG_HAS_PORT_IO
