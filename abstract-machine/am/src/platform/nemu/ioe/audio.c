@@ -29,7 +29,7 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 
 void audio_write(uint8_t *sta, int len) {
     int buf_size = inl(AUDIO_SBUF_SIZE_ADDR);
-    int full_len = buf_size / sizeof(uint8_t);
+    // int full_len = buf_size / sizeof(uint8_t);
     while (buf_size - inl(AUDIO_COUNT_ADDR) < len)
         ;
     int count = inl(AUDIO_COUNT_ADDR);
@@ -38,7 +38,7 @@ void audio_write(uint8_t *sta, int len) {
     int right = inl(AUDIO_INIT_ADDR);
     for (int i = 0; i < len; ++i) {
         ptr[right] = sta[i];
-        right = (right + 1) % full_len;
+        right = (right + 1) % 10;
     }
     outl(AUDIO_INIT_ADDR, right);
 }
