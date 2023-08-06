@@ -71,6 +71,9 @@ void init_sdl_audio() {
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     if (is_write) {
         switch (offset) {
+            case reg_count * 4: {
+                count = audio_base[reg_count];
+            }
             case reg_freq * 4: {
                 desired.freq = audio_base[reg_freq];
                 break;
