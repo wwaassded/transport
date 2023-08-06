@@ -43,7 +43,7 @@ void audio_write(uint8_t *sta, int len) {
     // for (int i = 0; i < full_len; ++i)
     //     printf("%d  ", ptr[i]);
     // printf("----------------\n");
-    printf("**%d**\n", count + len);
+    printf("**%d**\n", count);
 }
 
 
