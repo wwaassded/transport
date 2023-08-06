@@ -28,6 +28,7 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 }
 
 void audio_write(uint8_t *sta, int len) {
+    printf("1111");
     int buf_size = inl(AUDIO_SBUF_SIZE_ADDR);
     int full_len = buf_size / sizeof(uint8_t);
     int count = inl(AUDIO_COUNT_ADDR);
@@ -39,6 +40,7 @@ void audio_write(uint8_t *sta, int len) {
         right = (right + 1) % full_len;
     }
     outl(AUDIO_INIT_ADDR, right);
+    printf("2222");
 }
 
 
