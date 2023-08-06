@@ -42,9 +42,9 @@ static void audio_play(void *userdata, uint8_t *stream, int len) {
     if (count < nwrite)
         nwrite = count;
     for (int i = 0; i < nwrite; ++i) {
+        printf("TT:%d\n", i);
         stream[i] = sbuf[left];
         left = (left + 1) % full_len;
-        printf("TT:%d\n", i);
     }
 
     count -= nwrite;
