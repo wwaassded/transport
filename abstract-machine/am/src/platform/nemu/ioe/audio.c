@@ -27,4 +27,9 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 }
 
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
+    uint8_t *sta = (uint8_t *) ctl->buf.start;
+    uint8_t *end = (uint8_t *) ctl->buf.end;
+    int size = sizeof(uint8_t) * (end - sta);
+    while (io_read(AM_AUDIO_CONFIG).bufsize - io_read(AM_AUDIO_STATUS).count < size)
+        ;
 }

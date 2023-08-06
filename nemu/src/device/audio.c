@@ -30,18 +30,30 @@ enum {
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 static SDL_AudioSpec desired;
+
+
+void init_sdl_audio() {
+    desired.format = AUDIO_S16SYS;
+    desired.userdata = NULL;
+    SDL_InitSubSystem(SDL_INIT_AUDIO);
+    SDL_OpenAudio(&desired, NULL);
+    SDL_PauseAudio(0);
+}
+
+
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     if (is_write) {
         switch (offset) {
-            case 0: {
+            case reg_freq * 4: {
                 desired.freq = audio_base[0];
+                init_sdl_audio();
                 break;
             }
-            case 4: {
+            case reg_channels * 4: {
                 desired.channels = audio_base[1];
                 break;
             }
-            case 8: {
+            case reg_samples * 4: {
                 desired.samples = audio_base[2];
                 break;
             }
@@ -51,6 +63,9 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
         }
     } else {
         switch (offset) {
+            case reg_sbuf_size * 4: {
+                audio_base[reg_sbuf_size] = desired.size;
+            }
             default: {
                 panic("not implemented!\n");
             }
