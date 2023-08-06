@@ -54,7 +54,7 @@ static void audio_play(void *userdata, uint8_t *stream, int len) {
 
 
 void init_sdl_audio() {
-    printf("FUCK57\n");
+
     count = 0;
     desired.format = AUDIO_S16SYS;
     desired.userdata = NULL;
@@ -63,6 +63,7 @@ void init_sdl_audio() {
     if (ret == 0) {
         SDL_OpenAudio(&desired, NULL);
         SDL_PauseAudio(0);
+        printf("FUCK57\n");
     } else
         printf("%s\n", SDL_GetError());
 }
