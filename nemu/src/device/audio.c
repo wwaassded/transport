@@ -51,6 +51,7 @@ static void audio_play(void *userdata, uint8_t *stream, int len) {
         for (int i = nwrite; i < len; ++i) {
             stream[i] = 0;
         }
+    printf("SSSS\n");
 }
 
 
