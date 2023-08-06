@@ -39,6 +39,10 @@ void audio_write(uint8_t *sta, int len) {
         right = (right + 1) % full_len;
     }
     outl(AUDIO_INIT_ADDR, right);
+    printf("----------------\n");
+    for (int i = 0; i < full_len; ++i)
+        printf("%d  ", ptr[i]);
+    printf("----------------\n");
 }
 
 
