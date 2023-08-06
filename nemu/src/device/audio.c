@@ -37,6 +37,7 @@ static int right = 0;
 static uint32_t full_len = 0;
 
 static void audio_play(void *userdata, uint8_t *stream, int len) {
+    printf("SSSS\n");
     uint8_t *sbuf = (uint8_t *) (uintptr_t) CONFIG_SB_ADDR;
     int nwrite = len;
     if (count < nwrite)
@@ -63,7 +64,7 @@ void init_sdl_audio() {
     if (ret == 0) {
         SDL_OpenAudio(&desired, NULL);
         SDL_PauseAudio(0);
-        printf("SSSS\n");
+
     } else
         printf("%s\n", SDL_GetError());
 }
