@@ -37,13 +37,12 @@ static int right = 0;
 static uint32_t full_len = 0;
 
 static void audio_play(void *userdata, uint8_t *stream, int len) {
-    // uint8_t *sbuf = (uint8_t *) (uintptr_t) CONFIG_SB_ADDR;
+    uint8_t *sbuf = (uint8_t *) (uintptr_t) CONFIG_SB_ADDR;
     int nwrite = len;
     if (count < nwrite)
         nwrite = count;
     for (int i = 0; i < nwrite; ++i) {
-        stream[i] = 215;
-        // stream[i] = sbuf[left];
+        stream[i] = sbuf[left];
         left = (left + 1) % full_len;
     }
 
@@ -125,5 +124,6 @@ void init_audio() {
     left = 0;
     right = 0;
     full_len = CONFIG_SB_SIZE / sizeof(uint8_t);
+    printf("TTT%d\n", full_len);
     add_mmio_map("audio-sbuf", CONFIG_SB_ADDR, sbuf, CONFIG_SB_SIZE, NULL);
 }
