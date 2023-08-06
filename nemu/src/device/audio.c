@@ -88,7 +88,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
                 break;
             }
             default: {
-                panic("not implemented!\n");
+                panic("FUCK91!\n");
             }
         }
     } else {
@@ -105,7 +105,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
                 audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
             }
             default: {
-                panic("not implemented!\n");
+                panic("FUCK108!\n");
             }
         }
     }
