@@ -87,7 +87,9 @@ int printf(const char *fmt, ...) {
                     break;
                 }
                 default: {
+                    putch('\n');
                     putstr(fmt);
+                    putch('\n');
                     panic("Not implemented");
                 }
             }
