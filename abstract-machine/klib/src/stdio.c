@@ -61,6 +61,10 @@ int printf(const char *fmt, ...) {
                     }
                     break;
                 }
+                case 'p': {
+                    uintptr_t ptr = va_arg(ap, uintptr_t);
+                    printf("0x%x", ptr);
+                }
                 case 'u': {
                     panic("FUCK!\n");
                     break;
@@ -71,7 +75,7 @@ int printf(const char *fmt, ...) {
                 }
                 case 'x': {
                     char trans[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-                    uint32_t tmp = va_arg(ap, uint32_t);
+                    uint64_t tmp = va_arg(ap, uint64_t);
                     uint8_t i = 0;
                     for (i = 0; tmp != 0; ++i) {
                         buf[i] = trans[(tmp % 16)];
