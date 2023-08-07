@@ -61,18 +61,37 @@ int printf(const char *fmt, ...) {
                     }
                     break;
                 }
-                case 'p': {
-                    uintptr_t ptr = va_arg(ap, uintptr_t);
-                    printf("0x%x", ptr);
-                }
                 case 'u': {
-                    panic("FUCK!\n");
+                    uint8_t i;
+                    uint32_t num = va_arg(ap, uint32_t);
+                    for (i = 0; num != 0; ++i) {
+                        buf[i] = (num % 10) + '0';
+                        num /= 10;
+                    }
+                    if (i != 0) {
+                        while (width > i + 1) {
+                            putch(' ');
+                            --width;
+                        }
+                        res += i + 1;
+                        --i;
+                        while (i != 0) {
+                            putch(buf[i]);
+                            --i;
+                        }
+                        putch(buf[i]);
+                    } else {
+                        putch('0');
+                        res += 1;
+                    }
+                    break;
                     break;
                 }
                 case 'l': {
                     panic("FUCK!\n");
                     break;
                 }
+                case 'p':
                 case 'x': {
                     char trans[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
                     uint64_t tmp = va_arg(ap, uint64_t);
