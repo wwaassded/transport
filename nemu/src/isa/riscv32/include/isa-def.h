@@ -20,7 +20,7 @@
 #define FUNC_NAME_LEN 20
 
 typedef struct {
-  word_t gpr[32];
+  word_t gpr[36];
   vaddr_t pc;
 } riscv32_CPU_state;
 
