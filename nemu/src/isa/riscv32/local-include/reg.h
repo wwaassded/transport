@@ -27,6 +27,8 @@ static inline int check_csr_idx(int idx) {
     switch (idx) {
         case 773:
             return 3;
+        case 834:
+            return 2;
         default: {
             printf("csr.cgpr:%d\n", idx);
             panic("fuck!\n");
