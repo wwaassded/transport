@@ -23,8 +23,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
     csr.cgpr[0] = cpu.pc;
     csr.cgpr[2] = NO;
     uint64_t new_pc = csr.cgpr[3];
-    cpu.pc = new_pc;
-    return cpu.pc;
+    return new_pc;
 }
 
 word_t isa_query_intr() {
