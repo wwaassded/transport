@@ -20,11 +20,19 @@
 #define FUNC_NAME_LEN 20
 
 typedef struct {
-  word_t gpr[36];
-  vaddr_t pc;
+    word_t gpr[32];
+    vaddr_t pc;
 } riscv32_CPU_state;
 
-typedef struct{
+typedef struct {
+    uint64_t cgpr[4];
+    // word_t mepc;
+    // word_t mstaus;
+    // word_t mcause;
+    // word_t mtvec;
+} riscv32_CSR_state;
+
+typedef struct {
     char F_name[FUNC_NAME_LEN];
     uint32_t sta_address;
     uint32_t size;
@@ -33,9 +41,9 @@ typedef struct{
 
 // decode
 typedef struct {
-  union {
-    uint32_t val;
-  } inst;
+    union {
+        uint32_t val;
+    } inst;
 } riscv32_ISADecodeInfo;
 
 #define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)
