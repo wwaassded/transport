@@ -9,7 +9,6 @@ Context *__am_irq_handle(Context *c) {
         Event ev = {0};
         switch (c->mcause) {
             default:
-                printf("%u\n", *(uint64_t *)c->mcause);
                 ev.event = EVENT_ERROR;
                 break;
         }
