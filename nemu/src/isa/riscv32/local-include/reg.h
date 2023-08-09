@@ -29,6 +29,8 @@ static inline int check_csr_idx(int idx) {
             return 1;
         case 773:
             return 3;
+        case 833:
+            return 0;
         case 834:
             return 2;
         default: {
