@@ -20,7 +20,11 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    * Then return the address of the interrupt/exception vector.
    */
     csr.cgpr[0] = cpu.pc;
-    return 0;
+    csr.cgpr[2] = NO;
+    uint64_t new_pc = csr.cgpr[3];
+    cpu.pc = new_pc;
+    printf("HELLO WORLD!\n");
+    return cpu.pc;
 }
 
 word_t isa_query_intr() {
