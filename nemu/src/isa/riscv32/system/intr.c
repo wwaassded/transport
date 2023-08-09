@@ -19,11 +19,11 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
     /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
    */
+    printf("TEST2\n");
     csr.cgpr[0] = cpu.pc;
     csr.cgpr[2] = NO;
     uint64_t new_pc = csr.cgpr[3];
     cpu.pc = new_pc;
-    printf("HELLO WORLD!\n");
     return cpu.pc;
 }
 
