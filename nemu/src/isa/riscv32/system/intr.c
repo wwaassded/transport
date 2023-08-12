@@ -26,7 +26,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
     return new_pc;
 }
 word_t isa_return_intr() {
-    return csr.cgpr[0];
+    return csr.cgpr[0] + 4;
 }
 
 word_t isa_query_intr() {
