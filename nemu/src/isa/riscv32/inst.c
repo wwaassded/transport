@@ -18,7 +18,7 @@
 #include <cpu/decode.h>
 #include <cpu/ifetch.h>
 
-extern void isa_return_intr();
+extern word_t isa_return_intr();
 
 #define _R(i) gpr(i)
 #define _CR(i) cgpr(i)
@@ -177,7 +177,7 @@ static int decode_exec(Decode *s) {
     INSTPAT("0000000 ????? ????? 001 ????? 00100 11", slli, SI, _R(rd) = src1 << imm);
     INSTPAT("0000000 ????? ????? 101 ????? 00100 11", srli, SI, _R(rd) = src1 >> imm);
     INSTPAT("0100000 ????? ????? 101 ????? 00100 11", srai, SI, _R(rd) = (signed) src1 >> imm);
-    INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N, isa_return_intr());
+    INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, N, s->dnpc = isa_return_intr());
     INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N, NEMUTRAP(s->pc, _R(10)));// R(10) is $a0
     INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
     INSTPAT_END();
