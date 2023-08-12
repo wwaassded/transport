@@ -25,6 +25,9 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
     uint64_t new_pc = csr.cgpr[3];
     return new_pc;
 }
+void isa_return_intr() {
+  
+}
 
 word_t isa_query_intr() {
     return INTR_EMPTY;
