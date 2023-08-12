@@ -1,6 +1,7 @@
 #include <common.h>
 
 static Context *do_event(Event e, Context *c) {
+    panic("FUCK");
     switch (e.event) {
         default:
             panic("Unhandled event ID = %d", e.event);
