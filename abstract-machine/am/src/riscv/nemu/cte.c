@@ -5,7 +5,6 @@
 static Context *(*user_handler)(Event, Context *) = NULL;
 
 Context *__am_irq_handle(Context *c) {
-    // printf("FUCK:%u\n", c->mcause);
     if (user_handler) {
         Event ev = {0};
         switch (c->mcause) {
@@ -43,9 +42,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 }
 
 void yield() {
-    printf("TEST1\n");
     asm volatile("li a7, -1; ecall");
-    printf("TEST3\n");
 }
 
 bool ienabled() {
