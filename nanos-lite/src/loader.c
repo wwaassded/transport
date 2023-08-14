@@ -22,8 +22,23 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     ramdisk_read(&ELF_head, 0, sizeof(Elf_Ehdr));
     unsigned char magic_number[] = {ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3};
     if (memcmp(ELF_head.e_ident, magic_number, sizeof(magic_number)) != 0)
-        panic("it is not a elf file!");
+        panic("it is not a elf file! please check resources.S or set correct ramdisk.img!");
+    assert(ELF_head.e_ident[4] == ELFCLASS32);
     panic("YEE!");
+    // uint32_t entry_address = ELF_head.e_entry;
+    Elf32_Phdr ELF_phead;
+    for (int i = 0; i < ELF_head.e_phnum; ++i) {
+        size_t offset = ELF_head.e_phoff + i * ELF_head.e_phentsize;
+        ramdisk_read(&ELF_phead, offset, sizeof(Elf32_Phdr));
+        switch (ELF_phead.p_type) {
+            case PT_LOAD: {
+
+                break;
+            }
+            default: {
+            }
+        }
+    }
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
