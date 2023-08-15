@@ -2,6 +2,7 @@
 
 #define SYS_exit 0
 #define SYS_yeild 1
+#define SYS_write 4
 
 extern void yield();
 extern void halt(int code);
@@ -21,6 +22,10 @@ void do_syscall(Context *c) {
             sys_exit(c);
             break;
         }
+        case SYS_write: {
+            sys_write(c, a[1], (void *) (uintptr_t) a[2], a[3]);
+            break;
+        }
         default:
             printf("TEST::FUCK::it is me !");
             panic("Unhandled syscall ID = %d", a[0]);
@@ -35,4 +40,15 @@ void sys_yield(Context *c) {
 
 void sys_exit(Context *c) {
     halt(c->GPR2);
+}
+
+void sys_write(Context *c, int fd, void *buf, size_t count) {
+    if (fd == 1 || fd == 2) {
+        char *buf_char = (char *) buf;
+        for (size_t i = 0; i < count; ++i)
+            putch(buf_char[i]);
+        c->GPRx = 0;
+    } else {
+        c->GPRx = -1;
+    }
 }
