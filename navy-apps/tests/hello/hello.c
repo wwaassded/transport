@@ -3,6 +3,8 @@
 
 int main() {
     write(1, "Hello World!\n", 13);
+    int test = 0;
+    printf("TEST%d\n", test);
     // int i = 2;
     // volatile int j = 0;
     // while (1) {
