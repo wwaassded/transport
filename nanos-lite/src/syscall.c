@@ -4,8 +4,8 @@
 
 void do_syscall(Context *c) {
     uintptr_t a[4];
-    a[0] = c->GPR1;
-
+    a[0] = 1;
+    printf("7::%d\n", c->gpr[10]);
     switch (a[0]) {
         default:
             printf("TEST::FUCK::it is me !");
