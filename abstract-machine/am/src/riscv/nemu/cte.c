@@ -12,6 +12,10 @@ Context *__am_irq_handle(Context *c) {
                 ev.event = EVENT_YIELD;
                 break;
             }
+            case 1: {
+                ev.event = EVENT_SYSCALL;
+                break;
+            }
             default: {
                 printf("%d\n", c->mcause);
                 ev.event = EVENT_ERROR;
