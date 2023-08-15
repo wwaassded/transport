@@ -17,7 +17,7 @@ Context *__am_irq_handle(Context *c) {
             //     break;
             // }
             default: {
-                printf("%d\n", c->mcause);
+                printf("20:%d\n", c->mcause);
                 ev.event = EVENT_ERROR;
                 break;
             }
