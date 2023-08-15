@@ -18,6 +18,8 @@ void do_syscall(Context *c) {
             break;
         }
         case SYS_exit: {
+            sys_exit(c);
+            break;
         }
         default:
             printf("TEST::FUCK::it is me !");
