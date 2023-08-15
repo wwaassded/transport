@@ -7,7 +7,6 @@ static Context *do_event(Event e, Context *c) {
             break;
         }
         case EVENT_SYSCALL: {
-            printf("FUCK it is syscall\n");
             break;
         }
         default:
