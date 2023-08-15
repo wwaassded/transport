@@ -14,7 +14,6 @@ extern size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 extern void init_ramdisk();
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-    init_ramdisk();
     Elf_Ehdr ELF_head;
     ramdisk_read(&ELF_head, 0, sizeof(Elf_Ehdr));
     unsigned char magic_number[] = {ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3};
