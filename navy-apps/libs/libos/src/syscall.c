@@ -5,6 +5,11 @@
 #include <time.h>
 #include <unistd.h>
 
+
+extern char end;
+static char *ptr = &end;
+
+
 // helper macros
 #define _concat(x, y) x##y
 #define concat(x, y) _concat(x, y)
@@ -69,7 +74,12 @@ int _write(int fd, void *buf, size_t count) {
 }
 
 void *_sbrk(intptr_t increment) {
-    return (void *) -1;
+    if (increment == 0)
+        return (void *) ptr;
+    _syscall_(SYS_brk, (intptr_t) (increment + ptr), 0, 0);
+    void *ret_ptr = (void *) ptr;
+    ptr = ptr + increment;
+    return ret_ptr;
 }
 
 int _read(int fd, void *buf, size_t count) {
