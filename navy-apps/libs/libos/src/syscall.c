@@ -78,7 +78,9 @@ void *_sbrk(intptr_t increment) {
     if (increment)
         return ptr;
     else {
-        _syscall_(SYS_brk, (intptr_t) (ptr + increment), 0, 0);
+        void *tmp_ptr = ptr;
+        ptr = ptr + increment;
+        _syscall_(SYS_brk, (intptr_t) (ptr), 0, 0);
         return ptr;
     }
 }
