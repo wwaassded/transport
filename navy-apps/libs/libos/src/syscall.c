@@ -77,7 +77,7 @@ void *_sbrk(intptr_t increment) {
     if (increment == 0) {
         return pro_bre;
     }
-    if (_syscall_(SYS_brk, pro_bre + increment, 0, 0) == 0) {
+    if (_syscall_(SYS_brk, (intptr_t) (pro_bre + increment), 0, 0) == 0) {
         char *ret_ptr = pro_bre;
         pro_bre = pro_bre + increment / sizeof(char);
         return (void *) ret_ptr;
