@@ -7,8 +7,9 @@ void init_ramdisk(void);
 void init_irq(void);
 void init_fs(void);
 void init_proc(void);
-
+extern char end;
 int main() {
+    printf("TTTTTTT:%10p\n", &end);
     extern const char logo[];
     printf("%s", logo);
     Log("'Hello World!' from Nanos-lite");
