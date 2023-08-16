@@ -3,7 +3,7 @@
 
 int main() {
     write(1, "Hello World!\n", 13);
-    printf("TEST\n");
+    printf("TEST");
     // int test = 0;
     // int i = 2;
     // volatile int j = 0;
