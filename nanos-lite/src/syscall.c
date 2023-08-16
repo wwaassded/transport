@@ -44,7 +44,7 @@ void sys_yield(Context *c) {
 }
 
 void sys_exit(Context *c) {
-    halt(c->GPR2);
+    halt(0);
 }
 
 void sys_write(Context *c, int fd, void *buf, size_t count) {
