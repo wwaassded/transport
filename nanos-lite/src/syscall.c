@@ -24,7 +24,6 @@ void do_syscall(Context *c) {
             break;
         }
         case SYS_write: {
-            panic("TEST HERE!");
             sys_write(c, a[1], (void *) (uintptr_t) a[2], a[3]);
             break;
         }
