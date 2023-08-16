@@ -1,10 +1,11 @@
 #include "syscall.h"
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
-
 
 extern char end;
 static char *ptr = &end;
@@ -70,7 +71,7 @@ int _open(const char *path, int flags, mode_t mode) {
 }
 
 int _write(int fd, void *buf, size_t count) {
-    return _syscall_(SYS_write, fd, buf, count);
+    return _syscall_(SYS_write, fd, (intptr_t) buf, count);
 }
 
 void *_sbrk(intptr_t increment) {
@@ -80,9 +81,9 @@ void *_sbrk(intptr_t increment) {
     void *ret_ptr = (void *) ptr;
     ptr = ptr + increment;
     char test[300];
-    fprintf(test, "only test %10p\n", ptr);
+    sprintf(test, "only test %10p\n", ptr);
     _write(1, test, sizeof(test));
-    panic("TEST HERE!");
+    assert(0);
     return ret_ptr;
 }
 
