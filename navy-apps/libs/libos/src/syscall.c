@@ -1,15 +1,9 @@
 #include "syscall.h"
 #include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
-
-extern char end;
-static char *ptr = &end;
-
 
 // helper macros
 #define _concat(x, y) x##y
@@ -71,20 +65,12 @@ int _open(const char *path, int flags, mode_t mode) {
 }
 
 int _write(int fd, void *buf, size_t count) {
-    return _syscall_(SYS_write, fd, (intptr_t) buf, count);
+    _exit(_syscall_(SYS_write, fd, (intptr_t) (buf), count));
+    return 0;
 }
 
 void *_sbrk(intptr_t increment) {
-    if (increment == 0)
-        return (void *) ptr;
-    _syscall_(SYS_brk, (intptr_t) (increment + ptr), 0, 0);
-    void *ret_ptr = (void *) ptr;
-    ptr = ptr + increment;
-    char test[300];
-    sprintf(test, "only test %10p\n", ptr);
-    _write(1, test, 15);
-    assert(0);
-    return ret_ptr;
+    return (void *) -1;
 }
 
 int _read(int fd, void *buf, size_t count) {
