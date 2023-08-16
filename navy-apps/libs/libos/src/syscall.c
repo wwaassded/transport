@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 extern char end;
-static void *pro_bre = &end;
+static char *pro_bre = &end;
 
 // helper macros
 #define _concat(x, y) x##y
@@ -78,9 +78,9 @@ void *_sbrk(intptr_t increment) {
         return pro_bre;
     }
     if (_syscall_(SYS_brk, ((intptr_t) (pro_bre) + increment), 0, 0) == 0) {
-        void *ret_ptr = pro_bre;
+        char *ret_ptr = pro_bre;
         pro_bre = pro_bre + increment;
-        return pro_bre;
+        return (void *) ret_ptr;
     } else
         return (void *) -1;
 }
