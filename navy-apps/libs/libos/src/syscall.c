@@ -5,6 +5,9 @@
 #include <time.h>
 #include <unistd.h>
 
+extern char _end;
+static void *pro_bre = &(_end);
+
 // helper macros
 #define _concat(x, y) x##y
 #define concat(x, y) _concat(x, y)
@@ -65,13 +68,18 @@ int _open(const char *path, int flags, mode_t mode) {
 }
 
 int _write(int fd, void *buf, size_t count) {
-    _syscall_(SYS_write, fd, (uintptr_t)buf, count);
+    _syscall_(SYS_write, fd, (uintptr_t) buf, count);
     // _exit(SYS_write);
     return 0;
 }
 
 void *_sbrk(intptr_t increment) {
-    return (void *) -1;
+    if (_syscall_(SYS_brk, (intptr_t) (pro_bre + increment), 0, 0) == 0) {
+        void *ret_ptr = pro_bre;
+        pro_bre = pro_bre + increment;
+        return ret_ptr;
+    } else
+        return (void *) -1;
 }
 
 int _read(int fd, void *buf, size_t count) {

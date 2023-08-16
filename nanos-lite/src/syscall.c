@@ -3,6 +3,7 @@
 #define SYS_exit 0
 #define SYS_yeild 1
 #define SYS_write 4
+#define SYS_brk 9
 
 extern void yield();
 extern void halt(int code);
@@ -24,6 +25,10 @@ void do_syscall(Context *c) {
         }
         case SYS_write: {
             sys_write(c, a[1], (void *) (uintptr_t) a[2], a[3]);
+            break;
+        }
+        case SYS_brk: {
+            sys_brk(c);
             break;
         }
         default:
@@ -51,4 +56,8 @@ void sys_write(Context *c, int fd, void *buf, size_t count) {
     } else {
         c->GPRx = -1;
     }
+}
+
+void sys_brk(Context *c) {
+    c->GPRx = 0;
 }
