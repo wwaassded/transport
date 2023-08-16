@@ -79,6 +79,10 @@ void *_sbrk(intptr_t increment) {
     _syscall_(SYS_brk, (intptr_t) (increment + ptr), 0, 0);
     void *ret_ptr = (void *) ptr;
     ptr = ptr + increment;
+    char test[300];
+    fprintf(test, "only test %10p\n", ptr);
+    _write(1, test, sizeof(test));
+    panic("TEST HERE!");
     return ret_ptr;
 }
 
