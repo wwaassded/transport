@@ -28,7 +28,6 @@ void do_syscall(Context *c) {
             break;
         }
         case SYS_brk: {
-            assert(0);
             sys_brk(c);
             break;
         }
