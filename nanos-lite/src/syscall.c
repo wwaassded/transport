@@ -55,6 +55,7 @@ void sys_write(Context *c, int fd, void *buf, size_t count) {
             putch(buf_char[i]);
         c->GPRx = 0;
     } else {
+        panic("TEST HERE!");
         c->GPRx = -1;
     }
 }
