@@ -44,7 +44,6 @@ void sys_yield(Context *c) {
 }
 
 void sys_exit(Context *c) {
-    printf("erro: %d\n", c->GPR2);
     halt(c->GPR2);
 }
 
