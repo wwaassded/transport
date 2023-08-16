@@ -28,6 +28,7 @@ void do_syscall(Context *c) {
             break;
         }
         case SYS_brk: {
+            panic("TEST HERE!");
             sys_brk(c);
             break;
         }
