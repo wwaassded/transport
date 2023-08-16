@@ -80,7 +80,7 @@ void *_sbrk(intptr_t increment) {
     if (_syscall_(SYS_brk, ((intptr_t) (pro_bre) + increment), 0, 0) == 0) {
         void *ret_ptr = pro_bre;
         pro_bre = pro_bre + increment;
-        return ret_ptr;
+        return pro_bre;
     } else
         return (void *) -1;
 }
