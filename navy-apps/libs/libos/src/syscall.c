@@ -92,7 +92,8 @@ int _read(int fd, void *buf, size_t count) {
 }
 
 int _close(int fd) {
-    _exit(SYS_close);
+    // _exit(SYS_close);
+    _exit(0);
     return 0;
 }
 
