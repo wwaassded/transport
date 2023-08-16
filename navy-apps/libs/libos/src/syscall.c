@@ -5,8 +5,8 @@
 #include <time.h>
 #include <unistd.h>
 
-extern char _end;
-static void *pro_bre = NULL;
+extern char end;
+static void *pro_bre = &end;
 
 // helper macros
 #define _concat(x, y) x##y
@@ -75,7 +75,6 @@ int _write(int fd, void *buf, size_t count) {
 
 void *_sbrk(intptr_t increment) {
     if (increment == 0) {
-        pro_bre = &(_end);
         return pro_bre;
     }
     if (_syscall_(SYS_brk, (intptr_t) (pro_bre + increment), 0, 0) == 0) {
