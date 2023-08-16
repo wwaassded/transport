@@ -3,6 +3,7 @@
 
 int main() {
   write(1, "Hello World!\n", 13);
-  printf("TEST\n");
+  int number = 2;
+  printf("FUCK:%d\n",number);
   return 0;
 }
