@@ -1,5 +1,5 @@
 #include <proc.h>
-
+extern char end;
 #define MAX_NR_PROC 4
 extern void naive_uload(PCB *pcb, const char *filename);
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
@@ -23,7 +23,7 @@ void init_proc() {
     switch_boot_pcb();
 
     Log("Initializing processes...");
-
+    printf("TTTTTTT:%10p\n", &end);
     // load program here
     naive_uload(NULL, NULL);
 }
