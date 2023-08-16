@@ -82,7 +82,7 @@ void *_sbrk(intptr_t increment) {
     ptr = ptr + increment;
     char test[300];
     sprintf(test, "only test %10p\n", ptr);
-    _write(1, test, 21);
+    _write(1, test, 15);
     assert(0);
     return ret_ptr;
 }
