@@ -4,14 +4,17 @@
 #define SYS_exit 0
 #define SYS_yeild 1
 #define SYS_open 2
+#define SYS_read 3
 #define SYS_write 4
 #define SYS_close 7
+#define SYS_lseek 8
 #define SYS_brk 9
 
 extern void yield();
 extern void halt(int code);
 extern int fs_open(const char *pathname, int flags, int mode);
 extern size_t fs_read(int fd, void *buf, size_t len);
+extern size_t fs_write(int fd, const void *buf, size_t len);
 extern size_t fs_lseek(int fd, size_t offset, int whence);
 extern int fs_close(int fd);
 
@@ -24,15 +27,14 @@ void sys_exit(Context *c) {
     halt(c->GPR2);
 }
 
-void sys_write(Context *c, int fd, void *buf, size_t count) {
+void sys_write(Context *c, int fd, const void *buf, size_t count) {
     if (fd == 1 || fd == 2) {
         char *buf_char = (char *) buf;
         for (size_t i = 0; i < count; ++i)
             putch(buf_char[i]);
         c->GPRx = 0;
     } else {
-        panic("TEST HERE!");
-        c->GPRx = -1;
+        c->GPRx = fs_write(fd, buf, count);
     }
 }
 
@@ -41,10 +43,19 @@ void sys_brk(Context *c) {
 }
 
 void sys_open(Context *c, const char *path, int flags, unsigned int mode) {
-    fs_open(path, flags, mode);
-    c->GPRx = 0;
+    c->GPRx = fs_open(path, flags, mode);
 }
 
+void sys_close(Context *c, int fd) {
+    c->GPRx = fs_close(fd);
+}
+void sys_read(Context *c, int fd, void *buf, size_t len) {
+    c->GPRx = fs_read(fd, buf, len);
+}
+
+void sys_lseek(Context *c, int fd, size_t offset, int whence) {
+    c->GPRx = fs_lseek(fd, offset, whence);
+}
 
 void do_syscall(Context *c) {
     uintptr_t a[4];
@@ -65,9 +76,21 @@ void do_syscall(Context *c) {
             sys_open(c, (const char *) a[1], a[2], a[3]);
             break;
         }
+        case SYS_read: { /* case 3 */
+            sys_read(c, a[1], (void *) a[2], a[3]);
+            break;
+        }
         case SYS_write: { /* case 4 */
+            sys_write(c, a[1], (const void *) a[2], a[3]);
+            break;
         }
         case SYS_close: { /* case 7 */
+            sys_close(c, a[1]);
+            break;
+        }
+        case SYS_lseek: { /* case 8 */
+            sys_lseek(c, a[1], a[2], a[3]);
+            break;
         }
         case SYS_brk: { /* case 9 */
             sys_brk(c);
