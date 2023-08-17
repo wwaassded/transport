@@ -32,16 +32,3 @@ size_t get_ramdisk_size() {
     return RAMDISK_SIZE;
 }
 
-
-int fs_open(const char *pathname, int flags, int mode) {
-    // for (int i = 0; file_table[i].name != NULL; ++i) {
-    // }
-    panic("TEST HERE!");
-    return 1;
-}
-// size_t fs_read(int fd, void *buf, size_t len) {
-// }
-
-// int fs_close(int fd) {
-//     return 0;
-// }

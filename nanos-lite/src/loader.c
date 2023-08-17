@@ -17,7 +17,7 @@ extern int fs_open(const char *pathname, int flags, int mode);
 
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-    fs_open(NULL, 0, 0);
+    fs_open(filename, 0, 0);
     panic("TEST HERE!");
     Elf_Ehdr ELF_head;
     ramdisk_read(&ELF_head, 0, sizeof(Elf_Ehdr));
