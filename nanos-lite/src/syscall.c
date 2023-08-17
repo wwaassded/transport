@@ -41,6 +41,7 @@ void sys_brk(Context *c) {
 }
 
 void sys_open(Context *c, const char *path, int flags, unsigned int mode) {
+    panic("YEE");
     c->GPRx = fs_open(path, flags, mode);
 }
 
@@ -61,7 +62,6 @@ void do_syscall(Context *c) {
             break;
         }
         case SYS_open: { /* case 2 */
-            panic("YEE!");
             sys_open(c, (const char *) a[1], a[2], a[3]);
             break;
         }
