@@ -16,6 +16,7 @@ extern int fs_open(const char *pathname, int flags, int mode);
 extern size_t fs_read(file_dp fd, void *buf, size_t len);
 extern size_t fs_lseek(int fd, size_t offset, int whence);
 extern int fs_close(file_dp fd);
+extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
     file_dp fd = fs_open(filename, 0, 0);
@@ -28,8 +29,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     Elf32_Phdr ELF_phead;
     for (int i = 0; i < ELF_head.e_phnum; ++i) {
         size_t offset = ELF_head.e_phoff + i * ELF_head.e_phentsize;
-        fs_lseek(fd, offset, 0);
-        fs_read(fd, &ELF_phead, sizeof(Elf32_Phdr));
+        // fs_lseek(fd, offset, 0);
+        // fs_read(fd, &ELF_phead, sizeof(Elf32_Phdr));
+        ramdisk_read(&ELF_phead, offset, sizeof(Elf32_Phdr));
         switch (ELF_phead.p_type) {
             case PT_LOAD: {
                 uint8_t *mem_ptr = (uint8_t *) (uintptr_t) ELF_phead.p_vaddr;
