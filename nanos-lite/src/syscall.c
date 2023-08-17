@@ -1,4 +1,5 @@
 #include "syscall.h"
+#include <common.h>
 
 #define SYS_exit 0
 #define SYS_yeild 1
@@ -7,6 +8,33 @@
 
 extern void yield();
 extern void halt(int code);
+
+
+void sys_yield(Context *c) {
+    yield();
+    c->GPRx = 0;
+}
+
+void sys_exit(Context *c) {
+    halt(c->GPR2);
+}
+
+void sys_write(Context *c, int fd, void *buf, size_t count) {
+    if (fd == 1 || fd == 2) {
+        char *buf_char = (char *) buf;
+        for (size_t i = 0; i < count; ++i)
+            putch(buf_char[i]);
+        c->GPRx = 0;
+    } else {
+        panic("TEST HERE!");
+        c->GPRx = -1;
+    }
+}
+
+void sys_brk(Context *c) {
+    c->GPRx = 0;
+}
+
 
 void do_syscall(Context *c) {
     uintptr_t a[4];
@@ -35,30 +63,4 @@ void do_syscall(Context *c) {
             printf("TEST::FUCK::it is me !");
             panic("Unhandled syscall ID = %d", a[0]);
     }
-}
-
-
-void sys_yield(Context *c) {
-    yield();
-    c->GPRx = 0;
-}
-
-void sys_exit(Context *c) {
-    halt(c->GPR2);
-}
-
-void sys_write(Context *c, int fd, void *buf, size_t count) {
-    if (fd == 1 || fd == 2) {
-        char *buf_char = (char *) buf;
-        for (size_t i = 0; i < count; ++i)
-            putch(buf_char[i]);
-        c->GPRx = 0;
-    } else {
-        panic("TEST HERE!");
-        c->GPRx = -1;
-    }
-}
-
-void sys_brk(Context *c) {
-    c->GPRx = 0;
 }
