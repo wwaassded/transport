@@ -2,12 +2,12 @@
 #include <stdio.h>
 
 int main() {
-    printf("PASS!!!\n");
-    return 0;
+
 
     FILE *fp = fopen("/share/files/num", "r+");
     assert(fp);
-
+    printf("PASS!!!\n");
+    return 0;
     fseek(fp, 0, SEEK_END);
     long size = ftell(fp);
     assert(size == 5000);
