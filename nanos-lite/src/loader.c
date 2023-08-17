@@ -26,8 +26,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     if (memcmp(ELF_head.e_ident, magic_number, sizeof(magic_number)) != 0)
         panic("it is not a elf file! please check resources.S or set correct ramdisk.img!");
     assert(ELF_head.e_ident[4] == ELFCLASS32);
-    assert(ELF_head.e_entry == 0x83004d50);
-    panic("YEE it work");
     Elf32_Phdr ELF_phead;
     for (int i = 0; i < ELF_head.e_phnum; ++i) {
         size_t offset = ELF_head.e_phoff + i * ELF_head.e_phentsize;
@@ -35,6 +33,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
         fs_read(fd, &ELF_phead, sizeof(Elf32_Phdr));
         switch (ELF_phead.p_type) {
             case PT_LOAD: {
+                panic("LOAD");
                 uint8_t *mem_ptr = (uint8_t *) (uintptr_t) ELF_phead.p_vaddr;
                 memset(mem_ptr, 0, ELF_phead.p_memsz);
                 uint8_t *src_ptr = &ramdisk_start + ELF_phead.p_offset;
