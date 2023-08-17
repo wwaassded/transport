@@ -10,7 +10,6 @@
 
 typedef int file_dp;
 
-extern size_t get_ramdisk_size();
 extern int fs_open(const char *pathname, int flags, int mode);
 extern size_t fs_read(file_dp fd, void *buf, size_t len);
 extern size_t fs_lseek(int fd, size_t offset, int whence);
@@ -34,8 +33,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
             case PT_LOAD: {
                 uint8_t *mem_ptr = (uint8_t *) (uintptr_t) ELF_phead.p_vaddr;
                 memset(mem_ptr, 0, ELF_phead.p_memsz);
-                // uint8_t *src_ptr = &ramdisk_start + ELF_phead.p_offset;
-                // memcpy(mem_ptr, src_ptr, ELF_phead.p_filesz);
                 fs_lseek(fd, ELF_phead.p_offset, 0);
                 fs_read(fd, mem_ptr, ELF_phead.p_filesz);
                 break;

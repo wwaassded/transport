@@ -66,6 +66,10 @@ size_t fs_read(int fd, void *buf, size_t len) {
     }
 }
 
+size_t fs_write(int fd, const void *buf, size_t len) {
+    return -1;
+}
+
 size_t fs_lseek(int fd, size_t offset, int whence) {
     switch (whence) {
         case SEEK_SET: {
