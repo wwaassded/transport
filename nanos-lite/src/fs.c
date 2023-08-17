@@ -2,7 +2,7 @@
 
 typedef size_t (*ReadFn)(void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn)(const void *buf, size_t offset, size_t len);
-
+extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 typedef struct {
     char *name;
     size_t size;
@@ -42,9 +42,15 @@ void init_fs() {
 
 int fs_open(const char *pathname, int flags, int mode) {
     for (int i = 0; file_table[i].name != NULL; ++i)
-        if (strcmp(file_table[i].name, pathname) == 0) {
-            printf("HELLO:%s\n", pathname);
-            panic("PASS!!");
-        }
-    panic("LOST!!");
+        if (strcmp(file_table[i].name, pathname) == 0)
+            return i;
+    panic("no such file please check files.h!");
+}
+
+int fs_close(int fd) {
+    return 0;
+}
+
+size_t fs_read(int fd, void *buf, size_t len) {
+    return ramdisk_read(buf, file_table[fd].disk_offset, len);
 }
