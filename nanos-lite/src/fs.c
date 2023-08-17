@@ -84,6 +84,12 @@ size_t fs_write(int fd, const void *buf, size_t len) {
     return ret;
 }
 
+
+/// @brief rewind your file pointer littel bug remain
+/// @param fd
+/// @param offset
+/// @param whence
+/// @return
 size_t fs_lseek(int fd, size_t offset, int whence) {
     switch (whence) {
         case SEEK_SET: {
@@ -98,7 +104,9 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
             file_table[fd].open_offset = file_table[fd].open_offset + file_table[fd].size + offset;
             break;
         }
+        default: {
+            panic("wrong whence please check your program!");
+        }
     }
-    assert(file_table[fd].open_offset <= file_table[fd].disk_offset + file_table[fd].size && file_table[fd].open_offset >= file_table[fd].disk_offset);
     return 0;
 }
