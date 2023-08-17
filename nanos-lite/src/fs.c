@@ -108,6 +108,6 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
             panic("wrong whence please check your program!");
         }
     }
-    assert(file_table[fd].open_offset <= file_table[fd].disk_offset + file_table[fd].size && file_table[fd].open_offset >= file_table[fd].disk_offset);
+    assert(file_table[fd].open_offset <= file_table[fd].disk_offset + file_table[fd].size);
     return 0;
 }
