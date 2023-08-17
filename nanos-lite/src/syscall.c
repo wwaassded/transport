@@ -4,6 +4,7 @@
 #define SYS_exit 0
 #define SYS_yeild 1
 #define SYS_write 4
+#define SYS_close 7
 #define SYS_brk 9
 
 extern void yield();
@@ -53,6 +54,11 @@ void do_syscall(Context *c) {
         }
         case SYS_write: {
             sys_write(c, a[1], (void *) (uintptr_t) a[2], a[3]);
+            break;
+        }
+        case SYS_close: {
+            // fs_close(a[1]);
+            c->GPRx = 0;
             break;
         }
         case SYS_brk: {

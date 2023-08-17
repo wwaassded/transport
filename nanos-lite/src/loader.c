@@ -7,13 +7,18 @@
 #define Elf_Ehdr Elf32_Ehdr
 #define Elf_Phdr Elf32_Phdr
 #endif
+
 extern uint8_t ramdisk_start;
 extern size_t get_ramdisk_size();
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 extern size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 extern void init_ramdisk();
+extern int fs_open(const char *pathname, int flags, int mode);
+
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
+    fs_open(NULL, 0, 0);
+    panic("TEST HERE!");
     Elf_Ehdr ELF_head;
     ramdisk_read(&ELF_head, 0, sizeof(Elf_Ehdr));
     unsigned char magic_number[] = {ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3};
