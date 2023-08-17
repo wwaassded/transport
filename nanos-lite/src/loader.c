@@ -12,7 +12,7 @@ typedef int file_dp;
 
 extern int fs_open(const char *pathname, int flags, int mode);
 extern size_t fs_read(file_dp fd, void *buf, size_t len);
-extern size_t fs_lseek(int fd, size_t offset, int whence);
+extern size_t fs_lseek(file_dp fd, size_t offset, int whence);
 extern int fs_close(file_dp fd);
 
 

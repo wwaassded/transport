@@ -3,13 +3,17 @@
 
 #define SYS_exit 0
 #define SYS_yeild 1
+#define SYS_open 2
 #define SYS_write 4
 #define SYS_close 7
 #define SYS_brk 9
 
 extern void yield();
 extern void halt(int code);
-
+extern int fs_open(const char *pathname, int flags, int mode);
+extern size_t fs_read(int fd, void *buf, size_t len);
+extern size_t fs_lseek(int fd, size_t offset, int whence);
+extern int fs_close(int fd);
 
 void sys_yield(Context *c) {
     yield();
@@ -36,6 +40,10 @@ void sys_brk(Context *c) {
     c->GPRx = 0;
 }
 
+void sys_open(Context *c, const char *path, int flags, unsigned int mode) {
+    c->GPRx = fs_open(path, flags, mode);
+}
+
 
 void do_syscall(Context *c) {
     uintptr_t a[4];
@@ -44,24 +52,23 @@ void do_syscall(Context *c) {
     a[2] = c->GPR3;
     a[3] = c->GPR4;
     switch (a[0]) {
-        case SYS_yeild: {
-            sys_yield(c);
-            break;
-        }
-        case SYS_exit: {
+        case SYS_exit: { /* case 0 */
             sys_exit(c);
             break;
         }
-        case SYS_write: {
-            sys_write(c, a[1], (void *) (uintptr_t) a[2], a[3]);
+        case SYS_yeild: { /* case 1 */
+            sys_yield(c);
             break;
         }
-        case SYS_close: {
-            // fs_close(a[1]);
-            c->GPRx = 0;
+        case SYS_open: { /* case 2 */
+            sys_open(c, (const char *) a[1], a[2], a[3]);
             break;
         }
-        case SYS_brk: {
+        case SYS_write: { /* case 4 */
+        }
+        case SYS_close: { /* case 7 */
+        }
+        case SYS_brk: { /* case 9 */
             sys_brk(c);
             break;
         }
