@@ -42,7 +42,6 @@ void sys_brk(Context *c) {
 
 void sys_open(Context *c, const char *path, int flags, unsigned int mode) {
     c->GPRx = fs_open(path, flags, mode);
-    panic("YEE!");
 }
 
 
