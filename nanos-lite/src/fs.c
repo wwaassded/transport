@@ -59,8 +59,6 @@ size_t fs_read(int fd, void *buf, size_t len) {
         return 0;
     if (file_table[fd].open_offset == 0)
         file_table[fd].open_offset = file_table[fd].disk_offset;
-    if (file_table[fd].open_offset > file_table[fd].size + file_table[fd].disk_offset)
-        panic("FUCK");
     if (file_table[fd].open_offset + len > file_table[fd].disk_offset + file_table[fd].size) {
         size_t ret = ramdisk_read(buf, file_table[fd].open_offset, file_table[fd].disk_offset + file_table[fd].size - file_table[fd].open_offset);
         file_table[fd].open_offset = file_table[fd].disk_offset + file_table[fd].size;
@@ -76,8 +74,6 @@ size_t fs_write(int fd, const void *buf, size_t len) {
         return 0;
     if (file_table[fd].open_offset == 0)
         file_table[fd].open_offset = file_table[fd].disk_offset;
-    if (file_table[fd].open_offset > file_table[fd].size + file_table[fd].disk_offset)
-        panic("FUCK");
     if (file_table[fd].open_offset + len > file_table[fd].disk_offset + file_table[fd].size) {
         size_t ret = ramdisk_write(buf, file_table[fd].open_offset, file_table[fd].disk_offset + file_table[fd].size - file_table[fd].open_offset);
         file_table[fd].open_offset = file_table[fd].disk_offset + file_table[fd].size;
@@ -112,5 +108,6 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
             panic("wrong whence please check your program!");
         }
     }
+    assert(file_table[fd].open_offset <= file_table[fd].disk_offset + file_table[fd].size && file_table[fd].open_offset >= file_table[fd].disk_offset);
     return 0;
 }
