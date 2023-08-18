@@ -17,8 +17,12 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
     char *buf_char = (char *) buf;
     for (size_t i = 0; i < len; ++i)
         putch(buf_char[i]);
-    // panic("HERE");
     return len;
+    // if (fd == 1 || fd == 2) {
+    //     char *buf_char = (char *) buf;
+    //     for (size_t i = 0; i < count; ++i)
+    //         putch(buf_char[i]);
+    // }
 }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
