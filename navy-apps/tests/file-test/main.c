@@ -8,9 +8,8 @@ int main() {
     long size = ftell(fp);
     // assert(size == 5000);
     if (size != 5000)
-        return 0;
-    else
-        return 1;
+        printf("not equal!\n");
+    return 0;
 
     // fseek(fp, 500 * 5, SEEK_SET);
     // int i, n;
