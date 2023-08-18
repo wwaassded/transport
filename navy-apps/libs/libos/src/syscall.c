@@ -59,6 +59,7 @@ intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
 
 void _exit(int status) {
     _syscall_(SYS_exit, status, 0, 0);
+    assert(0);
     while (1)
         ;
 }
@@ -71,13 +72,13 @@ int _write(int fd, void *buf, size_t count) {
     return _syscall_(SYS_write, fd, (intptr_t) (buf), count);
 }
 
-void *_sbrk(intptr_t increment) {
+void *_sbrk(__intptr_t increment) {
     if (increment == 0) {
         return ptr;
     } else {
         void *tmp_ptr = ptr;
         ptr = ptr + increment;
-        _syscall_(SYS_brk, (intptr_t) (ptr), 0, 0);
+        _syscall_(SYS_brk, (__intptr_t) (ptr), 0, 0);
         return ptr;
     }
 }

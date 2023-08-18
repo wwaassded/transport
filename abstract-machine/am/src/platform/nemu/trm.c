@@ -16,13 +16,14 @@ void putch(char ch) {
 }
 
 void halt(int code) {
-  nemu_trap(code);
-
-  // should not reach here
-  while (1);
+    nemu_trap(code);
+    panic("should reach here!");
+    // should not reach here
+    while (1)
+        ;
 }
 
 void _trm_init() {
-  int ret = main(mainargs);
-  halt(ret);
+    int ret = main(mainargs);
+    halt(ret);
 }
