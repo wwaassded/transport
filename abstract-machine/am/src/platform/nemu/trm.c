@@ -16,6 +16,7 @@ void putch(char ch) {
 }
 
 void _putch(char ch) {
+    nemu_trap(0);
     outb(SERIAL_PORT, ch);
 }
 
