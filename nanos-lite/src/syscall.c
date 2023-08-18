@@ -28,15 +28,14 @@ void sys_exit(Context *c) {
 }
 
 void sys_write(Context *c, int fd, const void *buf, size_t count) {
-    // if (fd == 1 || fd == 2) {
-    //     char *buf_char = (char *) buf;
-    //     for (size_t i = 0; i < count; ++i)
-    //         putch(buf_char[i]);
-    //     c->GPRx = 0;
-    // } else {
-    //     c->GPRx = fs_write(fd, buf, count);
-    // }
-    c->GPRx = 0;
+    if (fd == 1 || fd == 2) {
+        char *buf_char = (char *) buf;
+        for (size_t i = 0; i < count; ++i)
+            putch(buf_char[i]);
+        c->GPRx = count;
+    } else {
+        c->GPRx = fs_write(fd, buf, count);
+    }
 }
 
 void sys_brk(Context *c) {
