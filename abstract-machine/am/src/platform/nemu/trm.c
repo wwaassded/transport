@@ -16,7 +16,6 @@ void putch(char ch) {
 }
 
 void _putch(char ch) {
-    halt(0);
     outb(SERIAL_PORT, ch);
 }
 
