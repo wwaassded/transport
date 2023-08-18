@@ -108,6 +108,7 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
             file_table[fd].open_offset = file_table[fd].disk_offset + file_table[fd].size + offset;
             assert(file_table[fd].open_offset >= file_table[fd].disk_offset);
             panic("HERE");
+            printf("%d\n", file_table[fd].size);
             break;
         }
         default: {
