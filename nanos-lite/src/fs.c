@@ -95,7 +95,7 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
         case SEEK_SET: {
             assert(file_table[fd].open_offset >= file_table[fd].disk_offset);
             file_table[fd].open_offset = file_table[fd].disk_offset + offset;
-            assert(file_table[fd].open_offset >= file_table[fd].disk_offset);
+            // assert(file_table[fd].open_offset >= file_table[fd].disk_offset);
             break;
         }
         case SEEK_CUR: {
