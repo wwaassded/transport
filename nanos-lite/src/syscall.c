@@ -24,7 +24,6 @@ void sys_yield(Context *c) {
 }
 
 void sys_exit(Context *c) {
-    panic("HERE");
     halt(c->GPR2);
 }
 
