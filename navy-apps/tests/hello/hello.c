@@ -7,7 +7,7 @@ int main() {
     printf("only test!\n");
     printf("FUCK\n");
 
-    // assert(0);
+    assert(0);
     // int i = 2;
     // volatile int j = 0;
     // while (1) {
