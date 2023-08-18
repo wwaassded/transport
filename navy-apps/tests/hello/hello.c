@@ -1,9 +1,12 @@
+#include <assert.h>
 #include <stdio.h>
 #include <unistd.h>
 
 int main() {
     write(1, "Hello World!\n", 13);
     printf("only test!");
+    printf("FUCK");
+    assert(0);
     // int i = 2;
     // volatile int j = 0;
     // while (1) {
