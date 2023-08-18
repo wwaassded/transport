@@ -91,9 +91,8 @@ size_t fs_write(int fd, const void *buf, size_t len) {
         file_table[fd].open_offset += len;
         return ret;
     } else {
-        panic("HERE");
         size_t ret = file_table[fd].write(buf, file_table[fd].open_offset, len);
-        file_table[fd].open_offset += len;
+        // file_table[fd].open_offset += len;
         return ret;
     }
 }
