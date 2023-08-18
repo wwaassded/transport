@@ -9,14 +9,17 @@
 #define NAME(key) \
     [AM_KEY_##key] = #key,
 
+
 static const char *keyname[256] __attribute__((used)) = {
         [AM_KEY_NONE] = "NONE",
         AM_KEYS(NAME)};
+extern void _putch(char ch);
+
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
     char *buf_char = (char *) buf;
     for (size_t i = 0; i < len; ++i)
-        putch(buf_char[i]);
+        _putch(buf_char[i]);
     return len;
 }
 
