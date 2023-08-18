@@ -4,7 +4,7 @@
 extern void _exit(int status);
 int main() {
     write(1, "Hello World!\n", 13);
-    _exit(0);
+    // _exit(0);
     // printf("only test!\n");
     // printf("FUCK\n");
 
