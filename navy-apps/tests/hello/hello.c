@@ -5,7 +5,7 @@
 int main() {
     write(1, "Hello World!\n", 13);
     printf("only test!\n");
-    printf("FUCK");
+    printf("FUCK\n");
     // assert(0);
     // int i = 2;
     // volatile int j = 0;
@@ -16,5 +16,4 @@ int main() {
     //         j = 0;
     //     }
     // }
-    return 0;
 }
