@@ -3,8 +3,8 @@
 #include <unistd.h>
 extern void _exit(int status);
 int main() {
-    _exit(0);
     write(1, "Hello World!\n", 13);
+    _exit(0);
     int i = 2;
     volatile int j = 0;
     while (1) {
