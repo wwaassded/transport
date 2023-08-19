@@ -2,7 +2,8 @@
 #include <nemu.h>
 
 #define KEYDOWN_MASK 0x8000
-// KBD_ADDR
+
+
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
     uint32_t tmp = *(uint32_t *) (KBD_ADDR + 0);
     if ((tmp & KEYDOWN_MASK) == 0x8000) {
