@@ -53,7 +53,7 @@ void sys_lseek(Context *c, int fd, size_t offset, int whence) {
 }
 
 void sys_gettimeofday(Context *c, struct timeval *tv, struct timezone *tz) {
-    c->GPRx = io_read(AM_TIMER_UPTIME).us;
+    c->GPRx = io_read(AM_TIMER_UPTIME).us / 100000;
 }
 
 void do_syscall(Context *c) {
