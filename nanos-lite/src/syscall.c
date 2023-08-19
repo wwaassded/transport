@@ -38,7 +38,6 @@ void sys_brk(Context *c) {
 }
 
 void sys_open(Context *c, const char *path, int flags, unsigned int mode) {
-    panic("TEST");
     c->GPRx = fs_open(path, flags, mode);
 }
 
