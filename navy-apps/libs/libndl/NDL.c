@@ -1,3 +1,4 @@
+#include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +16,12 @@ uint32_t NDL_GetTicks() {
 }
 
 int NDL_PollEvent(char *buf, int len) {
-    return 0;
+    int fd = open("/dev/events", 0, 0);
+    read(fd, buf, len);
+    if (buf == NULL)
+        return 0;
+    else
+        return 1;
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
