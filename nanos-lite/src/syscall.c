@@ -1,5 +1,6 @@
 #include "syscall.h"
 #include <common.h>
+#include <sys/time.h>
 
 #define SYS_exit 0
 #define SYS_yeild 1
@@ -9,6 +10,7 @@
 #define SYS_close 7
 #define SYS_lseek 8
 #define SYS_brk 9
+#define SYS_gettimeofday 19
 
 extern void yield();
 extern void halt(int code);
@@ -28,12 +30,6 @@ void sys_exit(Context *c) {
 }
 
 void sys_write(Context *c, int fd, const void *buf, size_t count) {
-    // if (fd == 1 || fd == 2) {
-    //     char *buf_char = (char *) buf;
-    //     for (size_t i = 0; i < count; ++i)
-    //         putch(buf_char[i]);
-    //     c->GPRx = count;
-    // }
     c->GPRx = fs_write(fd, buf, count);
 }
 
@@ -54,6 +50,15 @@ void sys_read(Context *c, int fd, void *buf, size_t len) {
 
 void sys_lseek(Context *c, int fd, size_t offset, int whence) {
     c->GPRx = fs_lseek(fd, offset, whence);
+}
+
+void sys_gettimeofday(Context *c, struct timeval *tv, struct timezone *tz) {
+    panic("HERE");
+    int val = gettimeofday(tv, NULL);
+    if (val == -1)
+        c->GPRx = -1;
+    else
+        c->GPRx = tv->tv_sec * 1000000 + tv->tv_usec;
 }
 
 void do_syscall(Context *c) {
@@ -93,6 +98,10 @@ void do_syscall(Context *c) {
         }
         case SYS_brk: { /* case 9 */
             sys_brk(c);
+            break;
+        }
+        case SYS_gettimeofday: { /* case 19 */
+            sys_gettimeofday(c, (struct timeval *) a[1], (struct timezone *) a[2]);
             break;
         }
         default:
