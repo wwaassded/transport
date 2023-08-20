@@ -23,7 +23,6 @@ int NDL_PollEvent(char *buf, int len) {
 
 void NDL_OpenCanvas(int *w, int *h) {
     if (getenv("NWM_APP")) {
-        assert(0);
         int fbctl = 4;
         fbdev = 5;
         screen_w = *w;
@@ -31,7 +30,6 @@ void NDL_OpenCanvas(int *w, int *h) {
         char buf[64];
         int len = sprintf(buf, "%d %d", screen_w, screen_h);
         printf("%s\n", buf);
-        assert(0);
         // let NWM resize the window and create the frame buffer
         write(fbctl, buf, len);
         while (1) {
@@ -42,8 +40,13 @@ void NDL_OpenCanvas(int *w, int *h) {
             if (strcmp(buf, "mmap ok") == 0) break;
         }
         close(fbctl);
+    } else {
+        char buf[64];
+        int fd = open("/proc/dispinfo", 0, 0);
+        read(fd, buf, 0);
+        printf("%s\n", buf);
+        assert(0);
     }
-    assert(0);
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
