@@ -31,7 +31,7 @@ void *BMP_Load(const char *filename, int *width, int *height) {
     int w = hdr.width;
     int h = hdr.height;
     uint32_t *pixels = malloc(w * h * sizeof(uint32_t));
-    printf("0x%10p\n", pixels);
+    printf("%10p\n", pixels);
     int line_off = (w * 3 + 3) & ~0x3;
     // for (int i = 0; i < h; i++) {
     //     fseek(fp, hdr.offset + (h - 1 - i) * line_off, SEEK_SET);
