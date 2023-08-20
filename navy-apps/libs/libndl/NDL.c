@@ -45,15 +45,15 @@ void NDL_OpenCanvas(int *w, int *h) {
         int fd = open("/proc/dispinfo", 0, 0);
         read(4, buf, 64);
         char *tmp = strtok(buf, ":");
-        char *number = strtok(buf, " ");
+        char *number = strtok(NULL, " ");
         if (strcmp(tmp, "WIDTH") == 0)
             *w = atoi(number);
         else if (strcmp(tmp, "HEIGHT") == 0)
             *h = atoi(number);
         else
             assert(0);
-        char *tmp = strtok(buf, ":");
-        char *number = strtok(buf, " ");
+        tmp = strtok(NULL, ":");
+        number = strtok(NULL, " ");
         if (strcmp(tmp, "WIDTH") == 0)
             *w = atoi(number);
         else if (strcmp(tmp, "HEIGHT") == 0)
