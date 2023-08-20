@@ -22,7 +22,6 @@ int NDL_PollEvent(char *buf, int len) {
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
-    assert(0);
     if (getenv("NWM_APP")) {
         assert(0);
         int fbctl = 4;
@@ -44,6 +43,7 @@ void NDL_OpenCanvas(int *w, int *h) {
         }
         close(fbctl);
     }
+    assert(0);
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
