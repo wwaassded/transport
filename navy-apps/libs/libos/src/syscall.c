@@ -1,5 +1,6 @@
 #include "syscall.h"
 #include <assert.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <time.h>
@@ -75,7 +76,8 @@ int _write(int fd, void *buf, size_t count) {
 void *_sbrk(__intptr_t increment) {
     char test[50];
     sprintf(test, "%10p\n", ptr);
-    panic("TEST");
+    _write(1, test, 10);
+    assert(0);
     if (increment == 0) {
         return ptr;
     } else {
