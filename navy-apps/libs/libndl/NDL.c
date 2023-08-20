@@ -40,15 +40,13 @@ void NDL_OpenCanvas(int *w, int *h) {
             if (strcmp(buf, "mmap ok") == 0) break;
         }
         close(fbctl);
-    } else {
+    } else if (*w == 0 && *h == 0) {
         char buf[64];
         int fd = open("/proc/dispinfo", 0, 0);
         read(4, buf, 64);
-        printf("%s\n", buf);
         char *tmp = strtok(buf, " ");
         char *number = strtok(NULL, " ");
         number = strtok(NULL, " ");
-        printf("%s %s\n", tmp, number);
         if (strcmp(tmp, "WIDTH") == 0)
             *w = atoi(number);
         else if (strcmp(tmp, "HEIGHT") == 0)
@@ -58,15 +56,12 @@ void NDL_OpenCanvas(int *w, int *h) {
         tmp = strtok(NULL, " ");
         number = strtok(NULL, " ");
         number = strtok(NULL, " ");
-        printf("%s %s\n", tmp, number);
         if (strcmp(tmp, "WIDTH") == 0)
             *w = atoi(number);
         else if (strcmp(tmp, "HEIGHT") == 0)
             *h = atoi(number);
         else
             assert(0);
-        printf("%d %d\n", *w, *h);
-        assert(0);
     }
 }
 
