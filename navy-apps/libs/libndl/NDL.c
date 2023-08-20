@@ -46,7 +46,22 @@ void NDL_OpenCanvas(int *w, int *h) {
         read(4, buf, 64);
         printf("%s\n", buf);
         char *tmp = strtok(buf, ":");
-        printf("%s\n", tmp);
+        char *number = strtok(buf, " ");
+        if (strcmp(tmp, "WIDTH") == 0)
+            *w = atoi(number);
+        else if (strcmp(tmp, "HEIGHT") == 0)
+            *h = atoi(number);
+        else
+            assert(0);
+        char *tmp = strtok(buf, ":");
+        char *number = strtok(buf, " ");
+        if (strcmp(tmp, "WIDTH") == 0)
+            *w = atoi(number);
+        else if (strcmp(tmp, "HEIGHT") == 0)
+            *h = atoi(number);
+        else
+            assert(0);
+        printf("%d %d\n", *w, *h);
         assert(0);
     }
 }
