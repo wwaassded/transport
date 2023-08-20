@@ -6,7 +6,7 @@
 extern void *_sbrk(__intptr_t increment);
 extern char _end;
 int main() {
-    void *ptr = _sbrk(0);
+    void *ptr = _sbrk(sizeof(uint32_t));
     printf("%10p\n", ptr);
     printf("%10p\n", &_end);
     assert(0);
