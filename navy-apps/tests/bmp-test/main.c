@@ -6,10 +6,6 @@
 extern void *_sbrk(__intptr_t increment);
 extern char _end;
 int main() {
-    void *ptr = _sbrk(sizeof(uint32_t));
-    printf("%10p\n", ptr);
-    printf("%10p\n", &_end);
-    assert(0);
     NDL_Init(0);
     int w, h;
     void *bmp = BMP_Load("/share/pictures/projectn.bmp", &w, &h);
