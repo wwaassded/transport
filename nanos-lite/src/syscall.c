@@ -34,6 +34,7 @@ void sys_write(Context *c, int fd, const void *buf, size_t count) {
 }
 
 void sys_brk(Context *c) {
+    panic("TEST");
     c->GPRx = 0;
 }
 
