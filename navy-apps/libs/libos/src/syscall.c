@@ -73,6 +73,9 @@ int _write(int fd, void *buf, size_t count) {
 }
 
 void *_sbrk(__intptr_t increment) {
+    char test[50];
+    sprintf(test, "%10p\n", ptr);
+    panic("TEST");
     if (increment == 0) {
         return ptr;
     } else {
