@@ -43,7 +43,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     } else {
         char buf[64];
         int fd = open("/proc/dispinfo", 0, 0);
-        read(fd, buf, 0);
+        read(4, buf, 0);
         printf("%s\n", buf);
         assert(0);
     }
