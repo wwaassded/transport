@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 extern void *_sbrk(__intptr_t increment);
+extern char _end;
 int main() {
     void *ptr = _sbrk(0);
     printf("%10p\n", ptr);
+    printf("%10p\n", &_end);
     assert(0);
     NDL_Init(0);
     int w, h;
