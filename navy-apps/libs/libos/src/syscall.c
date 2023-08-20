@@ -80,7 +80,7 @@ void *_sbrk(__intptr_t increment) {
         void *tmp_ptr = ptr;
         ptr = ptr + increment;
         _syscall_(SYS_brk, (__intptr_t) (ptr), 0, 0);
-        return ptr;
+        return tmp_ptr;
     }
 }
 
