@@ -48,24 +48,35 @@ void NDL_OpenCanvas(int *w, int *h) {
         char *number = strtok(NULL, " ");
         number = strtok(NULL, " ");
         if (strcmp(tmp, "WIDTH") == 0)
-            *w = atoi(number);
+            screen_w = atoi(number);
         else if (strcmp(tmp, "HEIGHT") == 0)
-            *h = atoi(number);
+            screen_h = atoi(number);
         else
             assert(0);
         tmp = strtok(NULL, " ");
         number = strtok(NULL, " ");
         number = strtok(NULL, " ");
         if (strcmp(tmp, "WIDTH") == 0)
-            *w = atoi(number);
+            screen_w = atoi(number);
         else if (strcmp(tmp, "HEIGHT") == 0)
-            *h = atoi(number);
+            screen_h = atoi(number);
         else
             assert(0);
+        if (*w == 0 && *h == 0) {
+            *w = screen_w;
+            *h = screen_h;
+        }
+        assert(screen_h >= *h && screen_w >= *w);
     }
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+    int fd = open("/dev/fb", 0, 0);
+    for (int i = x; i < x + h; ++i) {
+        lseek(fd, (i * screen_w + y) * sizeof(uint32_t), SEEK_SET);
+        int erro = write(fd, pixels, w * sizeof(uint32_t));
+        assert(erro != -1);
+    }
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {

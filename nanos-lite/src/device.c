@@ -14,7 +14,7 @@ static const char *keyname[256] __attribute__((used)) = {
         [AM_KEY_NONE] = "NONE",
         AM_KEYS(NAME)};
 extern void _putch(char ch);
-
+static int screen_w = 0, screen_h = 0;
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
     char *buf_char = (char *) buf;
@@ -38,7 +38,18 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-    return 0;
+    int w = len / sizeof(uint32_t);
+    int number = offset / sizeof(uint32_t);
+    void *pixels = (void *) buf;
+    io_write(AM_GPU_FBDRAW, number / screen_w, number % screen_w, pixels, w, 1, true);
+    return len;
+}
+
+size_t init_fb() {
+    AM_GPU_CONFIG_T cfg = io_read(AM_GPU_CONFIG);
+    screen_w = cfg.width;
+    screen_h = cfg.height;
+    return cfg.height * cfg.width * sizeof(uint32_t);
 }
 
 void init_device() {

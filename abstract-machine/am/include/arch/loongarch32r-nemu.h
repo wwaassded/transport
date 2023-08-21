@@ -2,7 +2,6 @@
 #define __ARCH_H__
 
 struct Context {
-  // TODO: fix the order of these members to match trap.S
   uintptr_t gpr[32], era, estat, prmd;
   void *pdir;
 };

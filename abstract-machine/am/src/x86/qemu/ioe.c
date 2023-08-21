@@ -1,5 +1,5 @@
 #include "x86-qemu.h"
-#include <klib.h> // TODO: delete
+
 
 // UART
 // ====================================================
