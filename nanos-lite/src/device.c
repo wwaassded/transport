@@ -38,15 +38,11 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-    if (len == 0)
-        io_write(AM_GPU_FBDRAW, 0, 0, NULL, 0, 0, true);
-    else {
-        int w = len / sizeof(uint32_t);
-        int number = offset / sizeof(uint32_t);
-        void *pixels = (void *) buf;
-        io_write(AM_GPU_FBDRAW, number / screen_w, number % screen_w, pixels, w, 3, false);
-        printf("TT:%d\n", number / screen_w);
-    }
+    int w = len / sizeof(uint32_t);
+    int number = offset / sizeof(uint32_t);
+    void *pixels = (void *) buf;
+    io_write(AM_GPU_FBDRAW, number / screen_w, number % screen_w, pixels, w, 1, true);
+    printf("TT:%d\n", number / screen_w);
     return len;
 }
 
