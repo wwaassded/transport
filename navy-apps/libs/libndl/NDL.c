@@ -66,9 +66,7 @@ void NDL_OpenCanvas(int *w, int *h) {
             *w = screen_w;
             *h = screen_h;
         }
-        *w = screen_w;
-        *h = screen_h;
-        // assert(screen_h >= *h && screen_w >= *w);
+        assert(screen_h >= *h && screen_w >= *w);
     }
 }
 
