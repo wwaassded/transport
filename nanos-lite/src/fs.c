@@ -61,7 +61,7 @@ int fs_open(const char *pathname, int flags, int mode) {
     for (int i = 0; file_table[i].name != NULL; ++i) {
         if (strcmp(file_table[i].name, pathname) == 0)
             return i;
-        printf("%s\n", file_table[i].name);
+        // printf("%s\n", file_table[i].name);
     }
     panic("no such file please check files.h!");
 }
