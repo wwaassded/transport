@@ -28,7 +28,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
     if (kev.keycode == AM_KEY_NONE)
         return 0;
     sprintf(buf, "receive event : %s %s\n", kev.keydown ? "kd" : "ku", keyname[kev.keycode]);
-    return 1;
+    return kev.keycode;
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {

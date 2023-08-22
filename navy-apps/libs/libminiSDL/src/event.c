@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <assert.h>
 #include <fcntl.h>
+#include <unistd.h>
 #define keyname(k) #k,
 
 static const char *keyname[] = {
@@ -21,6 +22,10 @@ int SDL_PollEvent(SDL_Event *ev) {
 int SDL_WaitEvent(SDL_Event *event) {
     // TODO :: implament me !!
     int fd = open("/dev/events", 0, 0);
+    char buf[32];
+    int ret = read(fd, buf, 0);
+    if (ret != 0) {
+    }
     return 1;
 }
 
