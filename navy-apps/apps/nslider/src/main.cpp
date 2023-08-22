@@ -31,6 +31,7 @@ void render() {
 }
 
 void prev(int rep) {
+    assert(0);
     if (rep == 0) rep = 1;
     cur -= rep;
     if (cur < 0) cur = 0;
@@ -38,6 +39,7 @@ void prev(int rep) {
 }
 
 void next(int rep) {
+    assert(0);
     if (rep == 0) rep = 1;
     cur += rep;
     if (cur >= N) cur = N - 1;

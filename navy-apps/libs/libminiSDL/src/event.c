@@ -32,7 +32,7 @@ int SDL_WaitEvent(SDL_Event *event) {
         typ = strtok(NULL, " ");
         if (strcmp(typ, "kd") == 0) {
             event->type = SDL_KEYDOWN;
-            printf("%s\n", keyname[ret]);
+            event->key.keysym.sym = ret;
         } else if (strcmp(typ, "ku") == 0)
             event->type = SDL_KEYUP;
         else
