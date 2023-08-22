@@ -52,7 +52,6 @@ static Finfo file_table[] __attribute__((used)) = {
 
 
 void init_fs() {
-    // initialize the size of /dev/fb
     file_table[FD_FBUF].size = init_fb();
 }
 
