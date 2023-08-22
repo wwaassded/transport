@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <assert.h>
 #include <fcntl.h>
+#include <string.h>
 #include <unistd.h>
 #define keyname(k) #k,
 
@@ -25,6 +26,16 @@ int SDL_WaitEvent(SDL_Event *event) {
     char buf[32];
     int ret = read(fd, buf, 0);
     if (ret != 0) {
+        char *typ = strtok(buf, " ");
+        typ = strtok(NULL, " ");
+        typ = strtok(NULL, " ");
+        typ = strtok(NULL, " ");
+        if (strcmp(typ, "kd") == 0) {
+            event->type = SDL_KEYDOWN;
+        } else if (strcmp(typ, "ku") == 0)
+            event->type = SDL_KEYUP;
+        else
+            assert(0);
     }
     return 1;
 }
