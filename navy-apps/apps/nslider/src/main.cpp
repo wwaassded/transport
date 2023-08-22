@@ -28,7 +28,6 @@ void render() {
     slide = SDL_LoadBMP(fname);
     assert(slide);
     SDL_UpdateRect(slide, 0, 0, 0, 0);
-    assert(0);
 }
 
 void prev(int rep) {
