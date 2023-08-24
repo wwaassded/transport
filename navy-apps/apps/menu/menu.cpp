@@ -77,7 +77,6 @@ int main(int argc, char *argv[], char *envp[]) {
     set_i_max();
 
     while (1) {
-        assert(0);
         display_menu(i_max);
 
         SDL_Event e;
@@ -165,9 +164,11 @@ static void draw_text_row(char *s, int r) {
 }
 
 static void display_menu(int n) {
+    assert(0);
     clear_display();
     SDL_Rect rect = {.x = screen->w - logo_sf->w, .y = 0};
     SDL_BlitSurface(logo_sf, NULL, screen, &rect);
+    assert(0);
     printf("Available applications:\n");
     char buf[80];
     int i;
