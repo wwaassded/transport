@@ -9,9 +9,53 @@ extern void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h);
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
     assert(dst && src);
     assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+    if (srcrect == NULL) {
+        SDL_Rect tmp;
+        tmp.x = 0;
+        tmp.y = 0;
+        tmp.w = src->w;
+        tmp.h = src->h;
+        srcrect = &tmp;
+    }
+    if (dstrect == NULL) {
+        SDL_Rect tmp;
+        tmp.x = 0;
+        tmp.y = 0;
+        dstrect = &tmp;
+    }
+    uint32_t *dst_pixels = (uint32_t *) dst->pixels;
+    uint32_t *src_pixels = (uint32_t *) src->pixels;
+    int i = dstrect->y;
+    int j = srcrect->y;
+    for (; j < srcrect->y + srcrect->h; ++i, ++j) {
+        int sr_sta = j * src->w + srcrect->x;
+        int ds_sta = i * dst->w + dstrect->x;
+        for (int k = 0; k < srcrect->w; ++k) {
+            src_pixels[sr_sta] = dst_pixels[ds_sta];
+            ++sr_sta;
+            ++ds_sta;
+        }
+    }
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+    //  若为nullptr则将整个surface作为rect
+    if (dstrect == NULL) {
+        SDL_Rect tmp;
+        tmp.x = 0;
+        tmp.y = 0;
+        tmp.h = dst->h;
+        tmp.w = dst->w;
+        dstrect = &tmp;
+    }
+    uint32_t *co_pi = (uint32_t *) dst->pixels;
+    for (int i = dstrect->y; i < dstrect->y + dstrect->h; ++i) {
+        int sta = i * dst->w + dstrect->x;
+        for (int j = 0; j < dstrect->w; ++j) {
+            co_pi[sta] = color;
+            ++sta;
+        }
+    }
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
