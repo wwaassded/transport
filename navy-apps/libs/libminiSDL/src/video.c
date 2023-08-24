@@ -40,6 +40,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+    assert(0);
     //  若为nullptr则将整个surface作为rect
     if (dstrect == NULL) {
         SDL_Rect tmp;
