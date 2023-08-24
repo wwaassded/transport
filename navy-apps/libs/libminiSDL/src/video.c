@@ -7,6 +7,7 @@
 extern void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h);
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
+    assert(0);
     assert(dst && src);
     assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
     if (srcrect == NULL) {
