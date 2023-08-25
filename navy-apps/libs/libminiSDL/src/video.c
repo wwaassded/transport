@@ -41,16 +41,18 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+    int flag = 1;
     //  若为nullptr则将整个surface作为rect
     if (dstrect == NULL) {
-        SDL_Rect tmp;
-        tmp.x = 0;
-        tmp.y = 0;
-        tmp.h = dst->h;
-        tmp.w = dst->w;
-        dstrect = &tmp;
+        flag = 0;
+        dstrect = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+        dstrect->x = 0;
+        dstrect->y = 0;
+        dstrect->h = dst->h;
+        dstrect->w = dst->w;
     }
     printf("%d %d\n", dstrect->h, dstrect->w);
+    free(dstrect);
     assert(0);
     uint32_t *co_pi = (uint32_t *) dst->pixels;
     for (int i = dstrect->y; i < dstrect->y + dstrect->h; ++i) {
@@ -60,6 +62,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
             ++sta;
         }
     }
+    if (flag == 0)
+        free(dstrect);
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
