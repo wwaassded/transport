@@ -1,6 +1,7 @@
 #include <NDL.h>
 #include <assert.h>
 #include <sdl-video.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -40,7 +41,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-    assert(0);
     //  若为nullptr则将整个surface作为rect
     if (dstrect == NULL) {
         SDL_Rect tmp;
@@ -50,6 +50,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
         tmp.w = dst->w;
         dstrect = &tmp;
     }
+    printf("%d %d\n", dstrect->h, dstrect->w);
+    assert(0);
     uint32_t *co_pi = (uint32_t *) dst->pixels;
     for (int i = dstrect->y; i < dstrect->y + dstrect->h; ++i) {
         int sta = i * dst->w + dstrect->x;
