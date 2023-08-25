@@ -8,22 +8,23 @@
 extern void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h);
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
-    assert(0);
     assert(dst && src);
     assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+    int flag1 = 1;
+    int flag2 = 1;
     if (srcrect == NULL) {
-        SDL_Rect tmp;
-        tmp.x = 0;
-        tmp.y = 0;
-        tmp.w = src->w;
-        tmp.h = src->h;
-        srcrect = &tmp;
+        flag1 = 0;
+        srcrect = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+        srcrect->x = 0;
+        srcrect->y = 0;
+        srcrect->w = src->w;
+        srcrect->h = src->h;
     }
     if (dstrect == NULL) {
-        SDL_Rect tmp;
-        tmp.x = 0;
-        tmp.y = 0;
-        dstrect = &tmp;
+        flag2 = 0;
+        dstrect = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+        dstrect->x = 0;
+        dstrect->y = 0;
     }
     uint32_t *dst_pixels = (uint32_t *) dst->pixels;
     uint32_t *src_pixels = (uint32_t *) src->pixels;
@@ -38,6 +39,10 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
             ++ds_sta;
         }
     }
+    if (flag1 == 0)
+        free(srcrect);
+    if (flag2 == 0)
+        free(dstrect);
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
