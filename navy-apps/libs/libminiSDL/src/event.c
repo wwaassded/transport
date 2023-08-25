@@ -15,13 +15,27 @@ int SDL_PushEvent(SDL_Event *ev) {
     return 0;
 }
 
-int SDL_PollEvent(SDL_Event *ev) {
-    assert(0);
-    return 0;
+int SDL_PollEvent(SDL_Event *event) {
+    int fd = open("/dev/events", 0, 0);
+    char buf[32];
+    int ret = read(fd, buf, 0);
+    if (ret == 0)
+        return 0;
+    char *typ = strtok(buf, " ");
+    typ = strtok(NULL, " ");
+    typ = strtok(NULL, " ");
+    typ = strtok(NULL, " ");
+    if (strcmp(typ, "kd") == 0) {
+        event->type = SDL_KEYDOWN;
+        event->key.keysym.sym = ret;
+    } else if (strcmp(typ, "ku") == 0)
+        event->type = SDL_KEYUP;
+    else
+        assert(0);
+    return 1;
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-    // TODO :: implament me !!
     int fd = open("/dev/events", 0, 0);
     char buf[32];
     int ret = read(fd, buf, 0);
