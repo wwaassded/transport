@@ -56,17 +56,6 @@ void init_fs() {
 }
 
 
-int fs_open(const char *pathname, int flags, int mode) {
-    int i;
-    for (i = 0; file_table[i].name != NULL; ++i) {
-        if (strcmp(file_table[i].name, pathname) == 0)
-            return i;
-        // printf("%s\n", file_table[i].name);
-    }
-    printf("%s %s\n", file_table[i - 1].name, pathname);
-    panic("no such file please check files.h!");
-}
-
 int fs_close(int fd) {
     return 0;
 }
@@ -133,4 +122,15 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
             file_table[fd].open_offset = file_table[fd].disk_offset;
     }
     return 0;
+}
+
+int fs_open(const char *pathname, int flags, int mode) {
+    int i;
+    for (i = 0; file_table[i].name != NULL; ++i)
+        if (strcmp(file_table[i].name, pathname) == 0) {
+            fs_lseek(i, 0, SEEK_SET);
+            return i;
+        }
+    printf("%s %s\n", file_table[i - 1].name, pathname);
+    panic("no such file please check files.h!");
 }
