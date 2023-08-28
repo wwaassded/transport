@@ -64,7 +64,7 @@ void sys_execve(Context *c, const char *fname, char *const argv[], char *const e
 }
 
 void sys_exit(Context *c) {
-    sys_execve(c, "/bin/menu", NULL, NULL);
+    naive_uload(NULL, "/bin/menu");
     // halt(c->GPR2);
 }
 
