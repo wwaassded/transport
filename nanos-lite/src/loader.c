@@ -19,6 +19,7 @@ extern int fs_close(file_dp fd);
 static uintptr_t loader(PCB *pcb, const char *filename) {
     file_dp fd = fs_open(filename, 0, 0);
     Elf_Ehdr ELF_head;
+    fs_lseek(fd, 0, 0);
     fs_read(fd, &ELF_head, sizeof(Elf_Ehdr));
     unsigned char magic_number[] = {ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3};
     if (memcmp(ELF_head.e_ident, magic_number, sizeof(magic_number)) != 0)
