@@ -37,8 +37,6 @@ void builtin_sh_run() {
                 const char *res = term->keypress(handle_key(&ev));
 
                 if (res) {
-                    printf("%d : %s\n", strlen(res), res);
-                    assert(0);
                     sh_handle_cmd(res);
                     sh_prompt();
                 }
