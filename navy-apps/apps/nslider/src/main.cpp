@@ -57,6 +57,9 @@ int main() {
 
         if (e.type == SDL_KEYDOWN) {
             switch (e.key.keysym.sym) {
+                case SDLK_q: {
+                    return 0;
+                }
                 case SDLK_0:
                     rep = rep * 10 + 0;
                     break;
