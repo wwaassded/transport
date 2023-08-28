@@ -57,6 +57,7 @@ void sys_gettimeofday(Context *c, struct timeval *tv, struct timezone *tz) {
 }
 
 void sys_execve(Context *c, const char *fname, char *const argv[], char *const envp[]) {
+    printf("FUCK %s\n", fname);
     naive_uload(NULL, fname);
     printf("should not reach here!\n");
     assert(0);
