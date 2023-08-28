@@ -21,7 +21,6 @@ struct BitmapHeader {
 
 void *BMP_Load(const char *filename, int *width, int *height) {
     printf("TEST %s\n", filename);
-    assert(0);
     FILE *fp = fopen(filename, "r");
     assert(fp);
     if (!fp) return NULL;
