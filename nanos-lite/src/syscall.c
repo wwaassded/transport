@@ -1,5 +1,6 @@
 #include "syscall.h"
 #include <common.h>
+#include <proc.h>
 #include <sys/time.h>
 
 #define SYS_exit 0
@@ -10,10 +11,12 @@
 #define SYS_close 7
 #define SYS_lseek 8
 #define SYS_brk 9
+#define SYS_execve 13
 #define SYS_gettimeofday 19
 
 extern void yield();
 extern void halt(int code);
+extern void naive_uload(PCB *pcb, const char *filename);
 extern int fs_open(const char *pathname, int flags, int mode);
 extern size_t fs_read(int fd, void *buf, size_t len);
 extern size_t fs_write(int fd, const void *buf, size_t len);
@@ -25,9 +28,6 @@ void sys_yield(Context *c) {
     c->GPRx = 0;
 }
 
-void sys_exit(Context *c) {
-    halt(c->GPR2);
-}
 
 void sys_write(Context *c, int fd, const void *buf, size_t count) {
     c->GPRx = fs_write(fd, buf, count);
@@ -54,6 +54,17 @@ void sys_lseek(Context *c, int fd, size_t offset, int whence) {
 
 void sys_gettimeofday(Context *c, struct timeval *tv, struct timezone *tz) {
     c->GPRx = io_read(AM_TIMER_UPTIME).us / 100000;
+}
+
+void sys_execve(Context *c, const char *fname, char *const argv[], char *const envp[]) {
+    naive_uload(NULL, fname);
+    printf("should not reach here!\n");
+    assert(0);
+}
+
+void sys_exit(Context *c) {
+    sys_execve(c, "/bin/menu", NULL, NULL);
+    // halt(c->GPR2);
 }
 
 void do_syscall(Context *c) {
@@ -94,6 +105,9 @@ void do_syscall(Context *c) {
         case SYS_brk: { /* case 9 */
             sys_brk(c);
             break;
+        }
+        case SYS_execve: { /* case 13*/
+            sys_execve(c, (const char *) a[1], (char *const *) a[2], (char *const *) a[3]);
         }
         case SYS_gettimeofday: { /* case 19 */
             sys_gettimeofday(c, (struct timeval *) a[1], (struct timezone *) a[2]);
