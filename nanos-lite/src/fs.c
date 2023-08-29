@@ -12,6 +12,9 @@ extern size_t serial_write(const void *buf, size_t offset, size_t len);
 extern size_t events_read(void *buf, size_t offset, size_t len);
 extern size_t dispinfo_read(void *buf, size_t offset, size_t len);
 extern size_t fb_write(const void *buf, size_t offset, size_t len);
+extern size_t sbctl_read(void *buf, size_t offset, size_t len);
+extern size_t sbctl_write(const void *buf, size_t offset, size_t len);
+extern size_t sb_write(const void *buf, size_t offset, size_t len);
 typedef struct {
     char *name;
     size_t size;
@@ -27,6 +30,8 @@ enum { FD_STDIN,
        FD_EVENTS,
        FD_DISINFO,
        FD_FBUF,
+       FD_SB,
+       FD_SBCTL,
        FD_FB };
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
@@ -47,6 +52,8 @@ static Finfo file_table[] __attribute__((used)) = {
         [FD_EVENTS] = {"/dev/events", 0, 0, 0, events_read, invalid_write},
         [FD_DISINFO] = {"/proc/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},
         [FD_FBUF] = {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
+        [FD_SB] = {"/dev/sb", 0, 0, 0, invalid_read, sb_write},
+        [FD_SBCTL] = {"/dev/sbctl", 0, 0, 0, sbctl_read, sbctl_write},
 #include "files.h"
 };
 

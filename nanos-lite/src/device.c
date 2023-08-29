@@ -60,3 +60,28 @@ void init_device() {
     Log("Initializing devices...");
     ioe_init();
 }
+
+size_t sbctl_read(void *buf, size_t offset, size_t len) {
+    AM_AUDIO_CONFIG_T cfg = io_read(AM_AUDIO_CONFIG);
+    AM_AUDIO_STATUS_T stat = io_read(AM_AUDIO_STATUS);
+    int *pointer = (int *) buf;
+    pointer[0] = cfg.bufsize - stat.count;
+    return sizeof(int);
+}
+
+size_t sbctl_write(const void *buf, size_t offset, size_t len) {
+    const int *pointer = (const int *) buf;
+    int freq = pointer[0];
+    int channels = pointer[1];
+    int samples = pointer[2];
+    io_write(AM_AUDIO_CTRL, freq, channels, samples);
+    return 3 * sizeof(int);
+}
+
+size_t sb_write(const void *buf, size_t offset, size_t len) {
+    Area test;
+    test.start = (void *) (intptr_t) buf;
+    test.end = test.start + len;
+    io_write(AM_AUDIO_PLAY, test);
+    return len;
+}
