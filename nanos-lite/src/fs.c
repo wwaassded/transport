@@ -128,7 +128,7 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
         if (file_table[fd].open_offset < file_table[fd].disk_offset)
             file_table[fd].open_offset = file_table[fd].disk_offset;
     }
-    return 0;
+    return file_table[fd].open_offset;
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
