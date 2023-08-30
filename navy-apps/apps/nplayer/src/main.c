@@ -89,7 +89,9 @@ int main(int argc, char *argv[]) {
     assert(size);
     fseek(fp, 0, SEEK_SET);
     int ret = fread(buf, size, 1, fp);
-    assert(ret == 1);
+    assert(ret == size);
+    printf("it work!\n");
+    assert(0);
     fclose(fp);
 
     int error;
