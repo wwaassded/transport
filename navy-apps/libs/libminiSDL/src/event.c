@@ -6,6 +6,9 @@
 #include <unistd.h>
 #define keyname(k) #k,
 
+
+extern void CallbackHelper();
+
 static const char *keyname[] = {
         "NONE",
         _KEYS(keyname)};
@@ -16,6 +19,7 @@ int SDL_PushEvent(SDL_Event *ev) {
 }
 
 int SDL_PollEvent(SDL_Event *event) {
+    CallbackHelper();
     int fd = open("/dev/events", 0, 0);
     char buf[32];
     int ret = read(fd, buf, 0);

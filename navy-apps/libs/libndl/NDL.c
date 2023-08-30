@@ -12,7 +12,7 @@ static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
 
 uint32_t NDL_GetTicks() {
-    return gettimeofday(NULL, NULL) * 100000;
+    return gettimeofday(NULL, NULL) * 1000;
 }
 
 int NDL_PollEvent(char *buf, int len) {
@@ -84,19 +84,28 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
     write(fd, pixels, 0);
 }
 
+
 void NDL_OpenAudio(int freq, int channels, int samples) {
+    int fd = open("/dev/sbctl", 0, 0);
+    int parameter[3] = {freq, channels, samples};
+    write(fd, (void *) parameter, 0);
 }
 
 void NDL_CloseAudio() {
 }
 
 int NDL_PlayAudio(void *buf, int len) {
-    return 0;
+    int fd = open("/dev/sb", 0, 0);
+    return write(fd, buf, len);
 }
 
 int NDL_QueryAudio() {
-    return 0;
+    int fd = open("/dev/sbctl", 0, 0);
+    int ret = 0;
+    read(fd, (void *) (&ret), 0);
+    return ret;
 }
+
 
 int NDL_Init(uint32_t flags) {
     if (getenv("NWM_APP")) {

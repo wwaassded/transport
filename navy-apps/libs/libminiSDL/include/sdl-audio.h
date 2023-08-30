@@ -2,20 +2,20 @@
 #define __SDL_AUDIO_H__
 
 typedef struct {
-  int freq;
-  uint16_t format;
-  uint8_t channels;
-  uint16_t samples;
-  uint32_t size;
-  void (*callback)(void *userdata, uint8_t *stream, int len);
-  void *userdata;
+    int freq;
+    uint16_t format;
+    uint8_t channels;
+    uint16_t samples;
+    uint32_t size;
+    void (*callback)(void *userdata, uint8_t *stream, int len);
+    void *userdata;
 } SDL_AudioSpec;
 
 #define AUDIO_U8 8
 #define AUDIO_S16 16
 #define AUDIO_S16SYS AUDIO_S16
 
-#define SDL_MIX_MAXVOLUME  128
+#define SDL_MIX_MAXVOLUME 128
 
 int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained);
 void SDL_CloseAudio();
