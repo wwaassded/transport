@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
     fseek(fp, 0, SEEK_SET);
     int ret = fread(buf, size, 1, fp);
     printf("TT :: %d\n", ret);
-    assert(ret == size);
+    assert(ret == 1);
     printf("it work!\n");
     assert(0);
     fclose(fp);
